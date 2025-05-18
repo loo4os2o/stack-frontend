@@ -22,9 +22,9 @@ export default function AdminPage() {
 
   // 더미 데이터
   const members = [
-    { id: 1, name: '이주희', email: 'joohee@example.com', organization: 'ABC건설', phone: '010-1234-5678', joinDate: '2023-04-15' },
-    { id: 2, name: '홍길동', email: 'hong@example.com', organization: 'XYZ설계', phone: '010-1111-1111', joinDate: '2023-05-20' },
-    { id: 3, name: '이영희', email: 'lee@example.com', organization: '스마트건축', phone: '010-2222-2222', joinDate: '2023-06-10' },
+    { id: 1, name: '이주희', email: 'joohee@example.com', organization: 'ABC건설', phone: '010-1234-5678', joinDate: '2025-04-15' },
+    { id: 2, name: '홍길동', email: 'hong@example.com', organization: 'XYZ설계', phone: '010-1111-1111', joinDate: '2025-05-20' },
+    { id: 3, name: '이영희', email: 'lee@example.com', organization: '스마트건축', phone: '010-2222-2222', joinDate: '2025-06-10' },
   ];
 
   const projects = [
@@ -38,34 +38,34 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pt-16 pb-24">
       {isLoggedIn ? (
         <>
-          <h1 className="text-3xl font-bold mb-6">관리자 페이지</h1>
+          <h1 className="text-3xl font-bold mb-10">관리자 페이지</h1>
           
           {/* 탭 메뉴 */}
           <div className="mb-8 border-b">
             <div className="flex space-x-4">
               <button
-                className={`py-2 px-4 font-medium ${activeTab === 'members' ? 'text-[var(--primary-color)] border-b-2 border-[var(--primary-color)]' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'members' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('members')}
               >
                 회원 관리
               </button>
               <button
-                className={`py-2 px-4 font-medium ${activeTab === 'projects' ? 'text-[var(--primary-color)] border-b-2 border-[var(--primary-color)]' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'projects' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('projects')}
               >
                 프로젝트 관리
               </button>
               <button
-                className={`py-2 px-4 font-medium ${activeTab === 'services' ? 'text-[var(--primary-color)] border-b-2 border-[var(--primary-color)]' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'services' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('services')}
               >
                 서비스 요청 관리
               </button>
               <button
-                className={`py-2 px-4 font-medium ${activeTab === 'contents' ? 'text-[var(--primary-color)] border-b-2 border-[var(--primary-color)]' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'contents' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('contents')}
               >
                 콘텐츠 관리
@@ -84,7 +84,7 @@ export default function AdminPage() {
                     placeholder="회원 검색" 
                     className="px-3 py-2 border rounded-md"
                   />
-                  <button className="px-3 py-2 bg-[var(--primary-color)] text-white rounded-md">
+                  <button className="px-3 py-2 active-process-bg text-white rounded-md">
                     검색
                   </button>
                 </div>
@@ -129,7 +129,7 @@ export default function AdminPage() {
               <div className="mt-6 flex justify-center">
                 <div className="flex">
                   <button className="px-3 py-1 border rounded-l-md">이전</button>
-                  <button className="px-3 py-1 border bg-[var(--primary-color)] text-white">1</button>
+                  <button className="px-3 py-1 border active-process-bg text-white">1</button>
                   <button className="px-3 py-1 border">2</button>
                   <button className="px-3 py-1 border">3</button>
                   <button className="px-3 py-1 border rounded-r-md">다음</button>
@@ -156,7 +156,7 @@ export default function AdminPage() {
                     placeholder="프로젝트 검색" 
                     className="px-3 py-2 border rounded-md"
                   />
-                  <button className="px-3 py-2 bg-[var(--primary-color)] text-white rounded-md">
+                  <button className="px-3 py-2 active-process-bg text-white rounded-md">
                     검색
                   </button>
                 </div>
@@ -206,7 +206,7 @@ export default function AdminPage() {
                 
                 <div className="flex">
                   <button className="px-3 py-1 border rounded-l-md">이전</button>
-                  <button className="px-3 py-1 border bg-[var(--primary-color)] text-white">1</button>
+                  <button className="px-3 py-1 border active-process-bg text-white">1</button>
                   <button className="px-3 py-1 border rounded-r-md">다음</button>
                 </div>
               </div>
@@ -230,7 +230,7 @@ export default function AdminPage() {
                     placeholder="요청자 검색" 
                     className="px-3 py-2 border rounded-md"
                   />
-                  <button className="px-3 py-2 bg-[var(--primary-color)] text-white rounded-md">
+                  <button className="px-3 py-2 active-process-bg text-white rounded-md">
                     검색
                   </button>
                 </div>
@@ -285,7 +285,7 @@ export default function AdminPage() {
               <div className="mt-6 flex justify-center">
                 <div className="flex">
                   <button className="px-3 py-1 border rounded-l-md">이전</button>
-                  <button className="px-3 py-1 border bg-[var(--primary-color)] text-white">1</button>
+                  <button className="px-3 py-1 border active-process-bg text-white">1</button>
                   <button className="px-3 py-1 border rounded-r-md">다음</button>
                 </div>
               </div>
@@ -300,7 +300,7 @@ export default function AdminPage() {
                 <div className="border p-4 rounded-md">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-bold">PDF 자료 목록</h3>
-                    <button className="px-3 py-2 bg-[var(--primary-color)] text-white rounded-md">
+                    <button className="px-3 py-2 active-process-bg text-white rounded-md">
                       새 자료 업로드
                     </button>
                   </div>
@@ -343,7 +343,7 @@ export default function AdminPage() {
                 <div className="border p-4 rounded-md">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-bold">실적 목록</h3>
-                    <button className="px-3 py-2 bg-[var(--primary-color)] text-white rounded-md">
+                    <button className="px-3 py-2 active-process-bg text-white rounded-md">
                       새 실적 등록
                     </button>
                   </div>
@@ -398,7 +398,7 @@ export default function AdminPage() {
                   <div className="mt-4 flex justify-center">
                     <div className="flex">
                       <button className="px-3 py-1 border rounded-l-md">이전</button>
-                      <button className="px-3 py-1 border bg-[var(--primary-color)] text-white">1</button>
+                      <button className="px-3 py-1 border active-process-bg text-white">1</button>
                       <button className="px-3 py-1 border rounded-r-md">다음</button>
                     </div>
                   </div>

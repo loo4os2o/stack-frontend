@@ -230,14 +230,20 @@ export function HeaderMenu() {
             >
               연돌현상 평가
             </a>
-            <Link href="/service-request" className="drawer-link">
+            {/* <Link href="/service-request" className="drawer-link">
               서비스 요청하기
+            </Link> */}
+            <Link href="#" className="drawer-link">
+              마이페이지
             </Link>
             {isAdmin && (
               <Link href="/admin" className="drawer-link">
-                관리자
+                프로젝트관리
               </Link>
             )}
+            <Link href="#" className="drawer-link">
+              개인정보관리
+            </Link>
           </nav>
           
           <div className="drawer-footer">

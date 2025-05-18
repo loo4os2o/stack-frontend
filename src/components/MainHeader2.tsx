@@ -7,15 +7,22 @@ import Link from "next/link";
 const MainHeader2 = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
     const userLogin = localStorage.getItem('userLogin');
+    const storedUserName = localStorage.getItem('userName');
+    
     if (userLogin === 'true') {
       setIsLoggedIn(true);
+      if (storedUserName) {
+        setUserName(storedUserName);
+      }
     } else {
       setIsLoggedIn(false);
+      setUserName('');
     }
   }, []);
 
@@ -25,6 +32,7 @@ const MainHeader2 = () => {
       localStorage.removeItem('userName');
       localStorage.removeItem('userRole');
       setIsLoggedIn(false);
+      setUserName('');
       router.push('/');
     } else {
       router.push('/login');
@@ -146,13 +154,26 @@ const MainHeader2 = () => {
             메인 시안1 바로가기
           </Link>
           
-          <button 
-            onClick={handleLogin} 
-            className="login-button"
-            aria-label={isLoggedIn ? "로그아웃" : "로그인"}
-          >
-            {isLoggedIn ? "로그아웃" : "로그인"}
-          </button>
+          {isLoggedIn ? (
+            <div className="user-info">
+              <span className="user-name">{userName} 님</span>
+              <button 
+                onClick={handleLogin} 
+                className="login-button"
+                aria-label="로그아웃"
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={handleLogin} 
+              className="login-button"
+              aria-label="로그인"
+            >
+              로그인
+            </button>
+          )}
         </div>
       </div>
     </header>
