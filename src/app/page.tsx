@@ -134,7 +134,7 @@ export default function Home() {
       </section>
 
       {/* Section - STACK 시스템 특징 */}
-      <section className="py-8 mb-12 mt-64 md:mt-64">
+      <section className="py-8 mb-12 mt-64 md:mt-64 main-features">
         <h2 className="text-3xl font-bold mb-8 text-center font-white">
           STACK 시스템 특징
         </h2>

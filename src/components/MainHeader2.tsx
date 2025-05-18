@@ -9,6 +9,7 @@ const MainHeader2 = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
@@ -46,6 +47,10 @@ const MainHeader2 = () => {
       setActiveDropdown(dropdownId);
     }
   };
+  
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   useEffect(() => {
     const handleCloseDropdowns = () => {
@@ -57,12 +62,17 @@ const MainHeader2 = () => {
       if (!target.closest('.dropdown')) {
         handleCloseDropdowns();
       }
+      
+      // 모바일 메뉴 외부 클릭 시 닫기
+      if (isMobileMenuOpen && !target.closest('.header-container') && !target.closest('.mobile-menu-button') && window.innerWidth <= 1130) {
+        setIsMobileMenuOpen(false);
+      }
     });
 
     return () => {
       document.removeEventListener('click', handleCloseDropdowns);
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
   // 로그인 검사 후 리다이렉트 핸들러
   const handleNavigation = (e: React.MouseEvent, path: string) => {
@@ -71,12 +81,25 @@ const MainHeader2 = () => {
       router.push('/login');
     } else {
       router.push(path);
+      // 모바일 메뉴가 열려있으면 닫기
+      if (window.innerWidth <= 1130) {
+        setIsMobileMenuOpen(false);
+      }
     }
   };
 
   return (
     <header className="main-header2">
-      <div className="header-container">
+      {/* 모바일 메뉴 버튼 - 1130px 이하에서만 표시 */}
+      <button 
+        className="mobile-menu-button"
+        onClick={toggleMobileMenu}
+        aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+      >
+        {isMobileMenuOpen ? "✕" : "☰"}
+      </button>
+      
+      <div className={`header-container ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="logo">
           <Link href="/main2">
             <h1>S <span className="logo-accent">T</span> A C K</h1>
