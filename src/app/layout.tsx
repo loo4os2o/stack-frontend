@@ -15,6 +15,7 @@ export default function RootLayout({
   const pathname = usePathname();
   const [activeDropdowns, setActiveDropdowns] = useState<string[]>([]);
   const isMainPage = pathname === '/';
+  const isMain2Page = pathname === '/main2';
 
   const handleOutsideClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -43,6 +44,8 @@ export default function RootLayout({
       <body>
         {isMainPage ? (
           <MainHeader />
+        ) : isMain2Page ? (
+          null // main2 페이지에서는 헤더 표시하지 않음 (MainHeader2는 페이지 내에서 직접 렌더링)
         ) : (
           <header className="bg-white shadow-sm">
             <div className="w-full">

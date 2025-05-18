@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const MainHeader = () => {
   const router = useRouter();
@@ -31,6 +32,9 @@ const MainHeader = () => {
 
   return (
     <div className="transparent-header">
+      <Link href="/main2" className="main2-link">
+        메인 시안2 바로가기
+      </Link>
       <button 
         onClick={handleLogin} 
         className="login-icon"

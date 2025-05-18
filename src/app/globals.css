@@ -139,3 +139,9 @@ body {
 .active-process-bg{
   background-color: var(--primary-color);
 }
+
+/* 공통 이너 (1280px) */
+.container .inner{
+  max-width: 1280px;
+  margin: 0 auto;
+}
