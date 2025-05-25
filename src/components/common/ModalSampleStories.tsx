@@ -45,6 +45,7 @@ export default function ModalSampleStories() {
         onClose={() => setOpen3(false)}
         hideCloseButton
         width={320}
+        title=""
         footer={<button className="btn-primary btn-large w-full" onClick={() => setOpen3(false)}>확인</button>}
       >
         <div style={{ textAlign: 'center', padding: '2rem 0' }}>
