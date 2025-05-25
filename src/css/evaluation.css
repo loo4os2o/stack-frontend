@@ -1,0 +1,61 @@
+/* 공통 버튼 */
+.btn-primary{
+  background-color: var(--primary-color);
+  color: var(--text-color-white);
+  border: 1px solid var(--primary-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+/* 공통 이미지 */
+.imgage-wrap{
+  width: 100%;
+  height: 100%;
+}
+.imgage-wrap > img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* 연돌현상 예측평가 */
+.cppe-explain{
+  margin-bottom: 4rem;
+}
+.cppe-explain .left,
+.cppe-explain .right{
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.left, .right{
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+}
+.cppe-explain .left, .left{
+  /* border: 1px solid red; */
+}
+.cppe-explain .right, .right{
+  /* border: 1px solid blue; */
+}
+.left.center,
+.right.center,
+.cppe-explain .left.center,
+.cppe-explain .right.center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cppe-explain .left > p{
+  font-size: 1.1rem;
+  line-height: 1.8;
+}

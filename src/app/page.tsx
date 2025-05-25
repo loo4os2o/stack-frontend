@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Background from "@/assets/images/architecture-1867194_1920.jpg";
-import "@/css/main.css";
 
 export default function Home() {
   const router = useRouter();

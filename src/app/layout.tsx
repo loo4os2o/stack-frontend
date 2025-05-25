@@ -4,6 +4,7 @@ import { HeaderMenu } from "@/components/HeaderMenu";
 import MainHeader from "@/components/MainHeader";
 import Footer from "@/components/Footer";
 import "./globals.css";
+import "@/css/main.css";
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 
