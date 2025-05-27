@@ -51,7 +51,7 @@ export default function EvaluationPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-16 pb-24">
+    <div className="container cppe mx-auto px-4 pt-16 pb-24">
       <h1 className="text-3xl font-bold mb-10">연돌현상 예측평가</h1>
 
       {/* 연돌현상 예측평가 페이지 설명 영역 */}
@@ -97,7 +97,7 @@ export default function EvaluationPage() {
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 1 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
                   1
                 </div>
-                <span>프로젝트 입력</span>
+                <span>건물 정보 입력</span>
               </div>
               <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
               <div className={`flex flex-col items-center ${step >= 2 ? 'active-process' : 'text-gray-400'}`}>
@@ -371,7 +371,7 @@ export default function EvaluationPage() {
                     </fieldset>
                   </div>
                   <div className='w-full md:w-1/2 right'>
-                    2. 건물 매스 계획 이미지 영역
+                    2. 건물 매스 계획 이미지 영역(건물매스형상)
                   </div>
                 </div>
               </section>
@@ -517,7 +517,7 @@ export default function EvaluationPage() {
                     </div>
                   </div>
                   <div className='w-full md:w-1/2 right'>
-                    3. 승객용 엘리베이터 샤프트 계획 이미지 영역
+                    3. 승객용 엘리베이터 샤프트 계획 이미지 영역(샤프트형상)
                   </div>
                 </div>
               </section>
@@ -525,7 +525,7 @@ export default function EvaluationPage() {
               {/* 4. 계단실 샤프트 계획 */}
               <section className='mt-8'>
                 <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-1/2 left'>
+                  <div className='w-full md:w-2/2 left'>
                     <h2 className="text-xl font-bold mb-6">
                       4. 계단실 샤프트 계획
                     </h2>
@@ -662,16 +662,13 @@ export default function EvaluationPage() {
                       </fieldset>
                     </div>
                   </div>
-                  <div className='w-full md:w-1/2 right'>
-                    4. 계단실 샤프트 계획 이미지 영역
-                  </div>
                 </div>
               </section>
 
               {/* 5. 기본 건축계획 */}
               <section className='mt-8'>
                 <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-1/2 left'>
+                  <div className='w-full md:w-2/2 left'>
                     <fieldset>
                       <legend className="text-xl font-bold mb-6">
                         5. 기본 건축계획
@@ -702,16 +699,13 @@ export default function EvaluationPage() {
                       </div>
                     </fieldset>
                   </div>
-                  <div className='w-full md:w-1/2 right'>
-                    5. 기본 건축 계획 이미지 영역
-                  </div>
                 </div>
               </section>
 
               {/* 6. 공기유동 특이사항 */}
               <section className='mt-8'>
                 <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-1/2 left'>
+                  <div className='w-full md:w-2/2 left'>
                     <fieldset>
                       <legend className="text-xl font-bold mb-6">
                         6. 공기유동 특이사항
@@ -753,9 +747,6 @@ export default function EvaluationPage() {
                       </div>
                     </fieldset>
                   </div>
-                  <div className='w-full md:w-1/2 right'>
-                    6. 공기유동 특이사항 이미지 영역
-                  </div>
                 </div>
               </section>
 
@@ -780,78 +771,263 @@ export default function EvaluationPage() {
             </>
           )}
 
-          {/* Step 2: 결과 확인 */}
+          {/* Step 2: 분석 결과 */}
           {step === 2 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold mb-6">2단계: 평가 결과</h2>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">분석 결과 요약</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  <div className="p-6 border rounded-md text-center">
-                    <div className="text-3xl font-bold mb-2 text-red-500">상</div>
-                    <div className="text-lg">연돌현상 위험도</div>
-                  </div>
-                  <div className="p-6 border rounded-md text-center">
-                    <div className="text-3xl font-bold mb-2 text-orange-500">중</div>
-                    <div className="text-lg">예상 하자 발생도</div>
-                  </div>
-                  <div className="p-6 border rounded-md text-center">
-                    <div className="text-3xl font-bold mb-2 text-[var(--primary-color)]">필요</div>
-                    <div className="text-lg">엔지니어링 권장도</div>
-                  </div>
-                </div>
-                
-                <div className="placeholder p-4 mb-6">
-                  <div className="wireframe-header">결과 요약 텍스트</div>
-                  <div className="dev-note">
-                    개발자: 평가 결과에 대한 전반적인 요약 텍스트가 들어갈 위치입니다.
-                  </div>
-                </div>
-              </div>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">문제 및 하자 예상 결과</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="placeholder h-64">
-                    <div className="wireframe-header">건물 단면도</div>
-                    <div className="design-note">
-                      디자이너: 문제 발생 가능 구간을 표시한 건물 단면도 이미지
+            <>
+              {/* 1. 분석 결과 요약 */}
+              <section>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      1. 분석 결과 요약
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-6 border rounded-md text-center">
+                        <div className="text-xl font-semibold mb-8">연돌현상 영향도</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                          <div className="p-6 border rounded-full text-center">
+                            <div className="text-3xl font-bold mb-2 text-red-500">상</div>
+                            <div className="text-lg">연돌현상<br/>위험도</div>
+                          </div>
+                          <div className="p-6 border rounded-full text-center">
+                            <div className="text-3xl font-bold mb-2 text-orange-500">중</div>
+                            <div className="text-lg">예상 하자<br/>발생도</div>
+                          </div>
+                          <div className="p-6 border rounded-full text-center">
+                            <div className="text-3xl font-bold mb-2 text-[var(--primary-color)]">필요</div>
+                            <div className="text-lg">엔지니어링<br/>권장도</div>
+                          </div>
+                        </div>
+                        <div className="design-note text-left">
+                          디자이너: 연돌현상 영향도 아이콘
+                        </div>
+                      </div>
+                      <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
+                        <div className="text-xl font-semibold mb-6">프로젝트 이름</div>
+                        <div className="text-lg">
+                          <p>건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.</p>
+                          <p>건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.</p>
+                        </div>
+                        <div className="dev-note">
+                          개발자: 평가 결과에 대한 전반적인 요약 텍스트가 들어갈 위치입니다.
+                        </div>
+                      </div>
+                      <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
+                        <div className="text-xl font-semibold mb-6">문제발생 예상층</div>
+                        <p>본 건물은 실내외 온도 차 및 수직 높이에 따른 압력차로 인해 연돌현상이 발생할 수 있는 구조적 특성을 갖고 있으며, 특히 겨울철에는 하층부 외부 공기 유입과 상층부의 과도한 공기 배출 경향이 확인되었습니다. 이에 따라 환기 설비 및 샤프트 차압 제어가 필요한 것으로 평가됩니다.</p>
+                        <div className='flex gap-8 mt-4'>
+                          <div className="design-note flex-1">
+                            디자이너: 
+                          </div>
+                          <div className="dev-note flex-1">
+                            개발자: 차트
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
+                        <div className="text-xl font-semibold mb-6">최대 연돌 압력차(PA)</div>
+                        <p>CFD 시뮬레이션 결과, 외기와 실내의 온도차가 20℃ 이상일 경우 연돌 압력차가 최대 25Pa까지 증가하며, 이로 인해 계단실 및 엘리베이터 샤프트를 통한 공기 흐름이 상·하층 간 불균형을 유발하는 것으로 분석되었습니다.</p>
+                        <div className='flex gap-8 mt-auto'>
+                          <div className="design-note flex-1">
+                            디자이너: 
+                          </div>
+                          <div className="dev-note flex-1">
+                            개발자: 차트
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold mb-3">예상 문제점</h4>
-                    <div className="space-y-4">
-                      <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded">
-                        <div className="font-bold">상부층 엘리베이터 문 개폐 불량</div>
-                        <div className="text-sm">심각도: 높음</div>
-                      </div>
-                      <div className="p-3 bg-orange-50 border-l-4 border-orange-500 rounded">
-                        <div className="font-bold">로비 및 저층부 소음 발생</div>
-                        <div className="text-sm">심각도: 중간</div>
-                      </div>
-                      <div className="p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                        <div className="font-bold">에너지 손실</div>
-                        <div className="text-sm">심각도: 낮음</div>
+                </div>
+              </section>
+
+              {/* 2. 문제 및 하자 예상 결과 */}
+              <section className='mt-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      2. 연돌현상 예측 결과
+                    </h2>
+                    <div className='flex flex-col items-center justify-center'
+                      style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                    >
+                      <div className="text-xl font-medium">차트</div>
+                      <div className="dev-note">
+                        개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">압력차 검토 데이터</h3>
-                <div className="placeholder h-80">
-                  <div className="wireframe-header">압력차 그래프</div>
-                  <div className="design-note">
-                    디자이너: 층별 압력차를 보여주는 그래프
-                  </div>
-                  <div className="dev-note">
-                    개발자: 실제 구현 시 차트 라이브러리(Chart.js 등)를 사용해 구현
+              </section>
+
+              {/* 3. 문제/하자 예상 결과 */}
+              <section className='mt-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      3. 문제/하자 예상 결과
+                    </h2>
+                    <div className='mb-8'>
+                      <h3 className="mb-2 font-semibold">
+                        <span className="text-blue-500 mx-2">✤</span>
+                        주요 문제 및 하자
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className='flex flex-col gap-4'>
+                          <div className='flex items-center justify-center gap-8'
+                            style={{height: '100px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                          >
+                            <div className="text-xl font-medium">내용 1</div>
+                            <div className="design-note text-left">
+                              디자이너: 아이콘
+                            </div>
+                          </div>
+                          <div className='flex items-center justify-center gap-8'
+                            style={{height: '100px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                          >
+                            <div className="text-xl font-medium">내용 2</div>
+                            <div className="design-note text-left">
+                              디자이너: 아이콘
+                            </div>
+                          </div>
+                          <div className='flex items-center justify-center gap-8'
+                            style={{height: '100px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                          >
+                            <div className="text-xl font-medium">내용 3</div>
+                            <div className="design-note text-left">
+                              디자이너: 아이콘
+                            </div>
+                          </div>
+                          <div className='flex items-center justify-center gap-8'
+                            style={{height: '100px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                          >
+                            <div className="text-xl font-medium">내용 4</div>
+                            <div className="design-note text-left">
+                              디자이너: 아이콘
+                            </div>
+                          </div>
+                        </div>
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '100%', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">차트</div>
+                          <div className="dev-note">
+                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className=''>
+                      <h3 className="mb-2 font-semibold">
+                        <span className="text-blue-500 mx-2">✤</span>
+                        문제 발생 예상 층
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">차트</div>
+                          <div className="dev-note">
+                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          </div>
+                        </div>
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">내용 4</div>
+                          <div className="design-note text-left">
+                            디자이너: 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
+              </section>
+
+              {/* 4. 압력차 검토 데이터 */}
+              <section className='mt-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      4. 압력차 검토 데이터
+                    </h2>
+                    <div className='mb-6'>
+                      <h3 className="mb-2 font-semibold">
+                        <span className="text-blue-500 mx-2">✤</span>
+                        중서대 위치 및 압력분포 프로파일
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">차트</div>
+                          <div className="dev-note">
+                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          </div>
+                        </div>
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">내용</div>
+                          <div className="design-note text-left">
+                            디자이너: 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='mb-6'>
+                      <h3 className="mb-2 font-semibold">
+                        <span className="text-blue-500 mx-2">✤</span>
+                        주요층 압력차
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">차트</div>
+                          <div className="dev-note">
+                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          </div>
+                        </div>
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">내용</div>
+                          <div className="design-note text-left">
+                            디자이너: 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className=''>
+                      <h3 className="mb-2 font-semibold">
+                        <span className="text-blue-500 mx-2">✤</span>
+                        난방시즌 압력차 변화
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">차트</div>
+                          <div className="dev-note">
+                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          </div>
+                        </div>
+                        <div className='flex flex-col items-center justify-center'
+                          style={{height: '200px', borderRadius: '16px', backgroundColor: '#f0f0f0'}}
+                        >
+                          <div className="text-xl font-medium">내용</div>
+                          <div className="design-note text-left">
+                            디자이너: 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
               <div className="flex justify-center space-x-4 mt-8">
                 <button 
                   onClick={handlePrevStep}
@@ -866,101 +1042,78 @@ export default function EvaluationPage() {
                   해결방안 보기
                 </button>
               </div>
-            </div>
+            </>
           )}
           
           {/* Step 3: 해결방안 */}
           {step === 3 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold mb-6">3단계: 해결방안</h2>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">해결방안 개요</h3>
-                <div className="placeholder p-4 mb-6">
-                  <div className="wireframe-header">해결방안 개요 텍스트</div>
-                  <div className="dev-note">
-                    개발자: 해결방안에 대한 개요 텍스트가 들어갈 위치입니다.
-                  </div>
-                </div>
-              </div>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">해결방안 리스트</h3>
-                <div className="space-y-6">
-                  <div className="p-4 bg-white border rounded-lg shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <div className="placeholder h-12 w-12 mr-4"></div>
-                      <div>
-                        <h4 className="font-bold text-lg mb-2">엘리베이터 샤프트 압력 균형 시스템 도입</h4>
-                        <p>엘리베이터 샤프트 내 압력을 조절하여 압력차에 의한 문제 해결</p>
-                        <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                          <span className="font-bold text-blue-700">효과:</span> 엘리베이터 문 개폐 불량 해소, 소음 감소
+            <>
+              {/* 1. 해결방안 개요 */}
+              <section>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      1. 해결방안 개요
+                    </h2>
+                    <div className="wireframe-section">
+                      <div className="placeholder p-4 mb-6 flex flex-col justify-between">
+                        <div className="wireframe-header">연돌현상 영향도</div>
+                        <div className="dev-note">
+                          개발자: 프로젝트 이름 및 설명
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="p-4 bg-white border rounded-lg shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <div className="placeholder h-12 w-12 mr-4"></div>
-                      <div>
-                        <h4 className="font-bold text-lg mb-2">로비 및 공용부 에어커튼 설치</h4>
-                        <p>출입구 및 로비 공간에 에어커튼을 설치하여 외부 공기 유입 차단</p>
-                        <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                          <span className="font-bold text-blue-700">효과:</span> 에너지 손실 감소, 로비 환경 개선
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-white border rounded-lg shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <div className="placeholder h-12 w-12 mr-4"></div>
-                      <div>
-                        <h4 className="font-bold text-lg mb-2">공용부 공기 유동 제어 시스템</h4>
-                        <p>층간 연결 공간에 공기 유동을 제어하는 장치 설치</p>
-                        <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                          <span className="font-bold text-blue-700">효과:</span> 공기 흐름 제어, 실내 공기질 개선
+                    <div className="wireframe-section">
+                      <div className="placeholder p-4 mb-6 flex flex-col justify-between">
+                        <div className="wireframe-header">연돌현상 해결방안</div>
+                        <div className="dev-note">
+                          개발자: 해결방안에 대한 개요 텍스트가 들어갈 위치입니다.
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="wireframe-section mb-8">
-                <h3 className="text-xl font-bold mb-4">최적화 엔지니어링 제안</h3>
-                <div className="bg-[var(--light-gray)] p-6 rounded-lg">
-                  <p className="mb-4">연돌현상 저감을 위한 최적화된 엔지니어링 서비스가 필요합니다.</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div className="p-4 bg-white rounded-md shadow-sm">
-                      <h4 className="font-bold mb-2">연돌현상 예측평가</h4>
-                      <p className="text-sm mb-3">건축계획 기반 평가 및 보고서 제공</p>
-                      <div className="font-bold text-[var(--primary-color)]">Basic</div>
+              </section>
+
+              {/* 2. 개선안 리스트 */}
+              <section className='mt-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      2. 개선안 리스트
+                    </h2>
+                    <div className="wireframe-section">
+                      <div className="placeholder p-4 mb-6 flex flex-col justify-between h-80">
+                        <div className="wireframe-header">개선안 리스트</div>
+                        <div className="dev-note">
+                          개발자: 개선안에 대한 리스트 나열와 특수 방안에 대해 표현 될 위치입니다.
+                        </div>
+                      </div>
                     </div>
-                    <div className="p-4 bg-white rounded-md shadow-sm border-2 border-[var(--primary-color)]">
-                      <h4 className="font-bold mb-2">연돌현상 개선설계</h4>
-                      <p className="text-sm mb-3">연돌현상 저감을 위한 설계 가이드 제공</p>
-                      <div className="font-bold text-[var(--primary-color)]">Professional</div>
-                    </div>
-                    <div className="p-4 bg-white rounded-md shadow-sm">
-                      <h4 className="font-bold mb-2">연돌현상 최적설계</h4>
-                      <p className="text-sm mb-3">시뮬레이션 기반 최적 솔루션 설계</p>
-                      <div className="font-bold text-[var(--primary-color)]">Professional Plus</div>
-                    </div>
-                  </div>
-                  <div className="text-center mt-4">
-                    <Link
-                      href="/engineering"
-                      className="px-6 py-3 bg-[var(--primary-color)] text-white rounded-md transition"
-                    >
-                      엔지니어링 서비스 요청
-                    </Link>
                   </div>
                 </div>
-              </div>
-              
-              <div className="flex justify-center space-x-4 mt-8">
+              </section>
+
+              {/* 3. 연돌현상 설계검토 및 시뮬레이션 */}
+              <section className='mt-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                  <div className='w-full md:w-2/2 left'>
+                    <h2 className="text-xl font-bold mb-6">
+                      3. 연돌현상 설계검토 및 시뮬레이션
+                    </h2>
+                    <div className="wireframe-section">
+                      <div className="placeholder p-4 mb-6 flex flex-col justify-between h-80">
+                        <div className="wireframe-header">연돌현상 설계검토 및 시뮬레이션</div>
+                        <div className="dev-note">
+                          개발자: 연돌현상 설계검토 / 연돌현상 시뮬레이션에 관한 내용과 차트가 표현 될 위치입니다.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <div className="flex items-center justify-center space-x-4 mt-8">
                 <button 
                   onClick={handlePrevStep}
                   className="btn-large mr-4"
@@ -968,214 +1121,24 @@ export default function EvaluationPage() {
                   이전 단계로
                 </button>
                 <button 
-                  className="px-6 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition"
+                  className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
                 >
                   보고서 다운로드 (PDF)
                 </button>
+                
+                <div className="text-center">
+                  <Link
+                    href="/engineering"
+                    className="px-6 py-3 ml-4 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition"
+                  >
+                    엔지니어링 서비스 요청
+                  </Link>
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </Modal>
-      
-      
-
-      
-      {/* Step 2: 결과 확인 */}
-      {step === 2 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-6">2단계: 평가 결과</h2>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">분석 결과 요약</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="p-6 border rounded-md text-center">
-                <div className="text-3xl font-bold mb-2 text-red-500">상</div>
-                <div className="text-lg">연돌현상 위험도</div>
-              </div>
-              <div className="p-6 border rounded-md text-center">
-                <div className="text-3xl font-bold mb-2 text-orange-500">중</div>
-                <div className="text-lg">예상 하자 발생도</div>
-              </div>
-              <div className="p-6 border rounded-md text-center">
-                <div className="text-3xl font-bold mb-2 text-[var(--primary-color)]">필요</div>
-                <div className="text-lg">엔지니어링 권장도</div>
-              </div>
-            </div>
-            
-            <div className="placeholder p-4 mb-6">
-              <div className="wireframe-header">결과 요약 텍스트</div>
-              <div className="dev-note">
-                개발자: 평가 결과에 대한 전반적인 요약 텍스트가 들어갈 위치입니다.
-              </div>
-            </div>
-          </div>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">문제 및 하자 예상 결과</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="placeholder h-64">
-                <div className="wireframe-header">건물 단면도</div>
-                <div className="design-note">
-                  디자이너: 문제 발생 가능 구간을 표시한 건물 단면도 이미지
-                </div>
-              </div>
-              <div>
-                <h4 className="font-bold mb-3">예상 문제점</h4>
-                <div className="space-y-4">
-                  <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded">
-                    <div className="font-bold">상부층 엘리베이터 문 개폐 불량</div>
-                    <div className="text-sm">심각도: 높음</div>
-                  </div>
-                  <div className="p-3 bg-orange-50 border-l-4 border-orange-500 rounded">
-                    <div className="font-bold">로비 및 저층부 소음 발생</div>
-                    <div className="text-sm">심각도: 중간</div>
-                  </div>
-                  <div className="p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                    <div className="font-bold">에너지 손실</div>
-                    <div className="text-sm">심각도: 낮음</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">압력차 검토 데이터</h3>
-            <div className="placeholder h-80">
-              <div className="wireframe-header">압력차 그래프</div>
-              <div className="design-note">
-                디자이너: 층별 압력차를 보여주는 그래프
-              </div>
-              <div className="dev-note">
-                개발자: 실제 구현 시 차트 라이브러리(Chart.js 등)를 사용해 구현
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex justify-center space-x-4 mt-8">
-            <button 
-              onClick={handlePrevStep}
-              className="btn-large mr-4"
-            >
-              이전 단계로
-            </button>
-            <button 
-              onClick={handleNextStep}
-              className="btn-large"
-            >
-              해결방안 보기
-            </button>
-          </div>
-        </div>
-      )}
-      
-      {/* Step 3: 해결방안 */}
-      {step === 3 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-6">3단계: 해결방안</h2>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">해결방안 개요</h3>
-            <div className="placeholder p-4 mb-6">
-              <div className="wireframe-header">해결방안 개요 텍스트</div>
-              <div className="dev-note">
-                개발자: 해결방안에 대한 개요 텍스트가 들어갈 위치입니다.
-              </div>
-            </div>
-          </div>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">해결방안 리스트</h3>
-            <div className="space-y-6">
-              <div className="p-4 bg-white border rounded-lg shadow-sm">
-                <div className="flex items-start gap-4">
-                  <div className="placeholder h-12 w-12 mr-4"></div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">엘리베이터 샤프트 압력 균형 시스템 도입</h4>
-                    <p>엘리베이터 샤프트 내 압력을 조절하여 압력차에 의한 문제 해결</p>
-                    <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                      <span className="font-bold text-blue-700">효과:</span> 엘리베이터 문 개폐 불량 해소, 소음 감소
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 bg-white border rounded-lg shadow-sm">
-                <div className="flex items-start gap-4">
-                  <div className="placeholder h-12 w-12 mr-4"></div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">로비 및 공용부 에어커튼 설치</h4>
-                    <p>출입구 및 로비 공간에 에어커튼을 설치하여 외부 공기 유입 차단</p>
-                    <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                      <span className="font-bold text-blue-700">효과:</span> 에너지 손실 감소, 로비 환경 개선
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 bg-white border rounded-lg shadow-sm">
-                <div className="flex items-start gap-4">
-                  <div className="placeholder h-12 w-12 mr-4"></div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">공용부 공기 유동 제어 시스템</h4>
-                    <p>층간 연결 공간에 공기 유동을 제어하는 장치 설치</p>
-                    <div className="mt-2 text-sm bg-blue-50 p-2 rounded">
-                      <span className="font-bold text-blue-700">효과:</span> 공기 흐름 제어, 실내 공기질 개선
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="wireframe-section mb-8">
-            <h3 className="text-xl font-bold mb-4">최적화 엔지니어링 제안</h3>
-            <div className="bg-[var(--light-gray)] p-6 rounded-lg">
-              <p className="mb-4">연돌현상 저감을 위한 최적화된 엔지니어링 서비스가 필요합니다.</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div className="p-4 bg-white rounded-md shadow-sm">
-                  <h4 className="font-bold mb-2">연돌현상 예측평가</h4>
-                  <p className="text-sm mb-3">건축계획 기반 평가 및 보고서 제공</p>
-                  <div className="font-bold text-[var(--primary-color)]">Basic</div>
-                </div>
-                <div className="p-4 bg-white rounded-md shadow-sm border-2 border-[var(--primary-color)]">
-                  <h4 className="font-bold mb-2">연돌현상 개선설계</h4>
-                  <p className="text-sm mb-3">연돌현상 저감을 위한 설계 가이드 제공</p>
-                  <div className="font-bold text-[var(--primary-color)]">Professional</div>
-                </div>
-                <div className="p-4 bg-white rounded-md shadow-sm">
-                  <h4 className="font-bold mb-2">연돌현상 최적설계</h4>
-                  <p className="text-sm mb-3">시뮬레이션 기반 최적 솔루션 설계</p>
-                  <div className="font-bold text-[var(--primary-color)]">Professional Plus</div>
-                </div>
-              </div>
-              <div className="text-center mt-4">
-                <Link
-                  href="/engineering"
-                  className="px-6 py-3 bg-[var(--primary-color)] text-white rounded-md transition"
-                >
-                  엔지니어링 서비스 요청
-                </Link>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex justify-center space-x-4 mt-8">
-            <button 
-              onClick={handlePrevStep}
-              className="btn-large mr-4"
-            >
-              이전 단계로
-            </button>
-            <button 
-              className="px-6 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition"
-            >
-              보고서 다운로드 (PDF)
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 } 

@@ -1050,10 +1050,10 @@
 }
 
 .stack-intro-left h3 {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   /* color: var(--dark-gray); */
   color: #9C27B0;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 3rem;
 }
 
@@ -1114,7 +1114,8 @@
 }
 
 .services-container {
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  max-width: 1504px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -1125,9 +1126,10 @@
 }
 
 .services-title {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: #9C27B0;
 }
 
 .service-grid {
@@ -1210,7 +1212,7 @@
 
 /* 메인2 - 바로가기 섹션 스타일 */
 .shortcuts-section {
-  padding: 7rem 0;
+  padding: 10rem 0 12rem 0;
   background-color: white;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -1268,7 +1270,7 @@
   text-decoration: none;
   color: var(--text-color);
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   border-radius: 0;
 }
 

@@ -1,5 +1,5 @@
 /* 공통 버튼 */
-.btn-primary{
+.cppe .btn-primary{
   background-color: var(--primary-color);
   color: var(--text-color-white);
   border: 1px solid var(--primary-color);
