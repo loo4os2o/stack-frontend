@@ -1,0 +1,139 @@
+/* 엔지니어링 서비스 요금제 */
+.plan-tiers-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  width: 100%;
+  margin: 3rem 0 4rem 0;
+  position: relative;
+}
+.plan-card {
+  flex: 1 1 0%;
+  border-radius: 1rem;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  z-index: 10;
+  position: relative;
+  transition: clip-path 0.2s;
+}
+.plan-card-basic {
+  background: #dbeafe; /* 진한 연파랑 */
+  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+  padding: 2rem 6rem 2rem 3rem;
+}
+.plan-card-pro {
+  background: #d1fae5; /* 진한 연녹색 */
+  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+  padding: 2rem 5rem 2rem 7rem;
+}
+.plan-card-plus,
+.plan-card-last {
+  background: #fee2e2; /* 진한 연살구 */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  padding: 2rem 3rem 2rem 7rem;
+}
+.plan-level {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #777;
+}
+/* .plan-level-basic { color: #2563eb; } */
+/* .plan-level-pro { color: #059669; } */
+/* .plan-level-plus { color: #dc2626; } */
+
+.plan-desc {
+  width: 100%;
+  border-bottom: 1px solid #fff;
+  margin: 1rem 0 1.5rem 0;
+  padding-bottom: 1.5rem;
+}
+
+.plan-checklist > li {
+  position: relative;
+  padding-left: 0.5rem;
+  padding-bottom: 0.3rem;
+}
+.plan-checklist > li.check::before {
+  content: '✔️';
+  position: absolute;
+  left: -1rem;
+  margin-bottom: 1rem;
+}
+.plan-checklist > li.plus::before {
+  content: '➕';
+  position: absolute;
+  left: -1rem;
+  margin-bottom: 1rem;
+}
+
+/* 모든 서비스 비교표 */
+.service-comparison-table th, 
+.service-comparison-table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  text-align: left;
+}
+.service-comparison-table th.bg-blue-50,
+.service-comparison-table th.bg-green-50,
+.service-comparison-table th.bg-red-50 {
+  text-align: center;
+}
+.service-comparison-table td.text-center,
+.service-comparison-table th.text-center {
+  text-align: center;
+}
+
+.service-comparison-table th {
+  background: #f3f4f6;
+}
+
+.service-comparison-table .btn-xs {
+  font-size: 0.95rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.4rem;
+  margin: 0.1rem 0;
+}
+@media (max-width: 768px) {
+  .service-comparison-table {
+    min-width: 600px;
+  }
+  .service-comparison-table th, .service-comparison-table td {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.2rem;
+    word-break: keep-all;
+    white-space: pre-line;
+  }
+  .service-comparison-table .btn-xs {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .plan-card,
+  .plan-card-basic,
+  .plan-card-pro,
+  .plan-card-plus,
+  .plan-card-last {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    margin-left: 0 !important;
+  }
+  .plan-tiers-wrap {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .plan-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto !important;
+    padding: 2rem;
+  }
+}

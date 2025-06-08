@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Modal from '@/components/common/Modal';
-import Link from 'next/link';
+import SolutionTabs from './SolutionTabs';
 import "@/css/evaluation.css";
 import Image from 'next/image';
 import ExImgCppe from "@/assets/images/ex/ex-img-cppe.png";
@@ -1046,97 +1046,8 @@ export default function EvaluationPage() {
           )}
           
           {/* Step 3: 해결방안 */}
-          {step === 3 && (
-            <>
-              {/* 1. 해결방안 개요 */}
-              <section>
-                <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-2/2 left'>
-                    <h2 className="text-xl font-bold mb-6">
-                      1. 해결방안 개요
-                    </h2>
-                    <div className="wireframe-section">
-                      <div className="placeholder p-4 mb-6 flex flex-col justify-between">
-                        <div className="wireframe-header">연돌현상 영향도</div>
-                        <div className="dev-note">
-                          개발자: 프로젝트 이름 및 설명
-                        </div>
-                      </div>
-                    </div>
-                    <div className="wireframe-section">
-                      <div className="placeholder p-4 mb-6 flex flex-col justify-between">
-                        <div className="wireframe-header">연돌현상 해결방안</div>
-                        <div className="dev-note">
-                          개발자: 해결방안에 대한 개요 텍스트가 들어갈 위치입니다.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
+          {step === 3 && <SolutionTabs handlePrevStep={handlePrevStep} />}
 
-              {/* 2. 개선안 리스트 */}
-              <section className='mt-8'>
-                <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-2/2 left'>
-                    <h2 className="text-xl font-bold mb-6">
-                      2. 개선안 리스트
-                    </h2>
-                    <div className="wireframe-section">
-                      <div className="placeholder p-4 mb-6 flex flex-col justify-between h-80">
-                        <div className="wireframe-header">개선안 리스트</div>
-                        <div className="dev-note">
-                          개발자: 개선안에 대한 리스트 나열와 특수 방안에 대해 표현 될 위치입니다.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 3. 연돌현상 설계검토 및 시뮬레이션 */}
-              <section className='mt-8'>
-                <div className='flex flex-col md:flex-row gap-8'>
-                  <div className='w-full md:w-2/2 left'>
-                    <h2 className="text-xl font-bold mb-6">
-                      3. 연돌현상 설계검토 및 시뮬레이션
-                    </h2>
-                    <div className="wireframe-section">
-                      <div className="placeholder p-4 mb-6 flex flex-col justify-between h-80">
-                        <div className="wireframe-header">연돌현상 설계검토 및 시뮬레이션</div>
-                        <div className="dev-note">
-                          개발자: 연돌현상 설계검토 / 연돌현상 시뮬레이션에 관한 내용과 차트가 표현 될 위치입니다.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <div className="flex items-center justify-center space-x-4 mt-8">
-                <button 
-                  onClick={handlePrevStep}
-                  className="btn-large mr-4"
-                >
-                  이전 단계로
-                </button>
-                <button 
-                  className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
-                >
-                  보고서 다운로드 (PDF)
-                </button>
-                
-                <div className="text-center">
-                  <Link
-                    href="/engineering"
-                    className="px-6 py-3 ml-4 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition"
-                  >
-                    엔지니어링 서비스 요청
-                  </Link>
-                </div>
-              </div>
-            </>
-          )}
         </div>
       </Modal>
     </div>
