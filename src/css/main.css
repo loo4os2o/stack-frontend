@@ -579,7 +579,7 @@
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
-  z-index: 100;
+  z-index: 110;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -596,7 +596,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  z-index: 109;
 }
 
 .drawer-header {

@@ -80,7 +80,7 @@ export default function EvaluationPage() {
             <div className="design-note">연돌현상으로 인한 문제점이나 영향을 시각적으로 표현한 이미지</div>
           </div>
         </div>
-        <div className='imgage-wrap mt-16'>
+        <div className='image-wrap mt-16'>
           <Image src={ExImgCppe} alt="HOW DO WE ASSESS?" />
         </div>
       </section>
@@ -89,40 +89,42 @@ export default function EvaluationPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={
-          <div className="mb-4 mr-4">
-            {/* 진행 상태 표시 */}
-            <div className="flex items-center justify-between">
-              <div className={`flex flex-col items-center ${step >= 1 ? 'active-process' : 'text-gray-400'}`}>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 1 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
-                  1
-                </div>
-                <span>건물 정보 입력</span>
-              </div>
-              <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
-              <div className={`flex flex-col items-center ${step >= 2 ? 'active-process' : 'text-gray-400'}`}>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 2 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
-                  2
-                </div>
-                <span>연돌현상 분석결과</span>
-              </div>
-              <div className={`flex-1 h-1 mx-2 ${step >= 3 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
-              <div className={`flex flex-col items-center ${step >= 3 ? 'active-process' : 'text-gray-400'}`}>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 3 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
-                  3
-                </div>
-                <span>연돌현상 해결방안</span>
-              </div>
-            </div>
-          </div>
-        }
-        footer={
-          <>
-            <button className="btn-primary btn-large"
-              style={{width: '20%'}}
-              onClick={() => setModalOpen(false)}>확인 [닫기]</button>
-          </>
-        }
+        // title={
+        //   <div className="mb-4 mr-4">
+        //     {/* 진행 상태 표시 */}
+        //     <div className="flex items-center justify-between">
+        //       <div className={`flex flex-col items-center ${step >= 1 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 1 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           1
+        //         </div>
+        //         <span>건물 정보 입력</span>
+        //       </div>
+        //       <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
+        //       <div className={`flex flex-col items-center ${step >= 2 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 2 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           2
+        //         </div>
+        //         <span>연돌현상 분석결과</span>
+        //       </div>
+        //       <div className={`flex-1 h-1 mx-2 ${step >= 3 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
+        //       <div className={`flex flex-col items-center ${step >= 3 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 3 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           3
+        //         </div>
+        //         <span>연돌현상 해결방안</span>
+        //       </div>
+        //     </div>
+        //   </div>
+        // }
+        title={" "}
+        // footer={
+        //   <>
+        //     <button className="btn-primary btn-large"
+        //       style={{width: '20%'}}
+        //       onClick={() => setModalOpen(false)}>확인 [닫기]</button>
+        //   </>
+        // }
+        footer={" "}
         width={'80%'}
       >
         <div>

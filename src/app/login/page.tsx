@@ -17,6 +17,9 @@ function LoginForm() {
   const [organization, setOrganization] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
+  const [emailCode, setEmailCode] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [passwordMatchError, setPasswordMatchError] = useState('');
 
   // 유저 계정 더미 데이터
   const users = [
@@ -65,6 +68,11 @@ function LoginForm() {
       // 로그인 실패
       setError('이메일 또는 비밀번호가 올바르지 않습니다.');
     } else {
+      // 비밀번호 일치 확인
+      if (password !== passwordCheck) {
+        setPasswordMatchError('비밀번호가 일치하지 않습니다.');
+        return;
+      }
       // 회원가입 처리 (실제 구현에서는 API 호출 등이 필요함)
       console.log('회원가입 시도', { email, password, name, organization, phone });
       // 회원가입 성공 후 로그인 화면으로 전환
@@ -74,14 +82,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <div className={`max-w-md mx-auto rounded-lg shadow-md p-8 ${isLogin ? 'bg-white' : 'bg-orange'}`}>
       <h1 className="text-2xl font-bold mb-6 text-center">
         {isLogin ? '로그인' : '회원가입'}
       </h1>
       
       <div className="flex mb-6">
         <button
-          className={`flex-1 py-2 text-center border-b-2 ${
+          className={`flex-1 py-2 text-center ${
             isLogin ? 'login-active' : 'login-inactive'
           }`}
           onClick={() => setIsLogin(true)}
@@ -89,7 +97,7 @@ function LoginForm() {
           로그인
         </button>
         <button
-          className={`flex-1 py-2 text-center border-b-2 ${
+          className={`flex-1 py-2 text-center ${
             !isLogin ? 'login-active' : 'login-inactive'
           }`}
           onClick={() => setIsLogin(false)}
@@ -107,7 +115,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="email" className="block mb-2">
-            이메일
+            아이디(이메일)<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="email"
@@ -118,28 +126,71 @@ function LoginForm() {
             placeholder="이메일 주소를 입력하세요"
             required
           />
+          {!isLogin && (
+            <div className="flex gap-2 mt-2">
+              <input
+                type="text"
+                maxLength={6}
+                value={emailCode}
+                onChange={e => setEmailCode(e.target.value.replace(/[^0-9]/g, ''))}
+                className="flex-1 px-4 py-2 border rounded-md"
+                placeholder="인증번호 6자리"
+              />
+              <button type="button" className="px-4 py-2 btn-basic whitespace-nowrap">인증하기</button>
+            </div>
+          )}
         </div>
         
         <div className="mb-4">
           <label htmlFor="password" className="block mb-2">
-            비밀번호
+            비밀번호<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (!isLogin && passwordCheck && e.target.value !== passwordCheck) {
+                setPasswordMatchError('비밀번호가 일치하지 않습니다.');
+              } else {
+                setPasswordMatchError('');
+              }
+            }}
             className="w-full px-4 py-2 border rounded-md"
-            placeholder="비밀번호를 입력하세요"
+            placeholder={isLogin ? "비밀번호를 입력하세요" : "영문, 숫자, 특수문자를 포함한 6-20자리"}
             required
           />
+          {!isLogin && (
+            <>
+              <input
+                type="password"
+                id="passwordCheck"
+                value={passwordCheck}
+                onChange={e => {
+                  setPasswordCheck(e.target.value);
+                  if (password !== e.target.value) {
+                    setPasswordMatchError('비밀번호가 일치하지 않습니다.');
+                  } else {
+                    setPasswordMatchError('');
+                  }
+                }}
+                className="w-full px-4 py-2 border rounded-md mt-2"
+                placeholder="비밀번호 재입력"
+                required
+              />
+              {passwordMatchError && (
+                <div className="text-red-500 text-sm mt-1">{passwordMatchError}</div>
+              )}
+            </>
+          )}
         </div>
         
         {!isLogin && (
           <>
             <div className="mb-4">
               <label htmlFor="name" className="block mb-2">
-                이름
+                이름<span className="text-red-500 ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -154,7 +205,7 @@ function LoginForm() {
             
             <div className="mb-4">
               <label htmlFor="organization" className="block mb-2">
-                소속
+                소속<span className="text-red-500 ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -169,7 +220,7 @@ function LoginForm() {
             
             <div className="mb-6">
               <label htmlFor="phone" className="block mb-2">
-                연락처
+                연락처<span className="text-red-500 ml-1">*</span>
               </label>
               <input
                 type="tel"

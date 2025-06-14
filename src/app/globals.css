@@ -39,6 +39,11 @@ body {
   color: var(--text-color-orange);
 }
 
+.bg-orange{
+  background-color: #FFF7ED;
+  /* background-color: #FFcd90; */
+}
+
 .placeholder {
   background-color: var(--medium-gray);
   border: 1px solid var(--dark-gray);
@@ -119,6 +124,16 @@ body {
     @apply bg-primary text-white border-transparent;
   }
 }
+
+/* 공통 아이콘 */
+.icon-img-40{
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 /* 로그인/회원가입 */
 .login-active{

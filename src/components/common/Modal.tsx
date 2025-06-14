@@ -77,7 +77,9 @@ export default function Modal({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 2rem 3rem 0.5rem 3.5rem;
+          padding: 1.5rem 3rem 0rem 3.5rem;
+          // 헤더있을 때
+          // padding: 2rem 3rem 0.5rem 3.5rem;
           // border-bottom: 1px solid #eee;
         }
         .modal-title {
@@ -95,7 +97,9 @@ export default function Modal({
         .modal-body {
           padding: 1.2rem 1.5rem;
           // border: 1px solid red;
-          max-height: 65vh;
+          max-height: 80vh;
+          // 헤더있을 때
+          // max-height: 65vh;
           overflow-y: auto;
         }
         .modal-footer {

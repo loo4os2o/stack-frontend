@@ -98,7 +98,7 @@ export default function PlanTiers() {
               <button className="plan-btn-free w-full py-2 rounded bg-gray-100 text-blue-700 font-semibold border border-blue-200 mb-2">{plan.free.label}</button>
             </div>
           )}
-          <div className="w-full mb-6">
+          <div className="w-full mb-6 h-full flex flex-col justify-between">
             <ul className="plan-checklist text-xs text-gray-700 mb-4 pl-4">
               {plan.request.desc.map((txt, i) => (
                 <li key={i} className='plus'>{txt}</li>

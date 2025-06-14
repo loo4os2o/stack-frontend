@@ -5,11 +5,26 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Background from "@/assets/images/architecture-1867194_1920.jpg";
+import slideImg1 from '@/assets/images/lotte-tower.jpg';
+import slideImg2 from '@/assets/images/haeundae.jpg';
+import slideImg3 from '@/assets/images/acro.jpg';
+import slideImg4 from '@/assets/images/lusail.png';
 
 export default function Home() {
   const router = useRouter();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // 슬라이드 이미지 배열
+  const slides = [
+    { src: slideImg1, alt: '슬라이드1' },
+    { src: slideImg2, alt: '슬라이드2' },
+    { src: slideImg3, alt: '슬라이드3' },
+    { src: slideImg4, alt: '슬라이드4' },
+  ];
+  const [slideIdx, setSlideIdx] = useState(0);
+  const prevSlide = () => setSlideIdx((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  const nextSlide = () => setSlideIdx((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
 
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
@@ -239,11 +254,47 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="w-full md:w-3/5 intro-image">
-            <div className="image-placeholder w-full h-full bg-gray-200 rounded-lg flex items-center justify-center"
-              style={{minHeight: '400px'}}
+          <div className="w-full md:w-3/5 intro-image flex items-center justify-center">
+            <div className="relative w-full bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden"
+              style={{height: '508px'}}
             >
-              <p className="text-gray-500">이미지 영역</p>
+              {/* 슬라이드 이미지 */}
+              <Image
+                src={slides[slideIdx].src}
+                alt={slides[slideIdx].alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover rounded-lg transition-all duration-300"
+                style={{ zIndex: 1 }}
+              />
+              {/* 좌우 화살표 */}
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 bg-white hover:bg-gray-200 text-gray-700 rounded-full w-10 h-10 flex items-center justify-center shadow"
+                onClick={prevSlide}
+                style={{ zIndex: 2 }}
+                aria-label="이전 슬라이드"
+              >
+                <span style={{transform: 'rotate(180deg)', marginTop: '4px'}}> ➜ </span>
+              </button>
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 bg-white hover:bg-gray-200 text-gray-700 rounded-full w-10 h-10 flex items-center justify-center shadow"
+                onClick={nextSlide}
+                style={{ zIndex: 2 }}
+                aria-label="다음 슬라이드"
+              >
+                <span style={{marginTop: '-2px'}}> ➜ </span>
+              </button>
+              {/* 인디케이터 */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`w-3 h-3 rounded-full ${i === slideIdx ? 'bg-blue-500' : 'bg-white/70 border border-gray-400'}`}
+                    onClick={() => setSlideIdx(i)}
+                    aria-label={`슬라이드 ${i + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

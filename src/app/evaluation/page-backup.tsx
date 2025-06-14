@@ -59,7 +59,7 @@ export default function EvaluationPage() {
             <div className="design-note">연돌현상으로 인한 문제점이나 영향을 시각적으로 표현한 이미지</div>
           </div>
         </div>
-        <div className='imgage-wrap mt-16'>
+        <div className='image-wrap mt-16'>
           <Image src={ExImgCppe} alt="HOW DO WE ASSESS?" />
         </div>
       </section>

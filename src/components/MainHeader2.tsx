@@ -134,7 +134,7 @@ const MainHeader2 = () => {
                 className="nav-link"
                 onClick={(e) => handleNavigation(e, '/projects')}
               >
-                프로젝트 실적
+                엔지니어링 프로젝트 실적
               </a>
             </li>
             
