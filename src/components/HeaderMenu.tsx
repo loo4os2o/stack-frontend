@@ -234,8 +234,8 @@ export function HeaderMenu() {
               서비스 요청하기
             </Link> */}
             {isLoggedIn && (
-              <Link href="#" className="drawer-link">
-                마이페이지
+              <Link href="/my-project" className="drawer-link">
+                마이 프로젝트
               </Link>
             )}
             {isAdmin && (

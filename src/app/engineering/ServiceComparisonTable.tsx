@@ -137,7 +137,7 @@ export default function ServiceComparisonTable() {
                   <button className="btn-primary btn-xs mt-auto">샘플 다운로드</button>
                 </div>
               </td>
-              <td className="bg-blue-50 p-0 h-full align-top">
+              <td className="bg-green-50 p-0 h-full align-top">
                 <div className="flex flex-col h-full justify-end p-4"
                   style={{minHeight: '190px'}}
                 >
@@ -149,7 +149,7 @@ export default function ServiceComparisonTable() {
                   <button className="btn-primary btn-xs mt-auto">샘플 다운로드</button>
                 </div>
               </td>
-              <td className="bg-blue-50 p-0 h-full align-top">
+              <td className="bg-red-50 p-0 h-full align-top">
                 <div className="flex flex-col h-full justify-end p-4"
                   style={{minHeight: '190px'}}
                 >
