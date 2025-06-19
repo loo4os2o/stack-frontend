@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Modal from '@/components/common/Modal';
 import SolutionTabs from './SolutionTabs';
 import "@/css/evaluation.css";
@@ -11,7 +10,6 @@ import ImageUploadButton from '@/components/ImageUploadButton';
 import ImagePreview from '@/components/ImagePreview';
 
 export default function EvaluationPage() {
-  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -33,16 +31,7 @@ export default function EvaluationPage() {
   const [midZone, setMidZone] = useState<number | ''>('');
   const [highZone, setHighZone] = useState<number | ''>('');
 
-  const handleEvaluate = () => {
-    setIsProcessing(true);
-    // 실제로는 여기서 API 호출 등을 통해 평가를 진행
-    setTimeout(() => {
-      setIsProcessing(false);
-      setModalOpen(false);
-      // 결과 페이지로 이동
-      router.push('/evaluation/result');
-    }, 2000);
-  };
+
 
   const handleNextStep = () => {
     if (step === 1) {
@@ -59,11 +48,6 @@ export default function EvaluationPage() {
 
   const handlePrevStep = () => {
     setStep(step - 1);
-  };
-
-  const handleSave = () => {
-    // TODO: 저장 로직 구현
-    alert('저장되었습니다.');
   };
 
   return (
@@ -105,7 +89,41 @@ export default function EvaluationPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        // title={
+        //   <div className="mb-4 mr-4">
+        //     {/* 진행 상태 표시 */}
+        //     <div className="flex items-center justify-between">
+        //       <div className={`flex flex-col items-center ${step >= 1 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 1 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           1
+        //         </div>
+        //         <span>건물 정보 입력</span>
+        //       </div>
+        //       <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
+        //       <div className={`flex flex-col items-center ${step >= 2 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 2 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           2
+        //         </div>
+        //         <span>연돌현상 분석결과</span>
+        //       </div>
+        //       <div className={`flex-1 h-1 mx-2 ${step >= 3 ? 'active-process-bg' : 'bg-gray-200'}`}></div>
+        //       <div className={`flex flex-col items-center ${step >= 3 ? 'active-process' : 'text-gray-400'}`}>
+        //         <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${step >= 3 ? 'active-process-bg text-white' : 'bg-gray-200'}`}>
+        //           3
+        //         </div>
+        //         <span>연돌현상 해결방안</span>
+        //       </div>
+        //     </div>
+        //   </div>
+        // }
         title={" "}
+        // footer={
+        //   <>
+        //     <button className="btn-primary btn-large"
+        //       style={{width: '20%'}}
+        //       onClick={() => setModalOpen(false)}>확인 [닫기]</button>
+        //   </>
+        // }
         footer={" "}
         width={'80%'}
       >
@@ -735,7 +753,7 @@ export default function EvaluationPage() {
               </section>
 
               {/* 평가하기 버튼 */}
-              <div className="flex justify-center gap-4 p-6 pb-0 mt-6">
+              <div className="flex justify-center p-6 pb-0 mt-6">
                 {isProcessing ? (
                   <button 
                     className="px-6 py-3 bg-gray-400 text-white rounded-md cursor-not-allowed"
@@ -744,21 +762,12 @@ export default function EvaluationPage() {
                     처리 중...
                   </button>
                 ) : (
-                  <>
-                    <button 
-                      onClick={handleSave}
-                      className="btn-large bg-primary text-white border-2 border-primary hover:underline"
-                      style={{ textUnderlineOffset: '4px' }}
-                    >
-                      저장하기
-                    </button>
-                    <button 
-                      onClick={handleEvaluate}
-                      className="btn-large"
-                    >
-                      평가하기
-                    </button>
-                  </>
+                  <button 
+                    onClick={handleNextStep}
+                    className="btn-large"
+                  >
+                    평가하기
+                  </button>
                 )}
               </div>
             </>
@@ -1039,6 +1048,7 @@ export default function EvaluationPage() {
           )}
           
           {/* Step 3: 해결방안 */}
+          {/* {step === 3 && <SolutionTabs handlePrevStep={handlePrevStep} />} */}
           {step === 3 && <SolutionTabs />}
 
         </div>

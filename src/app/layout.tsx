@@ -3,20 +3,25 @@
 import { HeaderMenu } from "@/components/HeaderMenu";
 import MainHeader from "@/components/MainHeader";
 import Footer from "@/components/Footer";
+import TopButton from "@/components/common/TopButton";
 import "./globals.css";
 import "@/css/main.css";
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const pathname = usePathname();
   const [activeDropdowns, setActiveDropdowns] = useState<string[]>([]);
   const isMainPage = pathname === '/';
   const isMain2Page = pathname === '/main2';
+  const [showTopButton, setShowTopButton] = useState(false);
 
   const handleOutsideClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -34,6 +39,26 @@ export default function RootLayout({
     };
   }, [handleOutsideClick]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <html lang="ko">
       <head>
@@ -42,7 +67,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body className={inter.className}>
         {isMainPage ? (
           <MainHeader />
         ) : isMain2Page ? (
@@ -56,6 +81,18 @@ export default function RootLayout({
         )}
         <main>{children}</main>
         <Footer />
+        <TopButton />
+        
+        {/* Top 버튼 */}
+        {showTopButton && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 w-12 h-12 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition flex items-center justify-center shadow-lg"
+            style={{ zIndex: 50 }}
+          >
+            ↑
+          </button>
+        )}
       </body>
     </html>
   );

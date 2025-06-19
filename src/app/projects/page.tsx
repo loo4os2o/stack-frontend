@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../css/projects.css';
 import Image from 'next/image';
 import lotteTowerImg from '@/assets/images/lotte-tower.jpg';
@@ -32,7 +32,7 @@ type Project = {
 export default function ProjectsPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [page, setPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 20;
 
   // 필터 상태
   const [filter, setFilter] = useState({
@@ -42,7 +42,8 @@ export default function ProjectsPage() {
   });
   const [appliedFilter, setAppliedFilter] = useState(filter);
 
-  const projects = [
+  // 샘플 5개 데이터
+  const baseProjects = [
     {
       title: '롯데월드타워',
       image: lotteTowerImg,
@@ -64,11 +65,11 @@ export default function ProjectsPage() {
       desc: '해운대 관광 리조트 개발사업 설계단계 \n연돌효과 저감용역',
       detail: {
         building: '해운대 관광 리조트 개발사업',
-        scale: '글자길이 테스트 글자길이 테스트 글자길이 테스트',
+        scale: '지하 3층, 지상 20층',
         height: '150m',
         usage: '주거시설',
-        client: '글자길이 테스트 글자길이 테스트 글자길이 테스트 글자길이 테스트 글자길이 테스트',
-        content: '글자길이 테스트 \n글자길이 테스트 \n글자길이 테스트 \n글자길이 테스트 \n글자길이 테스트',
+        client: '해운대관광',
+        content: '연돌효과 저감 컨설팅',
         photo: haeundaeImg,
       },
       repProject: true,
@@ -79,11 +80,11 @@ export default function ProjectsPage() {
       desc: '아크로 서울포레스트 신축공사 \n연돌효과 저감 및 기밀 지침 용역',
       detail: {
         building: '아크로 서울포레스트 신축공사',
-        scale: '',
+        scale: '지하 6층, 지상 49층',
         height: '300m',
         usage: '복합시설',
         client: '서울A건설',
-        content: '',
+        content: '기밀 지침 및 연돌효과 저감',
         photo: acroImg,
       },
       repProject: true,
@@ -110,22 +111,28 @@ export default function ProjectsPage() {
       },
       repProject: false,
     },
-    {
-      title: '페이징 테스트',
-      image: lusailImg,
-      desc: '페이징 테스트',
-      detail: null,
-      repProject: false,
-    },
   ];
 
+  // 50개 프로젝트 생성 (랜덤 섞기)
+  function getRandomInt(max: number) { return Math.floor(Math.random() * max); }
+  const projects = Array.from({ length: 50 }).map((_, i) => {
+    const base = baseProjects[getRandomInt(baseProjects.length)];
+    // title, desc, detail.building 등에 인덱스 붙여 구분
+    return {
+      ...base,
+      title: `${base.title} ${i + 1}`,
+      desc: `${base.desc}\n(프로젝트 번호: ${i + 1})`,
+      detail: base.detail ? { ...base.detail, building: `${base.detail.building} ${i + 1}` } : null,
+    };
+  });
+
   // 관리자 권한 확인
-  const [isAdmin, setIsAdmin] = useState(false);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsAdmin(localStorage.getItem('userRole') === 'admin');
-    }
-  }, []);
+  // const [isAdmin, setIsAdmin] = useState(false);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     setIsAdmin(localStorage.getItem('userRole') === 'admin');
+  //   }
+  // }, []);
 
   // 프로젝트 상태 관리 (삭제/추가/수정 반영)
   const [projectList, setProjectList] = useState<(Project | typeof projects[number])[]>(projects);
@@ -183,36 +190,36 @@ export default function ProjectsPage() {
   };
 
   // 삭제
-  const handleDelete = (idx: number) => {
-    setProjectList(prev => prev.filter((_, i) => i !== idx));
-    setOpenIndex(null);
-  };
+  // const handleDelete = (idx: number) => {
+  //   setProjectList(prev => prev.filter((_, i) => i !== idx));
+  //   setOpenIndex(null);
+  // };
   // 수정 모달 열기
-  const handleEdit = (idx: number) => {
-    setModalType('edit');
-    setEditIdx(idx);
-    setForm(projectList[idx]);
-    // 기존 이미지가 있으면 미리보기로 세팅 (string 또는 StaticImageData 모두)
-    const photo = projectList[idx].detail?.photo;
-    if (typeof photo === 'string') {
-      setPreviewUrl(photo);
-    } else if (photo && typeof photo === 'object' && 'src' in photo) {
-      setPreviewUrl(photo.src);
-    } else {
-      setPreviewUrl(null);
-    }
-    setModalOpen(true);
-  };
+  // const handleEdit = (idx: number) => {
+  //   setModalType('edit');
+  //   setEditIdx(idx);
+  //   setForm(projectList[idx]);
+  //   // 기존 이미지가 있으면 미리보기로 세팅 (string 또는 StaticImageData 모두)
+  //   const photo = projectList[idx].detail?.photo;
+  //   if (typeof photo === 'string') {
+  //     setPreviewUrl(photo);
+  //   } else if (photo && typeof photo === 'object' && 'src' in photo) {
+  //     setPreviewUrl(photo.src);
+  //   } else {
+  //     setPreviewUrl(null);
+  //   }
+  //   setModalOpen(true);
+  // };
   // 추가 모달 열기
-  const handleAdd = () => {
-    setModalType('add');
-    setForm({
-      title: '', desc: '', image: '', detail: { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' },
-      repProject: false,
-    });
-    setPreviewUrl(null);
-    setModalOpen(true);
-  };
+  // const handleAdd = () => {
+  //   setModalType('add');
+  //   setForm({
+  //     title: '', desc: '', image: '', detail: { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' },
+  //     repProject: false,
+  //   });
+  //   setPreviewUrl(null);
+  //   setModalOpen(true);
+  // };
   // 저장(수정/추가)
   const handleSave = () => {
     if (modalType === 'edit' && editIdx !== null) {
@@ -233,7 +240,7 @@ export default function ProjectsPage() {
       
       {/* 대표 이미지 3개 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        {projects.slice(0, 3).map((p, i) => (
+        {baseProjects.filter(p => p.repProject).map((p, i) => (
           <div key={i} className="flex flex-col items-center bg-white rounded-lg shadow p-4">
             <div className="w-full h-46 bg-gray-200 rounded mb-4 flex items-center justify-center overflow-hidden">
               <Image src={p.image} alt={p.title} width={400} height={200} className="object-cover w-full h-full" />
@@ -284,13 +291,13 @@ export default function ProjectsPage() {
       
       {/* 아코디언 프로젝트 목록 */}
       <div className="bg-white rounded-lg shadow py-4 px-8 mb-8 eng-projects">
-        {isAdmin && (
+        {/* {isAdmin && (
           <div className="flex justify-end">
           <button className="btn-primary login-active px-4 py-2 text-sm" onClick={handleAdd}>
               + 추가하기
             </button>
           </div>
-        )}
+        )} */}
         {pagedProjects.map((project) => {
           // projectList에서의 실제 인덱스 찾기
           const realIdx = projectList.findIndex(p => p === project);
@@ -304,7 +311,7 @@ export default function ProjectsPage() {
                   <span className="text-xl font-bold">{openIndex === realIdx ? '➖' : '➕'}</span>
                   <span className="font-semibold text-lg text-left">{project.title}</span>
                 </button>
-                {isAdmin && (
+                {/* {isAdmin && (
                   <div className="flex items-center gap-2 ml-2 mb-4 sm:mb-0">
                     <label className="flex items-center gap-1 text-sm">
                       <input
@@ -320,7 +327,7 @@ export default function ProjectsPage() {
                     <button className="px-2 py-1 text-sm border rounded hover:bg-gray-100" onClick={() => handleEdit(realIdx)}>수정</button>
                     <button className="px-2 py-1 text-sm border rounded text-red-500 hover:bg-red-50" onClick={() => handleDelete(realIdx)}>삭제</button>
                   </div>
-                )}
+                )} */}
               </div>
               {openIndex === realIdx && (
                 <div className="flex flex-col-reverse md:flex-row gap-6 py-6 acc-info-wrap">

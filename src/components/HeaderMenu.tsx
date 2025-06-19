@@ -87,7 +87,9 @@ export function HeaderMenu() {
           <div className="flex items-center space-x-2">
             {isLoggedIn ? (
               <div className="flex items-center space-x-3">
-                <span className="text-sm text-white">{userName} 님</span>
+                <Link href="/mypage" className="hover:underline">
+                  <span className="text-sm text-white">{userName} 님</span>
+                </Link>
                 <button 
                   onClick={handleLogout}
                   className="top-menu-btn"
@@ -244,7 +246,7 @@ export function HeaderMenu() {
               </Link>
             )}
             {isLoggedIn && (
-              <Link href="#" className="drawer-link">
+              <Link href="/mypage" className="drawer-link">
                 개인정보관리
               </Link>
             )}

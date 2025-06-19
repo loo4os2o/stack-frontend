@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function SolutionTabs({ handlePrevStep }: { handlePrevStep: () => void }) {
+export default function SolutionTabs() {
   const [activeTab, setActiveTab] = useState<'tab1' | 'tab2' | 'tab3'>('tab1');
 
   return (
@@ -112,27 +112,13 @@ export default function SolutionTabs({ handlePrevStep }: { handlePrevStep: () =>
         </>
       )}
 
-      <div className="flex items-center justify-center space-x-4 mt-8">
-        <button 
-          onClick={handlePrevStep}
-          className="btn-large mr-4"
-        >
-          이전 단계로
-        </button>
-        <button 
+      <div className="flex justify-center space-x-4 mt-8">
+        <Link 
+          href="/engineering"
           className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
         >
-          보고서 다운로드 (PDF)
-        </button>
-        
-        <div className="text-center">
-          <Link
-            href="/engineering"
-            className="px-6 py-3 ml-4 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition"
-          >
-            엔지니어링 서비스 요청
-          </Link>
-        </div>
+          엔지니어링 서비스 문의하기
+        </Link>
       </div>
     </div>
   );

@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import type { StaticImageData } from 'next/image';
+import Link from "next/link";
 import lotteTowerImg from '@/assets/images/lotte-tower.jpg';
 
-// 임시 마이 프로젝트 타입
-type MyProject = {
+// 프로젝트 타입
+type Project = {
+  id: string;
+  createdAt: string;
   name: string;
-  number: string;
-  date: string;
   usage: string;
   location: string;
   height: string;
@@ -18,45 +18,99 @@ type MyProject = {
   image?: string | StaticImageData | null;
 };
 
-// 예시 데이터 객체
-const exampleProject = {
-  name: "ABDC",
-  number: "2025A01A",
-  date: "2024-06-01",
-  usage: "주거",
-  location: "서울 강남구",
-  height: "120m",
-  shaft: "싱글존 샤프트",
-  image: lotteTowerImg,
-  // image: null,
-};
+// 예시 데이터
+const projects: Project[] = [
+  {
+    id: "2025A01A",
+    createdAt: '2025-05-10',
+    name: 'A 오피스타워',
+    usage: '오피스',
+    location: '서울 강서구',
+    height: '120m',
+    shaft: '싱글존 샤프트',
+    image: lotteTowerImg,
+  },
+  {
+    id: "2025A02B",
+    createdAt: '2025-06-01',
+    name: 'B 주상복합',
+    usage: '주거',
+    location: '대전 서구',
+    height: '200m',
+    shaft: '투존 샤프트',
+    image: null,
+  },
+  {
+    id: "2025A03C",
+    createdAt: '2025-06-05',
+    name: 'C 호텔',
+    usage: '호텔',
+    location: '서울 강남구',
+    height: '300m',
+    shaft: '멀티존 샤프트',
+    image: lotteTowerImg,
+  },
+];
 
 export default function MyProjectPage() {
-  // 실제로는 API 등에서 받아오겠지만, 임시로 useState로 관리
-  const [myProject, setMyProject] = useState<MyProject | null>(exampleProject);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [tab, setTab] = useState(0);
 
   return (
     <div className="container mx-auto px-4 py-16" style={{minHeight: "60vh"}}>
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center justify-between gap-4 mb-8">
         <h1 className="text-2xl font-bold">마이 프로젝트</h1>
-        <button
-          className="px-4 py-2 border rounded text-sm hover:bg-gray-100"
-          onClick={() => setMyProject(myProject ? null : exampleProject)}
-        >
-          {myProject ? '프로젝트가 없을때 (빈페이지)' : '프로젝트가 있을때'}
-        </button>
+        {selectedProject && (
+          <button 
+            onClick={() => setSelectedProject(null)}
+            className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+          >
+            <span>← 목록으로 돌아가기</span>
+          </button>
+        )}
       </div>
-      {!myProject ? (
-        <div className="flex flex-col items-center justify-center"
-          style={{minHeight: '40vh'}}
-        >
-          <div className="text-lg text-gray-500 mb-8">마이 프로젝트가 없습니다.</div>
-          <Link href="/evaluation">
-            <button className="btn-primary login-active px-6 py-3 text-base">새프로젝트 평가하기</button>
-          </Link>
+      
+      {!selectedProject ? (
+        // 프로젝트 리스트 테이블
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 번호</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">검토날짜</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트명</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">건물용도</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">위치</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">건물 높이</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">샤프트 계획</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {projects.map((project) => (
+                  <tr key={project.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">{project.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{project.createdAt}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button 
+                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                        onClick={() => setSelectedProject(project)}
+                      >
+                        {project.name}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">{project.usage}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{project.location}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{project.height}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{project.shaft}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
+        // 프로젝트 상세 정보
         <>
           <div className="flex flex-col lg:flex-row gap-8 mb-16">
             {/* 왼쪽: 프로젝트 정보 */}
@@ -69,31 +123,31 @@ export default function MyProjectPage() {
                 <tbody>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 rounded-tl-xl text-left align-middle">프로젝트명</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm rounded-tr-xl">{myProject.name}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm rounded-tr-xl">{selectedProject.name}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle">프로젝트 번호</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{myProject.number}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{selectedProject.id}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle">검토날짜</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{myProject.date}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{selectedProject.createdAt}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle">건물용도</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{myProject.usage}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{selectedProject.usage}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle">위치</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{myProject.location}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{selectedProject.location}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle">건물 높이</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{myProject.height}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">{selectedProject.height}</td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
                     <td style={{ background: '#0055A4' }} className="text-white font-medium px-6 py-4 w-40 text-left align-middle rounded-bl-xl">샤프트 계획</td>
-                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm rounded-br-xl">{myProject.shaft}</td>
+                    <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm rounded-br-xl">{selectedProject.shaft}</td>
                   </tr>
                 </tbody>
               </table>
@@ -111,11 +165,11 @@ export default function MyProjectPage() {
             </div>
             {/* 오른쪽: 대표 이미지 */}
             <div className="lg:w-1/3 w-full flex items-start justify-center">
-              {myProject.image ? (
+              {selectedProject.image ? (
                 <div className="w-full bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center shadow-lg"
                   style={{height: "30rem"}}
                 >
-                  <Image src={myProject.image} alt="대표 이미지" className="object-cover w-full h-full" />
+                  <Image src={selectedProject.image} alt="대표 이미지" className="object-cover w-full h-full" />
                 </div>
               ) : (
                 <div className="w-full bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center shadow-lg"
@@ -177,43 +231,21 @@ export default function MyProjectPage() {
                               <div className="text-lg">엔지니어링<br/>권장도</div>
                             </div>
                           </div>
-                          <div className="design-note text-left">
-                            디자이너: 연돌현상 영향도 아이콘
-                          </div>
                         </div>
                         <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
-                          <div className="text-xl font-semibold mb-6">프로젝트 이름</div>
+                          <div className="text-xl font-semibold mb-6">{selectedProject.name}</div>
                           <div className="text-lg">
                             <p>건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.</p>
                             <p>건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.</p>
-                          </div>
-                          <div className="dev-note">
-                            개발자: 평가 결과에 대한 전반적인 요약 텍스트가 들어갈 위치입니다.
                           </div>
                         </div>
                         <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
                           <div className="text-xl font-semibold mb-6">문제발생 예상층</div>
                           <p>본 건물은 실내외 온도 차 및 수직 높이에 따른 압력차로 인해 연돌현상이 발생할 수 있는 구조적 특성을 갖고 있으며, 특히 겨울철에는 하층부 외부 공기 유입과 상층부의 과도한 공기 배출 경향이 확인되었습니다. 이에 따라 환기 설비 및 샤프트 차압 제어가 필요한 것으로 평가됩니다.</p>
-                          <div className='flex gap-8 mt-4'>
-                            <div className="design-note flex-1">
-                              디자이너: 
-                            </div>
-                            <div className="dev-note flex-1">
-                              개발자: 차트
-                            </div>
-                          </div>
                         </div>
                         <div className="p-6 border rounded-md text-left h-full flex flex-col justify-between">
                           <div className="text-xl font-semibold mb-6">최대 연돌 압력차(PA)</div>
                           <p>CFD 시뮬레이션 결과, 외기와 실내의 온도차가 20℃ 이상일 경우 연돌 압력차가 최대 25Pa까지 증가하며, 이로 인해 계단실 및 엘리베이터 샤프트를 통한 공기 흐름이 상·하층 간 불균형을 유발하는 것으로 분석되었습니다.</p>
-                          <div className='flex gap-8 mt-auto'>
-                            <div className="design-note flex-1">
-                              디자이너: 
-                            </div>
-                            <div className="dev-note flex-1">
-                              개발자: 차트
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>

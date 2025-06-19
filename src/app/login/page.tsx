@@ -27,19 +27,40 @@ function LoginForm() {
       email: 'admin@example.com',
       password: 'admin',
       name: '관리자',
-      role: 'admin'
+      role: 'admin',
+      phone: '010-1111-1111',
+      company: {
+        name: '(주)브릿지',
+        address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
+        business_type: '소프트웨어 개발',
+        phone: '070-7777-7777'
+      }
     },
     {
       email: 'test@example.com',
       password: 'test',
       name: '테스트계정',
-      role: 'user'
+      role: 'user',
+      phone: '010-2222-2222',
+      company: {
+        name: '(주)브릿지',
+        address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
+        business_type: '소프트웨어 개발',
+        phone: '070-7777-7777'
+      }
     },
     {
       email: 'joohee@example.com',
       password: '1234',
       name: '이주희',
-      role: 'user'
+      role: 'user',
+      phone: '010-3333-3333',
+      company: {
+        name: '(주)브릿지',
+        address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
+        business_type: '소프트웨어 개발',
+        phone: '070-7777-7777'
+      }
     }
   ];
 
@@ -56,6 +77,12 @@ function LoginForm() {
         localStorage.setItem('userLogin', 'true');
         localStorage.setItem('userName', user.name);
         localStorage.setItem('userRole', user.role);
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userPhone', user.phone);
+        localStorage.setItem('userCompanyName', user.company.name);
+        localStorage.setItem('userCompanyAddress', user.company.address);
+        localStorage.setItem('userCompanyBusinessType', user.company.business_type);
+        localStorage.setItem('userCompanyPhone', user.company.phone);
         
         if (user.role === 'admin' && redirectTo === 'admin') {
           router.push('/admin');
