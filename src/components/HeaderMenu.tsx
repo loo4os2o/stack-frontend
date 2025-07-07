@@ -204,7 +204,7 @@ export function HeaderMenu() {
         
         <div className="drawer-content">
           <nav className="drawer-nav">
-            <Link href="/" className="drawer-link">
+            <Link href="/about" className="drawer-link">
               About S<span className="font-orange">T</span>ACK
             </Link>
             <Link href="/intro" className="drawer-link">

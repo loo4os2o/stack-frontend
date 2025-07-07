@@ -405,6 +405,31 @@
   text-align: center;
 }
 
+/* 푸터 링크바 */
+.footer-link-bar{
+  background-color: lightblue;
+  color: #999;
+  font-size: 0.9rem;
+  text-align: center;
+  height: 4.375rem;
+}
+.footer-link-bar .inner{
+  max-width: 1536px;
+  height: 100%;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-link-bar .inner a{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ========================================================== */
 /* 메인 투명 헤더 */
 /* ========================================================== */

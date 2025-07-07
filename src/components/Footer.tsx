@@ -1,10 +1,26 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import logoBTairTech from '@/assets/images/logo-BTairTech.png';
+import logoINHA from '@/assets/images/logo-INHA_University.png';
 
 const Footer = () => {
   return (
     <>
       <footer className="main-footer">
+
+        {/* 링크바 있을때 */}
+        <div className="footer-link-bar">
+          <div className="inner">
+            <Link href="https://btairtech.co.kr/" target='_blank'>
+              <Image src={logoBTairTech} alt="비티에어테크 바로가기" width={126} />
+            </Link>
+            <Link href="https://www.inha.ac.kr/kr/index.do" target='_blank'>
+              <Image src={logoINHA} alt="인하대학교 바로가기" width={180} />
+            </Link>
+          </div>
+        </div>
+
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
             {/* 로고 영역 */}

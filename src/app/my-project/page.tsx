@@ -16,12 +16,14 @@ type Project = {
   height: string;
   shaft: string;
   image?: string | StaticImageData | null;
+  service: string[];
+  reportUrl: string | null;
 };
 
 // 예시 데이터
 const projects: Project[] = [
   {
-    id: "2025A01A",
+    id: "1001",
     createdAt: '2025-05-10',
     name: 'A 오피스타워',
     usage: '오피스',
@@ -29,26 +31,32 @@ const projects: Project[] = [
     height: '120m',
     shaft: '싱글존 샤프트',
     image: lotteTowerImg,
+    service: ['Online', 'Plus'],
+    reportUrl: '/dummy-report-1.pdf',
   },
   {
-    id: "2025A02B",
-    createdAt: '2025-06-01',
+    id: "1002",
+    createdAt: '2025-06-05',
     name: 'B 주상복합',
     usage: '주거',
     location: '대전 서구',
     height: '200m',
     shaft: '투존 샤프트',
     image: null,
+    service: ['Pro'],
+    reportUrl: null,
   },
   {
-    id: "2025A03C",
-    createdAt: '2025-06-05',
+    id: "1003",
+    createdAt: '2025-02-15',
     name: 'C 호텔',
     usage: '호텔',
     location: '서울 강남구',
     height: '300m',
     shaft: '멀티존 샤프트',
     image: lotteTowerImg,
+    service: ['Plus', 'Basic', 'Online'],
+    reportUrl: '/dummy-report-3.pdf',
   },
 ];
 
@@ -77,32 +85,47 @@ export default function MyProjectPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 번호</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">검토날짜</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트명</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">건물용도</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">위치</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">건물 높이</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">샤프트 계획</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 번호</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 생성일자</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트명</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">이용 서비스</th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">기본 보고서 다운로드</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {projects.map((project) => (
                   <tr key={project.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">{project.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{project.createdAt}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
                       <button 
-                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                        className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                        onClick={() => setSelectedProject(project)}
+                      >
+                        {project.id}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">{project.createdAt}</td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      <button 
+                        className="text-blue-700 hover:text-blue-900 cursor-pointer"
                         onClick={() => setSelectedProject(project)}
                       >
                         {project.name}
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{project.usage}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{project.location}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{project.height}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{project.shaft}</td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      {project.service.map((s) => (
+                        <span key={s} className="inline-block bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
+                          {s}
+                        </span>
+                      ))}
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      {project.reportUrl ? (
+                        <a href={project.reportUrl} download className="px-3 py-1 bg-blue-900 text-white rounded hover:bg-blue-700 transition">다운로드</a>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
