@@ -1,15 +1,16 @@
 import React from 'react';
 
-import StackVennDiagram from './StackVennDiagram';
+// import StackVennDiagram from './StackVennDiagram';
 import '@/css/about.css';
 import Image from 'next/image';
+import ExImgDiagram0 from "@/assets/images/ex/sample-diagram-0.png";
 import ExImgDiagram1 from "@/assets/images/ex/sample-diagram-1.png";
 import ExImgDiagram2 from "@/assets/images/ex/sample-diagram-2.png";
 
 export default function AboutPage() {
   return (
-    <div style={{ maxWidth: 1536, margin: '0 auto', padding: '2rem 2rem 0 2rem' }}>
-      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+    <div style={{ maxWidth: 1536, margin: '0 auto', padding: '4rem 2rem 0 2rem' }}>
+      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2.5rem' }}>
         About 
         <span style={{letterSpacing: '10px', marginLeft: '24px'}}>
           S
@@ -17,7 +18,18 @@ export default function AboutPage() {
           ACK
         </span>
       </h1>
-      <StackVennDiagram />
+
+      {/* <StackVennDiagram /> */}
+      <div className='mb-12'
+        style={{border: "1px solid #ddd",borderRadius: '1rem', padding: '2rem',
+          background: "#fff"
+        }}
+      >
+        <div className='image-wrap'>
+          <Image src={ExImgDiagram0} alt="샘플이미지0" />
+        </div>
+      </div>
+
 
       <div className="flex gap-8">
         <section className='flex items-center justify-center flex-1' 
