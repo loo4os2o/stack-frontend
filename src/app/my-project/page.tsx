@@ -63,11 +63,18 @@ const projects: Project[] = [
 export default function MyProjectPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [tab, setTab] = useState(0);
+  const [showNoProject, setShowNoProject] = useState(false);
 
   return (
     <div className="container mx-auto px-4 py-16" style={{minHeight: "60vh"}}>
       <div className="flex items-center justify-between gap-4 mb-8">
         <h1 className="text-2xl font-bold">마이 프로젝트</h1>
+        {!selectedProject && (
+          <button className="text-gray-600 hover:text-gray-800 hover:underline" 
+            onClick={() => setShowNoProject(v => !v)}>
+            {showNoProject ? '프로젝트 리스트 뷰' : '빈 프로젝트 뷰'}
+          </button>
+        )}
         {selectedProject && (
           <button 
             onClick={() => setSelectedProject(null)}
@@ -79,59 +86,68 @@ export default function MyProjectPage() {
       </div>
       
       {!selectedProject ? (
-        // 프로젝트 리스트 테이블
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 번호</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 생성일자</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트명</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">이용 서비스</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">기본 보고서 다운로드</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {projects.map((project) => (
-                  <tr key={project.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      <button 
-                        className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
-                        onClick={() => setSelectedProject(project)}
-                      >
-                        {project.id}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">{project.createdAt}</td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      <button 
-                        className="text-blue-700 hover:text-blue-900 cursor-pointer"
-                        onClick={() => setSelectedProject(project)}
-                      >
-                        {project.name}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      {project.service.map((s) => (
-                        <span key={s} className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
-                          {s}
-                        </span>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      {project.reportUrl ? (
-                        <a href={project.reportUrl} download className="btn-primary btn-small">다운로드</a>
-                      ) : (
-                        <span className="text-gray-400">-</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        showNoProject ? (
+          <div className="flex flex-col items-center justify-between bg-white rounded-lg shadow-md p-16" style={{minHeight: '40vh'}}>
+            <div className="text-xl font-medium text-gray-500 mb-8 mt-16">마이 프로젝트가 없습니다.</div>
+            <Link href="/evaluation">
+              <button className="btn-primary">새프로젝트 평가하기</button>
+            </Link>
           </div>
-        </div>
+        ) : (
+          // 프로젝트 리스트 테이블
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 번호</th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트 생성일자</th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">프로젝트명</th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">이용 서비스</th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">기본 보고서 다운로드</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {projects.map((project) => (
+                    <tr key={project.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button 
+                          className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.id}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">{project.createdAt}</td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button 
+                          className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.name}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {project.service.map((s) => (
+                          <span key={s} className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
+                            {s}
+                          </span>
+                        ))}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {project.reportUrl ? (
+                          <a href={project.reportUrl} download className="btn-primary btn-small">다운로드</a>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
       ) : (
         // 프로젝트 상세 정보
         <>
