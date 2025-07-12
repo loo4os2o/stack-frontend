@@ -300,7 +300,7 @@ export default function AdminPage() {
                     onChange={e => setSearchMemberId(e.target.value.replace(/[^0-9]/g, ''))}
                   />
                   <button
-                    className="px-3 py-2 active-process-bg text-white rounded-md"
+                    className="btn-secondary"
                     onClick={() => {
                       if (searchMemberId) {
                         setFilteredProjects(projectRows.filter(row => String(row.memberId) === searchMemberId));
@@ -312,7 +312,7 @@ export default function AdminPage() {
                     검색
                   </button>
                   <button
-                    className="px-3 py-2 border rounded-md bg-gray-100"
+                    className="btn-secondary"
                     onClick={() => { setSearchMemberId(''); setFilteredProjects(null); }}
                   >
                     초기화
@@ -338,20 +338,20 @@ export default function AdminPage() {
                       <span className="text-sm">전체선택</span>
                     </label> */}
                     <button
-                      className="px-3 py-1.5 rounded bg-red-500 text-white text-sm hover:bg-red-600"
+                      className="btn-secondary px-3 py-1.5 text-sm"
                       onClick={handleDeleteSelected}
                       disabled={selectedProjectIds.length === 0}
                     >
                       선택삭제
                     </button>
                     <button
-                      className="px-3 py-1.5 rounded bg-green-600 text-white text-sm hover:bg-green-700"
+                      className="btn-secondary px-3 py-1.5 text-sm"
                       onClick={handleDownloadCSV}
                     >
                       목록 다운로드(Excel)
                     </button>
                     <button
-                      className="px-3 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700 ml-auto"
+                      className="btn-secondary px-3 py-1.5 text-sm ml-auto"
                       onClick={() => setCreateModalOpen(true)}
                     >
                       프로젝트 생성
@@ -419,14 +419,14 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-center">{row.name}</td>
                             <td className="px-4 py-3 text-center">
                               {row.service.map((s) => (
-                                <span key={s} className="inline-block bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
+                                <span key={s} className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
                                   {s}
                                 </span>
                               ))}
                             </td>
                             <td className="px-4 py-3 text-center">
                               {row.reportUrl ? (
-                                <a href={row.reportUrl} download className="px-3 py-1 bg-blue-900 text-white rounded hover:bg-blue-700 transition">다운로드</a>
+                                <a href={row.reportUrl} download className="btn-primary btn-small">다운로드</a>
                               ) : (
                                 <span className="text-gray-400">-</span>
                               )}

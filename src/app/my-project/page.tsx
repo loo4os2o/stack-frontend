@@ -114,14 +114,14 @@ export default function MyProjectPage() {
                     </td>
                     <td className="px-6 py-4 text-center whitespace-nowrap">
                       {project.service.map((s) => (
-                        <span key={s} className="inline-block bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
+                        <span key={s} className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0">
                           {s}
                         </span>
                       ))}
                     </td>
                     <td className="px-6 py-4 text-center whitespace-nowrap">
                       {project.reportUrl ? (
-                        <a href={project.reportUrl} download className="px-3 py-1 bg-blue-900 text-white rounded hover:bg-blue-700 transition">다운로드</a>
+                        <a href={project.reportUrl} download className="btn-primary btn-small">다운로드</a>
                       ) : (
                         <span className="text-gray-400">-</span>
                       )}
@@ -175,7 +175,7 @@ export default function MyProjectPage() {
                 </tbody>
               </table>
               <Link href="/engineering">
-                <button className="btn-primary px-4 py-3 mt-6 w-full">엔지니어링 서비스 문의하기</button>
+                <button className="btn-primary btn-large mt-6 w-full">엔지니어링 서비스 문의하기</button>
               </Link>
             </div>
             {/* 가운데: 차트 영역 */}

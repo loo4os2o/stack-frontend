@@ -175,11 +175,11 @@ export function HeaderMenu() {
                 </Link>
               </>
             )}
-            <Link href="/service-request" className="nav-btn-primary">
+            <Link href="/service-request" className="btn-primary">
               서비스 요청하기
             </Link>
             {isAdmin && (
-              <Link href="/admin" className="nav-btn-secondary">
+              <Link href="/admin" className="btn-secondary">
                 관리자
               </Link>
             )}

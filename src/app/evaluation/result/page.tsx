@@ -326,7 +326,7 @@ export default function EvaluationResultPage() {
                     setActiveTab('solution');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-md hover:bg-gray-50 transition"
+                  className="btn-secondary btn-large"
                   style={{ textUnderlineOffset: '4px', maxWidth: '200px' }}
                 >
                   해결방안 확인하기 ≫
@@ -410,13 +410,13 @@ export default function EvaluationResultPage() {
                     setActiveTab('analysis');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-md hover:bg-gray-50 transition"
+                  className="btn-secondary btn-large"
                 >
                   ≪ 분석결과 다시보기
                 </button>
                 <Link 
                   href="/engineering"
-                  className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+                  className="btn-primary btn-large"
                 >
                   연돌현상 검토보고서 요청하기 (엔지니어링 서비스 문의하기)
                 </Link>

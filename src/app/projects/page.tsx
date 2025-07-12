@@ -282,7 +282,7 @@ export default function ProjectsPage() {
             </select>
           </div>
           <div className="flex items-end w-full sm:w-auto">
-            <button type="button" className="px-3 py-1.5 btn-primary w-full sm:w-auto" onClick={handleApplyFilter}>
+            <button type="button" className="btn-primary w-full sm:w-auto" onClick={handleApplyFilter}>
               필터 적용
             </button>
           </div>

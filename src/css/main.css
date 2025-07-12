@@ -288,23 +288,6 @@
   align-items: center;
 }
 
-.main-intro .intro-buttons .btn-primary{
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 3rem;
-  border: 0;
-  background-color: var(--primary-color);
-  color: var(--text-color-white);
-}
-
-.main-intro .intro-buttons .btn-primary:hover{
-  text-decoration: underline;
-  text-underline-offset: 0.2rem;
-  border: 0;
-}
-
 .main-intro .underline-link {
   color: var(--primary-color);
   text-decoration: underline;
@@ -563,35 +546,6 @@
 
 .nav-link:hover:after {
   width: 100%;
-}
-
-.nav-btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.nav-btn-primary:hover {
-  background-color: var(--primary-color-dark, #0056b3);
-}
-
-.nav-btn-secondary {
-  color: var(--text-color);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.nav-btn-secondary:hover {
-  color: var(--primary-color);
-  background-color: #f5f5f5;
 }
 
 /* 드로어 메뉴 */

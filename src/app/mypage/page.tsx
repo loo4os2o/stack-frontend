@@ -123,13 +123,13 @@ export default function MyPage() {
                   <div className="flex justify-end space-x-2">
                     <button 
                       onClick={() => setShowPasswordChange(false)}
-                      className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                      className="btn-secondary px-4 py-1.5"
                     >
                       취소
                     </button>
                     <button 
                       onClick={handlePasswordChange}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                      className="btn-primary px-4 py-1.5"
                     >
                       변경하기
                     </button>
@@ -226,7 +226,7 @@ export default function MyPage() {
 
         {/* 저장 버튼 */}
         <div className="mt-12 flex justify-center">
-          <button className="px-8 py-3 bg-primary text-white rounded-md hover:bg-blue-900 transition">
+          <button className="btn-primary btn-large">
             저장하기
           </button>
         </div>

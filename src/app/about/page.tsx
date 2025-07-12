@@ -97,7 +97,7 @@ export default function AboutPage() {
 
       <div className='flex justify-center' 
         style={{maxWidth: '400px', margin: '3rem auto'}}>
-        <a className="nav-btn-primary w-full text-center"
+        <a className="btn-primary btn-large w-full text-center"
           href="/evaluation">연돌현상 평가하기</a>
       </div>
 

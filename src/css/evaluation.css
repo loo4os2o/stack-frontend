@@ -1,12 +1,7 @@
 /* 공통 버튼 */
-.cppe .btn-primary{
-  background-color: var(--primary-color);
-  color: var(--text-color-white);
-  border: 1px solid var(--primary-color);
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+.cppe .btn-primary,
+.cppe .btn-secondary{
   width: 100%;
-  font-size: 1.1rem;
 }
 
 /* 공통 이미지 */

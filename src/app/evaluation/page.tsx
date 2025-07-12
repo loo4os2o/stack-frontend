@@ -74,7 +74,8 @@ export default function EvaluationPage() {
               - 엘리베이터샤프트계획<br/>
               - 기본평면계획정보
             </p>
-            <button className='btn-primary btn-large mt-8 mb-2' 
+            {/* <button className='btn-primary btn-large mt-8 mb-2'  */}
+            <button className='btn-primary btn-large mt-8 mb-2'
               onClick={() => setModalOpen(true)}>시작하기</button>
           </div>
           <div className='w-full md:w-3/5 right center' style={{background: '#eee'}}>
@@ -723,8 +724,9 @@ export default function EvaluationPage() {
           <div className="flex justify-center gap-4 p-6 pb-0 mt-6">
             {isProcessing ? (
               <button 
-                className="px-6 py-3 bg-gray-400 text-white rounded-md cursor-not-allowed"
+                className="btn-primary btn-large disabled"
                 disabled
+                style={{ width: "25%" }}
               >
                 처리 중...
               </button>
@@ -732,14 +734,15 @@ export default function EvaluationPage() {
               <>
                 <button 
                   onClick={handleSave}
-                  className="btn-large bg-primary text-white border-2 border-primary hover:underline"
-                  style={{ textUnderlineOffset: '4px' }}
+                  className="btn-secondary btn-large"
+                  style={{ width: "25%" }}
                 >
                   저장하기
                 </button>
                 <button 
                   onClick={handleEvaluate}
-                  className="btn-large"
+                  className="btn-primary btn-large"
+                  style={{ width: "25%" }}
                 >
                   평가하기
                 </button>
@@ -769,8 +772,9 @@ export default function EvaluationPage() {
             브라우저가 video 태그를 지원하지 않습니다.
           </video>
           <button
-            className="btn-large mt-6"
+            className="btn-primary btn-large mt-6"
             onClick={handlePromoModalClose}
+            style={{ width: "50%" }}
           >
             분석결과 및 해결방안 확인하기
           </button>

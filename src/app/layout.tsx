@@ -8,9 +8,6 @@ import "./globals.css";
 import "@/css/main.css";
 import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -67,7 +64,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={inter.className}>
+      <body>
         {isMainPage ? (
           <MainHeader />
         ) : isMain2Page ? (

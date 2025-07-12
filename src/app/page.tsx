@@ -161,10 +161,10 @@ export default function Home() {
               온라인 도구를 사용하여 연돌현상 영향을 평가하고, 
               해결방안을 확인하여 대응전략 수립 방향을 마련하세요.
             </p>
-            <div className="text-center mt-6">
+            <div className="btn-primary mt-6">
               <a 
                 href="#" 
-                className="btn-primary inline-block"
+                className="inline-block"
                 onClick={(e) => handleNavigation(e, '/evaluation')}
               >
                 연돌현상 평가하기
@@ -179,10 +179,10 @@ export default function Home() {
               연돌예측검토 보고서부터 개선전략에 관한 설계도면,
               시뮬레이션 결과까지 다양하게 제공됩니다.
             </p>
-            <div className="text-center mt-6">
+            <div className="btn-primary mt-6">
               <a 
                 href="#" 
-                className="btn-primary inline-block"
+                className="inline-block"
                 onClick={(e) => handleNavigation(e, '/engineering')}
               >
                 엔지니어링 결과물 살펴보기
@@ -197,10 +197,10 @@ export default function Home() {
               국내 최고 연돌현상 전문가와 함께 솔루션을 제공받고,
               효과적인 개선 전략을 실행할 수 있습니다.
             </p>
-            <div className="text-center mt-6">
+            <div className="btn-primary mt-6">
               <a 
                 href="#" 
-                className="btn-primary inline-block"
+                className="inline-block"
                 onClick={(e) => handleNavigation(e, '/projects')}
               >
                 지난 프로젝트 살펴보기
@@ -239,7 +239,7 @@ export default function Home() {
             <div className="intro-buttons">
               <a 
                 href="#" 
-                className="btn-primary btn-large mb-6"
+                className="btn-primary btn-large mb-6 w-4/5 rounded-3xl text-center"
                 onClick={(e) => handleNavigation(e, '/evaluation')}
               >
                 연돌현상 평가하기
