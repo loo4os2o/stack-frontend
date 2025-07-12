@@ -772,7 +772,7 @@ export default function EvaluationPage() {
             className="btn-large mt-6"
             onClick={handlePromoModalClose}
           >
-            영상 닫고 결과 보기
+            분석결과 및 해결방안 확인하기
           </button>
         </div>
       </Modal>
