@@ -77,14 +77,14 @@ export default function Modal({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.5rem 3rem 0rem 3.5rem;
+          padding: 1.5rem 3rem 0rem 3rem;
           // 헤더있을 때
           // padding: 2rem 3rem 0.5rem 3.5rem;
           // border-bottom: 1px solid #eee;
         }
         .modal-title {
-          // font-size: 1.3rem;
-          // font-weight: 700;
+          font-size: 1.3rem;
+          font-weight: 700;
           width: 95%;
         }
         .modal-close {
