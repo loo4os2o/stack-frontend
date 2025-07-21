@@ -34,7 +34,6 @@
 /* 메인 시안2 배경 스타일 */
 .main2-bg-wrap {
   margin-top: 20rem;
-  padding: 0 1rem;
   position: relative;
 }
 .main2-bg-wrap .text-logo > p{
@@ -397,11 +396,9 @@
   height: 4.375rem;
 }
 .footer-link-bar .inner{
-  max-width: 1536px;
+  max-width: 1200px;
   height: 100%;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -465,11 +462,8 @@
 }
 
 .top-bar .container {
-  /* max-width: 1280px; */
-  max-width: 1536px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
   min-height: 3.125rem;
 }
 
@@ -499,12 +493,8 @@
 }
 
 .main-nav-bar .container {
-  /* max-width: 1280px; */
-  max-width: 1536px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  
 }
 
 .hamburger-menu {
@@ -696,16 +686,10 @@
 }
 
 /* 헤더 - 모바일 */
-@media (min-width: 1536px) {
+@media (min-width: 1200px) {
   .top-bar .container,
   .main-nav-bar .container {
-      max-width: 1536px !important;
-  }
-}
-@media (min-width: 1280px) {
-  .top-bar .container,
-  .main-nav-bar .container {
-      max-width: 1280px;
+      max-width: 1200px;
   }
 }
 @media (min-width: 890px) and (max-width: 1279px) {
@@ -740,9 +724,8 @@
 }
 
 .main-header2 .header-container {
-  max-width: 1504px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1023,9 +1006,8 @@
 }
 
 .stack-intro-section .flex {
-  max-width: 1504px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .stack-intro-left h3 {
@@ -1093,10 +1075,8 @@
 }
 
 .services-container {
-  /* max-width: 1280px; */
-  max-width: 1504px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .services-header {
@@ -1198,9 +1178,8 @@
 }
 
 .shortcuts-container {
-  max-width: 1504px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   gap: 4rem;
@@ -1343,7 +1322,7 @@
 }
 
 .contact-container {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
   position: relative;

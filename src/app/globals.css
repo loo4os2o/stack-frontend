@@ -220,9 +220,9 @@ body {
   background-color: var(--primary-color);
 }
 
-/* 공통 이너 (1280px) */
+/* 공통 이너 (1200px) */
 .container .inner{
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -266,4 +266,24 @@ body {
 
 .switch-slider.active::before {
   transform: translateX(20px);
+}
+
+/* 차트 */
+.chart-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-radius: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
+  background: #f5f5f5;
+}
+
+/* 공통 flex */
+.flex-row-center{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

@@ -264,7 +264,7 @@ export default function IntroPage() {
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
   return (
-    <div className="container mx-auto px-4 pt-16 pb-24">
+    <div className="container mx-auto pt-16 pb-24">
       <h1 className="text-3xl font-bold mb-10">연돌현상 소개</h1>
 
       <div className="bg-white rounded-lg shadow py-2 px-8 mb-12">

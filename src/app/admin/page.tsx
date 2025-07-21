@@ -163,7 +163,7 @@ export default function AdminPage() {
   const [totalEndDate, setTotalEndDate] = useState('2025-03-18');
 
   return (
-    <div className="container mx-auto px-4 pt-16 pb-24">
+    <div className="container mx-auto pt-16 pb-24">
       {isLoggedIn ? (
         <>
           <h1 className="text-3xl font-bold mb-10">관리자 페이지</h1>

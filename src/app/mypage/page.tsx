@@ -52,7 +52,7 @@ export default function MyPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 pt-16 pb-24">
+      <div className="container mx-auto pt-16 pb-24">
         <div className="flex justify-center items-center h-64">
           <div className="text-gray-600">로딩중...</div>
         </div>
@@ -62,7 +62,7 @@ export default function MyPage() {
 
   if (!userData) {
     return (
-      <div className="container mx-auto px-4 pt-16 pb-24">
+      <div className="container mx-auto pt-16 pb-24">
         <div className="flex justify-center items-center h-64">
           <div className="text-red-600">사용자 정보를 불러올 수 없습니다.</div>
         </div>
@@ -71,7 +71,7 @@ export default function MyPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 pt-16 pb-24">
+    <div className="container mx-auto pt-16 pb-24">
       <div className="max-w-3xl mx-auto">
         {/* 개인정보 관리 */}
         <div className="mb-12">

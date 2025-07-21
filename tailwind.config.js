@@ -17,6 +17,23 @@ module.exports = {
         "dark-gray": "var(--dark-gray)",
       },
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '0rem',
+        lg: '0rem',
+        xl: '0rem',
+        '2xl': '0rem',
+      },
+      screens: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1200px',
+        '2xl': '1200px',
+      },
+    },
   },
   plugins: [],
 }; 

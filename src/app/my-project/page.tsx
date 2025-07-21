@@ -66,7 +66,7 @@ export default function MyProjectPage() {
   const [showNoProject, setShowNoProject] = useState(false);
 
   return (
-    <div className="container mx-auto px-4 py-16" style={{minHeight: "60vh"}}>
+    <div className="container mx-auto py-16" style={{minHeight: "60vh"}}>
       <div className="flex items-center justify-between gap-4 mb-8">
         <h1 className="text-2xl font-bold">마이 프로젝트</h1>
         {!selectedProject && (

@@ -21,7 +21,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
             {/* 로고 영역 */}
             <div className="footer-logo">
@@ -61,7 +61,7 @@ const Footer = () => {
       
       {/* 저작권 */}
       <div className="copyright">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto py-4">
           <p>© 2025 STACK. All rights reserved.</p>
         </div>
       </div>

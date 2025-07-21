@@ -233,7 +233,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-16 pb-24">
+    <div className="container mx-auto pt-16 pb-24">
       <h1 className="text-3xl font-bold mb-10">
         엔지니어링 프로젝트 실적
       </h1>

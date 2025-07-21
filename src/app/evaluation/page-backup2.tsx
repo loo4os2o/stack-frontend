@@ -51,7 +51,7 @@ export default function EvaluationPage() {
   };
 
   return (
-    <div className="container cppe mx-auto px-4 pt-16 pb-24">
+    <div className="container cppe mx-auto pt-16 pb-24">
       <h1 className="text-3xl font-bold mb-10">연돌현상 예측평가</h1>
 
       {/* 연돌현상 예측평가 페이지 설명 영역 */}

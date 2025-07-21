@@ -33,7 +33,7 @@ export default function Main2() {
   };
 
   return (
-    <div className="container mx-auto px-4 home-page-wrapper"
+    <div className="container mx-auto home-page-wrapper"
       style={{backgroundColor: '#fff', width: '100%'}}
     >
       {/* MainHeader2 컴포넌트 추가 */}

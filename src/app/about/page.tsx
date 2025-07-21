@@ -9,7 +9,7 @@ import ExImgDiagram2 from "@/assets/images/ex/sample-diagram-2.png";
 
 export default function AboutPage() {
   return (
-    <div style={{ maxWidth: 1536, margin: '0 auto', padding: '4rem 2rem 0 2rem' }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto', paddingTop: '4rem' }}>
       <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2.5rem' }}>
         About 
         <span style={{letterSpacing: '10px', marginLeft: '24px'}}>
