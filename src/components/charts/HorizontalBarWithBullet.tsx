@@ -2,7 +2,17 @@
 import ReactECharts from "echarts-for-react";
 // 최대 연돌 압력차
 
-const HorizontalBarWithBullet = () => {
+interface HorizontalBarWithBulletProps {
+  width?: string | number;
+  height?: string | number;
+  className?: string;
+}
+
+const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({ 
+  width = '100%', 
+  height = 200, 
+  className = '' 
+}) => {
   const data = [
     { name: "최상층", value: 25 },
     { name: "로비층", value: 35 },
@@ -90,7 +100,7 @@ const HorizontalBarWithBullet = () => {
     },
   };
 
-  return <ReactECharts option={option} style={{ height: 200, width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height, width }} className={className} />;
 };
 
 export default HorizontalBarWithBullet;

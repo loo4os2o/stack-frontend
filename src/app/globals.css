@@ -6,7 +6,7 @@
 :root {
   --primary-color: #0055A4;
   --secondary-color: #00A896;
-  --background-color: #F8F9FA;
+  --background-color: #F4F4F4;
   --text-color: #333333;
   --light-gray: #EEEEEE;
   --medium-gray: #CCCCCC;
@@ -18,7 +18,9 @@
 body {
   color: var(--text-color);
   background-color: var(--background-color);
-  font-family: 'Pretendard', 'Noto Sans KR', 'Roboto', sans-serif;
+  /* background: #F4F4F4; */
+  /* font-family: 'Pretendard', 'Noto Sans KR', 'Roboto', sans-serif; */
+  font-family: 'Pretendard';
   overflow-x: hidden;
 }
 
@@ -33,16 +35,29 @@ body {
   z-index: 1;
 }
 
+/* =============================== */
+/* 폰트 컬러 */
+/* =============================== */
 .font-white {
   color: var(--text-color-white);
 }
 .font-orange{
   color: var(--text-color-orange);
 }
+.font-gray-9{
+  color: #969696;
+}
 
 .bg-orange{
   background-color: #FFF7ED;
   /* background-color: #FFcd90; */
+}
+
+/* =============================== */
+/* 폰트 크기 */
+/* =============================== */
+.font-15{
+  font-size: 0.938rem;
 }
 
 .placeholder {
@@ -91,34 +106,34 @@ body {
   padding: 0 0 2px 2px;
 }
 
-/* 커스텀 버튼 스타일 */
+/* =============================== */
+/* 버튼 */
+/* =============================== */
 @layer components {
-  .btn-basic {
-    @apply border border-gray-300 rounded-md transition-all duration-200;
+  [class*="btn-"] {
+    border-radius: 0.375rem;
+    padding: 0.438rem 1rem;
+    box-sizing: border-box;
+    font-size: 0.938rem;
+    font-weight: 500;
+    line-height: 160%;
+    height: 2.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
   }
 
-  .btn-basic:hover {
-    @apply bg-primary text-white border-transparent;
+  /* <a>태그 버튼 비활성화 */
+  .btn-primary.disabled .disabled,
+  .btn-secondary.disabled .disabled{
+    pointer-events: none;
   }
 
-  /* .btn-primary {
-    @apply px-4 py-2 border border-gray-300 rounded-md transition-all duration-200;
-  }
-  .btn-primary:hover {
-    @apply bg-primary text-white border-transparent;
-  } */
    /* 공통 버튼 : primary */
   .btn-primary{
     background: #FF4500;
     color: #ffffff;
     border: 1px solid #FF4500;
-    border-radius: 0.375rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.938rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
   }
   .btn-primary:hover,
   .btn-primary:focus,
@@ -133,24 +148,11 @@ body {
     cursor: not-allowed;
   }
 
-  /* <a>태그 버튼 비활성화 */
-  .btn-primary.disabled .disabled,
-  .btn-secondary.disabled .disabled{
-    pointer-events: none;
-  }
-
   /* 공통버튼 : secondary */
   .btn-secondary{
     background: #ffffff;
     color: #FF4500;
     border: 1px solid #FF4500;
-    border-radius: 0.375rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.938rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
   }
   .btn-secondary:hover,
   .btn-secondary:focus,
@@ -166,6 +168,26 @@ body {
     border: 1px solid #CCCCCC;
     cursor: not-allowed;
     box-shadow: none;
+  }
+
+  /* 공통버튼 : basic */
+  .btn-basic {
+    background: #ffffff;
+    color: #333333;
+    border: 1px solid #333333;
+  }
+
+  .btn-basic:hover,
+  .btn-basic:focus,
+  .btn-basic:active{
+    background: #333333;
+    border: 1px solid #333333;
+    color: #ffffff;
+  }
+
+  /* 버튼 사이즈 */
+  .btn-50{
+    height: 3.125rem;
   }
 
   .btn-large {
@@ -200,17 +222,324 @@ body {
 }
 
 
-/* 로그인/회원가입 */
-.login-active{
-  border-color: var(--primary-color);
-  background-color: var(--primary-color);
-  color: var(--text-color-white);
+/* =============================== */
+/* 폼요소 */
+/* =============================== */
+.form-group{
+  margin-bottom: 1.25rem;
 }
-.login-inactive{
-  border-color: rgba(243, 244, 246, 1);
-  background-color: rgba(229, 231, 235, 1);
-  color: var(--text-color);
+.form-group label,
+.form-group fieldset legend{
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 140%;
+  color: #333333;
+  margin-bottom: 0.5rem;
 }
+.form-group fieldset label{
+  font-weight: 400;
+  font-size: 0.938rem;
+  line-height: 160%;
+  color: #333333;
+  margin-bottom: 0;
+}
+
+/* input */
+@layer base {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"]{
+    width: 100%;
+    box-sizing: border-box;
+    height: 2.5rem;
+    border: 1px solid #dddddd;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.938rem;
+    font-weight: 400;
+    color: #333333;
+  }
+  input::placeholder{
+    color: #BFBFBF;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus{
+    outline: 2px solid #000 !important;
+    outline-offset: 0 !important;
+  }
+
+  textarea{
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.938rem;
+    font-weight: 400;
+    color: #333333;
+  }
+
+  input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    height: 2.625rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.938rem;
+    font-weight: 400;
+    color: #333333;
+    background-color: rgba(244, 244, 244, 0.8);
+  }
+  input[type="file"]::-webkit-file-upload-button,
+  input[type="file"]::file-selector-button {
+    background: #fff;
+    border: 1px solid #DDDDDD;
+    border-radius: 0.5rem;
+    font: inherit;
+    color: #333;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+
+  /* 단위가 있는 input */
+  .input-unit-wrap{
+    display: flex;
+    align-items: center;
+    border: 1px solid #dddddd;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.938rem;
+    font-weight: 400;
+    color: #333333;
+    height: 2.5rem;
+  }
+  .input-unit-wrap input{
+    width: 100%;
+    outline: none !important;
+  }
+  .input-unit-wrap > span{
+    white-space: nowrap;
+  }
+  .input-unit-wrap.disabled,
+  .input-unit-wrap.disabled > span{
+    background-color: #f5f5f5;
+    color: #999999;
+    cursor: not-allowed;
+  }
+}
+
+
+/* checkbox */
+.checkbox-group{
+  
+}
+.checkbox-group label{
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  font-weight: 500;
+  font-size: 0.938rem;
+  line-height: 140%;
+  color: #333333;
+}
+
+/* checkbox */
+@layer base {
+  input[type="checkbox"]{
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    border: 1px solid #dddddd;
+    border-radius: 0.25rem;
+    background: #ffffff;
+    margin-right: 0.5rem;
+    margin-top: 0.188rem;
+    position: relative;
+  }
+  input[type="checkbox"]:checked {
+    background-color: #FF4500;
+    border-color: #FF4500;
+  }
+  input[type="checkbox"]:checked::after {
+    content: "";
+    background-image: url('../assets/icons/icon-checked.png');
+    background-size: 0.625rem 0.5rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  input[type="checkbox"]:focus{
+    outline: none !important;
+    outline-offset: 0 !important;
+  }
+  .checkbox-sub{
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 160%;
+    color: #969696;
+    margin-top: 0.188rem;
+  }
+}
+
+/* radio */
+.radio-group{}
+.radio-group label{
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  font-weight: 400;
+  font-size: 0.938rem;
+  line-height: 140%;
+  color: #333333;
+  margin-bottom: 0.5rem !important;
+  width: fit-content;
+}
+.radio-group label.radio-etc{
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+.radio-group label.radio-etc > div{
+  display: flex;
+  align-items: center;
+}
+.radio-group label.radio-etc span{
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+}
+.radio-group label.radio-etc input[type="text"]{
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #dddddd;
+  background: #ffffff;
+  padding: 0 0.25rem;
+  height: 1.5rem;
+}
+
+.radio-group label.disabled,
+.radio-etc.disabled {
+  cursor: not-allowed;
+  color: #999999;
+  opacity: 0.5;
+}
+
+@layer base {
+  /* 공통 스타일 */
+  input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    background: #ffffff;
+    margin-right: 0.5rem;
+    margin-top: 0.188rem;
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* 선택 상태 */
+  input[type="radio"]:checked {
+    border-color: #FF4500;
+    background-color: #FF4500;
+  }
+
+  /* 체크 표시 (중앙 점) */
+  input[type="radio"]:checked::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* 포커스 시 외곽선 제거 */
+  input[type="radio"]:focus {
+    outline: none !important;
+    outline-offset: 0 !important;
+  }
+
+  input[type="radio"]:disabled,
+  input:disabled {
+    border-color: #dddddd;
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+}
+
+/* select */
+@layer base {
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    box-sizing: border-box;
+    height: 2.5rem;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 0.375rem;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    font-size: 0.938rem;
+    font-weight: 400;
+    color: #333333;
+    cursor: pointer;
+    background-image: url('../assets/icons/icon-select-arrow.png');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.75rem 0.75rem;
+  }
+  select:disabled {
+    background-color: #f5f5f5;
+    color: #aaaaaa;
+    cursor: not-allowed;
+  }
+}
+
+
+/* =============================== */
+/* 공통 이미지 */
+/* =============================== */
+.image-wrap{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-wrap > img{
+  width: 100%;
+  /* height: 100%; */
+  object-fit: cover;
+  object-position: center;
+}
+
+
+/* =============================== */
+/* 공통 border */
+/* =============================== */
+.border-0{
+  border: 0 !important;
+}
+
 
 /* 임시 - 연돌현상 평가 프로세스 */
 .active-process{
@@ -232,6 +561,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  margin-bottom: 1.25rem;
 }
 
 .switch-input {
@@ -250,10 +580,10 @@ body {
 .switch-slider::before {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
   background: white;
   border-radius: 50%;
   transition: transform 0.3s;
@@ -261,7 +591,7 @@ body {
 
 /* 활성화 상태 */
 .switch-slider.active {
-  background-color: #3b82f6;
+  background-color: #FF4500;
 }
 
 .switch-slider.active::before {

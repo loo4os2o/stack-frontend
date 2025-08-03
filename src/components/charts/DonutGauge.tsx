@@ -3,9 +3,12 @@ import React from "react";
 // 문제발생 예상층
 interface DonutGaugeProps {
   percentage: number; // 0 ~ 100
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
-const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage }) => {
+const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage, width = '100%', height = 300, className = '' }) => {
   const option = {
     series: [
       {
@@ -55,7 +58,7 @@ const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage }) => {
     ],
   };
 
-  return <ReactECharts option={option} style={{ height: 300, width: "100%" }} />;
+  return <ReactECharts option={option} style={{ height, width }} className={className} />;
 };
 
 export default DonutGauge;

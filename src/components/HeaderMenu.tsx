@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import logo from '@/assets/images/logo-STACK.png';
 
 export function HeaderMenu() {
   const router = useRouter();
@@ -83,7 +85,9 @@ export function HeaderMenu() {
       {/* 첫번째 줄 - 로고와 계정 정보 */}
       <div className="top-bar">
         <div className="container mx-auto flex justify-between items-center py-2">
-          <Link href="/" className="text-xl font-bold text-white">STACK</Link>
+          <Link href="/">
+            <Image src={logo} alt="logo" width={140} />
+          </Link>
           <div className="flex items-center space-x-2">
             {isLoggedIn ? (
               <div className="flex items-center space-x-3">
@@ -99,9 +103,9 @@ export function HeaderMenu() {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                {/* <Link href="/login" className="top-menu-btn">
+                <Link href="/login" className="top-menu-btn">
                   로그인
-                </Link> */}
+                </Link>
               </div>
             )}
           </div>
@@ -110,12 +114,12 @@ export function HeaderMenu() {
       
       {/* 두번째 줄 - 메인 메뉴 */}
       <div className="main-nav-bar">
-        <div className="container mx-auto flex justify-between items-center py-3">
+        <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-6">
             {/* 햄버거 메뉴 아이콘 */}
             <button 
               id="hamburger-btn"
-              className="hamburger-menu" 
+              className="hamburger-menu lg:hidden" 
               onClick={toggleDrawer}
               aria-label="메뉴 열기"
             >
@@ -125,7 +129,7 @@ export function HeaderMenu() {
             </button>
             
             {/* 메인 메뉴 아이템들 */}
-            <nav className="hidden md:block">
+            <nav className="hidden lg:block">
               <ul className="flex space-x-6 items-center">
                 <li>
                   <a 
@@ -164,18 +168,8 @@ export function HeaderMenu() {
           </div>
           
           {/* 오른쪽 메뉴 - 로그인/회원가입/서비스 요청 */}
-          <div className="hidden md:flex items-center space-x-4">
-            {!isLoggedIn && (
-              <>
-                <Link href="/login" className="nav-btn-secondary">
-                  로그인
-                </Link>
-                <Link href="/login" className="nav-btn-secondary">
-                  회원가입
-                </Link>
-              </>
-            )}
-            <Link href="/service-request" className="btn-primary">
+          <div className="hidden lg:flex items-center space-x-4">
+            <Link href="/service-request" className="btn-secondary">
               서비스 요청하기
             </Link>
             {isAdmin && (

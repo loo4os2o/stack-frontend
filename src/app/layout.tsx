@@ -19,6 +19,9 @@ export default function RootLayout({
   const isMainPage = pathname === '/';
   const isMain2Page = pathname === '/main2';
   const [showTopButton, setShowTopButton] = useState(false);
+  
+  // 로그인과 서비스 요청 페이지는 흰색 배경
+  const isWhiteBackgroundPage = pathname === '/login' || pathname === '/service-request';
 
   const handleOutsideClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -76,7 +79,14 @@ export default function RootLayout({
             </div>
           </header>
         )}
-        <main>{children}</main>
+        <main 
+          style={{ 
+            backgroundColor: isWhiteBackgroundPage 
+            ? 'white' : 'var(--background-color)'
+          }}
+        >
+          {children}
+        </main>
         <Footer />
         <TopButton />
         

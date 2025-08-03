@@ -15,11 +15,11 @@ export default function ImagePreview({ previewUrl }: Props) {
       <style jsx>{`
         .preview-container {
           width: 100%;
-          height: 400px;
+          height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #fafafa;
+          background: rgba(244, 244, 244, 0.8);
           border-radius: 8px;
           overflow: hidden;
         }

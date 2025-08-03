@@ -9,6 +9,9 @@ interface ModalProps {
   footer?: ReactNode;
   width?: string | number;
   hideCloseButton?: boolean;
+  headerPadding?: string;
+  titlePadding?: string;
+  bodyPadding?: string;
 }
 
 export default function Modal({
@@ -19,6 +22,9 @@ export default function Modal({
   footer,
   width = 400,
   hideCloseButton = false,
+  headerPadding = '2.5rem 2.5rem 0 2.5rem',
+  titlePadding = '0 0 2rem 0',
+  bodyPadding = '2rem 1.8rem 2rem 2.5rem',
 }: ModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -42,15 +48,17 @@ export default function Modal({
         style={{ width, minWidth: 280 }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="modal-header">
-          {title && <h2 className="modal-title">{title}</h2>}
-          {!hideCloseButton && (
-            <button className="modal-close" onClick={onClose} aria-label="닫기">
-              ×
-            </button>
-          )}
+        <div className="modal-header" style={{ padding: headerPadding }}>
+          <div className='line' style={{ padding: titlePadding }}>
+            {title && <h2 className="modal-title">{title}</h2>}
+            {!hideCloseButton && (
+              <button className="modal-close" onClick={onClose} aria-label="닫기">
+                ×
+              </button>
+            )}
+          </div>
         </div>
-        <div className="modal-body">{children}</div>
+        <div className="modal-body" style={{ padding: bodyPadding }}>{children}</div>
         {footer && <div className="modal-footer">{footer}</div>}
       </div>
       <style jsx>{`
@@ -77,33 +85,38 @@ export default function Modal({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.5rem 3rem 0rem 3rem;
-          // 헤더있을 때
-          // padding: 2rem 3rem 0.5rem 3.5rem;
-          // border-bottom: 1px solid #eee;
+          }
+        .line{
+          border-bottom: 1px solid #DDDDDD;
+          width: 100%;
+          display: flex;
+          align-items: center;
         }
         .modal-title {
-          font-size: 1.3rem;
           font-weight: 700;
-          width: 95%;
+          font-size: 2rem;
+          line-height: 140%;
+          flex: 1;
         }
         .modal-close {
-          background: none;
+          background: #F4F4F4;
+          border-radius: 0.5rem;
           border: none;
-          font-size: 1.7rem;
+          width: 2.5rem;
+          height: 2.5rem;
+          font-size: 1.25rem;
+          font-weight: 700;
           cursor: pointer;
-          color: #888;
+          color: #8E8E8E;
         }
         .modal-body {
-          padding: 1.2rem 1.5rem;
+          // padding: 2rem 1.8rem 2rem 2.5rem;
           // border: 1px solid red;
-          max-height: 80vh;
-          // 헤더있을 때
-          // max-height: 65vh;
+          max-height: 60vh;
           overflow-y: auto;
         }
         .modal-footer {
-          padding: 1rem 1.5rem 1.5rem 1.5rem;
+          padding: 0.5rem 1.5rem 0.5rem 1.5rem;
           // border-top: 1px solid #eee;
           text-align: right;
         }

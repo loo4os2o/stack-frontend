@@ -9,15 +9,19 @@ interface Block {
 
 interface Props {
   blocks: Block[];
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
-const VerticalRangeBar: React.FC<Props> = ({ blocks }) => {
+const VerticalRangeBar: React.FC<Props> = ({ blocks, width = 50, height = 300, className = '' }) => {
   return (
     <div
+      className={className}
       style={{
         position: "relative",
-        width: 50,
-        height: 300,
+        width: width,
+        height: height,
         background: "#e0e0e0",
         borderRadius: 8,
         margin: "auto",

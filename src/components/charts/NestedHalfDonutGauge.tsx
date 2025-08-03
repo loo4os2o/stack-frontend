@@ -5,11 +5,17 @@ import React from "react";
 interface Props {
   dangerPercent: number; // 예: 0.49
   warningPercent: number; // 예: 0.68
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
 const GaugeNestedFullDonut: React.FC<Props> = ({
   dangerPercent,
   warningPercent,
+  width = '100%',
+  height = 360,
+  className = '',
 }) => {
   const option = {
     title: [
@@ -120,7 +126,7 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
     ],
   };
 
-  return <ReactECharts option={option} style={{ height: 360, width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height, width }} className={className} />;
 };
 
 export default GaugeNestedFullDonut;

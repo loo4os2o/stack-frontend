@@ -17,9 +17,12 @@ interface Bullet {
 interface Props {
   ranges: Range[];
   bullets: Bullet[];
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
-const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets }) => {
+const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets, width = '100%', height = 500, className = '' }) => {
   const option = {
     title: {
       text: "중성대 위치",
@@ -96,7 +99,7 @@ const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets }) => {
     ],
   };
 
-  return <ReactECharts option={option} style={{ height: 500, width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height, width }} className={className} />;
 };
 
 export default RangeBarWithBullet;

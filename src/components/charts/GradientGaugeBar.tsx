@@ -6,6 +6,9 @@ interface GradientGaugeBarProps {
   leftPosition: number; // 0 ~ 100
   rightLabel: string;
   rightPosition: number; // 0 ~ 100
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
 const GradientGaugeBar: React.FC<GradientGaugeBarProps> = ({
@@ -13,13 +16,17 @@ const GradientGaugeBar: React.FC<GradientGaugeBarProps> = ({
   leftPosition,
   rightLabel,
   rightPosition,
+  width = '95%',
+  height = 120,
+  className = '',
 }) => {
   return (
     <div
+      className={className}
       style={{
         position: "relative",
-        height: 120,
-        width: '95%',
+        height: height,
+        width: width,
         background: "transparent",
         padding: "60px 0 20px 0",
         // border: "1px solid red",

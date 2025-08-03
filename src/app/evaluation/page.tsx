@@ -8,7 +8,11 @@ import Image from 'next/image';
 import ExImgCppe from "@/assets/images/ex/ex-img-cppe.png";
 import ImageUploadButton from '@/components/ImageUploadButton';
 import ImagePreview from '@/components/ImagePreview';
+import ArrowRight from "@/assets/icons/icon-btn-more.png";
+import ImgEv1 from "@/assets/images/evaluation/img-ev-1.png";
 import { useRef } from 'react';
+import TooltipButton from '@/components/common/TooltipButton';
+import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
 
 export default function EvaluationPage() {
   const router = useRouter();
@@ -16,10 +20,11 @@ export default function EvaluationPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [promoModalOpen, setPromoModalOpen] = useState(false);
+  const [showPromoButton, setShowPromoButton] = useState(false);
   const promoVideoRef = useRef<HTMLVideoElement>(null);
 
-  // 1. 건물 용도 - 라디오 옵션
-  const [selectedPurpose, setSelectedPurpose] = useState<string>('');
+  // 1. 건물 용도 - 체크박스 옵션
+  const [selectedPurpose, setSelectedPurpose] = useState<string[]>([]);
   const [customPurpose, setCustomPurpose] = useState<string>('');
 
   // 2. 건물 매스 계획 - 스위치
@@ -30,16 +35,18 @@ export default function EvaluationPage() {
   const [skyLobby, setSkyLobby] = useState(false);
   const [shuttleElevator, setShuttleElevator] = useState(false);
 
-  const [lowZone, setLowZone] = useState<number | ''>('');
-  const [midZone, setMidZone] = useState<number | ''>('');
-  const [highZone, setHighZone] = useState<number | ''>('');
-
   const handleEvaluate = () => {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
       setModalOpen(false);
+      setShowPromoButton(false);
       setPromoModalOpen(true);
+      
+      // 동영상 임시 재생이 끝났다고 설정하고 5초 후에 버튼 표시
+      setTimeout(() => {
+        setShowPromoButton(true);
+      }, 5000);
     }, 1000);
   };
 
@@ -54,35 +61,70 @@ export default function EvaluationPage() {
     alert('저장되었습니다.');
   };
 
+
+  // 차트 데이터
+  const chartData: {
+    ranges: { x: number; start: number; end: number }[];
+    bullets: { x: number; y: number }[];
+    blocks: { start: number; end: number; type: "danger" | "warning" }[];
+  } = {
+    ranges: [
+      { x: 1, start: 0, end: 50 },
+      { x: 2, start: 20, end: 80 },
+      { x: 3, start: 40, end: 120 },
+      { x: 4, start: 60, end: 140 }
+    ],
+    bullets: [
+      { x: 1, y: 25 },
+      { x: 2, y: 50 },
+      { x: 3, y: 80 },
+      { x: 4, y: 100 }
+    ],
+    blocks: [
+      { start: 0, end: 30, type: "danger" },
+      { start: 30, end: 60, type: "warning" },
+      { start: 60, end: 90, type: "danger" },
+      { start: 90, end: 100, type: "warning" }
+    ],
+  };
+
+
   return (
-    <div className="container cppe mx-auto pt-16 pb-24">
-      <h1 className="text-3xl font-bold mb-10">연돌현상 예측평가</h1>
+    <div className="container mx-auto py-10 evaluation">
+      <h1 className="text-3xl font-bold mb-5">연돌현상 예측평가</h1>
 
       {/* 연돌현상 예측평가 페이지 설명 영역 */}
       <section className='cppe-explain'>
-        <div className='flex flex-col md:flex-row gap-8'>
+        <div className='flex flex-col md:flex-row gap-5'>
           <div className='w-full md:w-2/5 left'>
+            <h2 className='mb-1'>연돌현상</h2>
+            <h3 className='mb-3'>Stack Effect, Chimney Phenomenon</h3>
             <p>
-              연돌현상(Stack Effect, Chimney Phenomenon)은
-              실내외 온도 차이로 인해 공기가 수직으로 이동하는 자연 현상 
-              즉, 따뜻한 공기는 위로 상승하고, 찬 공기는 아래로 내려가는 
-              물리 법칙에 따라, 건물 내부의 공기 흐름이 굴뚝처럼 위로 
-              올라가는 현상을 말합니다. <br/><br/>
-              예측평가를위해다음정보가필요합니다.<br/>
-              - 건물높이및층정보<br/>
-              - 매스계획<br/>
-              - 엘리베이터샤프트계획<br/>
-              - 기본평면계획정보
+              실내외 온도 차이로 인해 공기가 수직으로 이동하는 자연 현상 즉, 
+              따뜻한 공기는 위로 상승하고, 찬 공기는 아래로 내려가는 물리 법칙에 따라, 
+              건물 내부의 공기 흐름이 굴뚝처럼 위로 올라가는 현상을 말합니다.
             </p>
-            {/* <button className='btn-primary btn-large mt-8 mb-2'  */}
-            <button className='btn-primary btn-large mt-8 mb-2'
-              onClick={() => setModalOpen(true)}>시작하기</button>
-          </div>
-          <div className='w-full md:w-3/5 right center' style={{background: '#eee'}}>
-            <div className="placeholder h-80 mt-4 flex-1 w-full">
-              <div className="wireframe-header">연돌현상 영향도 이미지</div>
+            <div className='text-box mb-4'>
+              <h4 className='mb-2'>예측평가를 위해 필요한 정보</h4>
+              <ul className='mt-3'>
+                <li>건물 높이 및 층 정보</li>
+                <li>매스계획</li>
+                <li>엘리베이터 샤프트 계획</li>
+                <li>기본 평면 계획 정보</li>
+              </ul>
             </div>
-            <div className="design-note">연돌현상으로 인한 문제점이나 영향을 시각적으로 표현한 이미지</div>
+            <button className='btn-primary w-full btn-50 rounded-xl
+              flex items-center justify-between gap-2'
+              onClick={() => setModalOpen(true)}
+            >
+                시작하기
+                <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+            </button>
+          </div>
+          <div className='w-full md:w-3/5 right' style={{padding: 0}}>
+            <div className='image-wrap'>
+              <Image src={ImgEv1} alt="이미지1 설명입니다." />
+            </div>
           </div>
         </div>
         <div className='image-wrap mt-16'>
@@ -94,234 +136,223 @@ export default function EvaluationPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={" "}
+        title={"연돌현상 예측평가"}
         footer={" "}
         width={'80%'}
       >
-        <div>
-          {/* 1. 건물 일반 정보 */}
+        <div className='evaluation-page'>
+
+          <h2>1. 건물 일반 정보</h2>
           <section>
             <div className='flex flex-col md:flex-row gap-8'>
               <div className='w-full md:w-1/2 left'>
-                <h2 className="text-xl font-bold mb-6">
-                  1. 건물 일반 정보
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-6"
-                  style={{columnGap: '4rem'}}
-                >
-                  {/* 프로젝트명 */}
-                  <div>
-                    <label htmlFor="projectName" 
-                      className="block mb-2 font-semibold">프로젝트명
-                      <span className="text-red-500 ml-1">*</span>
-                    </label>
+
+                {/* 프로젝트명 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group' style={{marginBottom: "0.375rem"}}>
+                    <label htmlFor="projectName">프로젝트명<span className="text-red-500 ml-1">*</span></label>
                     <input 
                       type="text" 
                       id="projectName" 
-                      className="w-full px-4 py-2 border rounded-md"
                       placeholder="예: OO 오피스 빌딩"
                     />
                   </div>
 
                   {/* 프로젝트 대표사진 업로드 */}
-                  <div className='flex items-center gap-2'>
-                    <label htmlFor="imageUpload" className="block mt-1 font-semibold">
-                        프로젝트 대표사진 업로드</label>
+                  <div className='form-group'>
+                    <label htmlFor="imageUpload" className='hidden'></label>
                     <ImageUploadButton onImageSelect={setPreview} />
+                    {/* <input type="file" id="imageUpload" /> */}
                   </div>
+                </div>
 
-                  {/* 건물 용도 */}
-                  <fieldset className="space-y-2">
-                    <legend className="mb-2 font-semibold">건물 용도
-                      <span className="text-red-500 ml-1">*</span>
-                    </legend>
-                    {[
-                      { label: '오피스', value: 'office' },
-                      { label: '상업시설', value: 'commercial' },
-                      { label: '주거시설', value: 'residential' }
-                    ].map((opt) => (
-                      <label key={opt.value} 
-                        className="flex items-center gap-2"
-                        style={{width: 'fit-content'}}
-                      >
-                        <input
-                          type="radio"
-                          name="buildingPurpose"
-                          value={opt.value}
-                          checked={selectedPurpose === opt.value}
-                          onChange={(e) => setSelectedPurpose(e.target.value)}
-                          className="accent-blue-500"
-                        />
-                        {opt.label}
-                      </label>
-                    ))}
-
-                    {/* 기타 + 입력 */}
-                    <label className="flex items-center gap-2" style={{width: 'fit-content'}}>
-                      <input
-                        type="radio"
-                        name="buildingPurpose"
-                        value="custom"
-                        checked={selectedPurpose === 'custom'}
-                        onChange={(e) => setSelectedPurpose(e.target.value)}
-                        className="accent-blue-500"
+                {/* 위치(기후데이터) */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group'>
+                    <label htmlFor="location">위치(기후데이터)<span className="text-red-500 ml-1">*</span></label>
+                    <div className="flex items-center gap-2 w-full">
+                      <select id="location">
+                        <option value="">선택하세요</option>
+                        <option value="서울">서울</option>
+                        <option value="경기도">경기도</option>
+                        <option value="대전">대전</option>
+                        <option value="부산">부산</option>
+                      </select>
+                      <TooltipButton 
+                        position="bottom"
+                        tooltipText="기후데이터를 적용하기 위한 프로젝트 위치(도시)를 선택해 주세요.<br/>지역별 외기조건 반영에 사용됩니다."
                       />
-                      기타:
-                      <input
-                        type="text"
-                        placeholder="용도를 입력하세요"
-                        value={customPurpose}
-                        onChange={(e) => setCustomPurpose(e.target.value)}
-                        disabled={selectedPurpose !== 'custom'}
-                        className={`border px-4 py-1 rounded-md ${
-                          selectedPurpose !== 'custom' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''
-                        }`}
-                      />
-                    </label>
-                  </fieldset>
-
-                  {/* 준공(예정)연도 */}
-                  <div>
-                    <label htmlFor="completionYear" 
-                      className="block mb-2 font-semibold">준공(예정)연도
-                    </label>
-                    <div className="flex items-center border rounded-md px-4 py-2">
-                      <input
-                        type="text"
-                        id="completionYear"
-                        className="w-full outline-none"
-                        placeholder="2025"
-                      />
-                      <span className="text-gray-500 ml-2">년</span>
                     </div>
                   </div>
+                </div>
 
-                  {/* 위치 */}
-                  <div>
-                    <label htmlFor="location" 
-                      className="block mb-2 font-semibold">위치
-                      <span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <select id="location" className="w-full px-4 py-2 border rounded-md">
-                      <option value="">선택하세요</option>
-                      <option value="서울">서울</option>
-                      <option value="경기도">경기도</option>
-                      <option value="대전">대전</option>
-                      <option value="부산">부산</option>
-                    </select>
+                {/* 준공(예정)연도 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group'>
+                    <label htmlFor="completionYear">준공(예정)연도</label>
+                    <input
+                      type="text"
+                      id="completionYear"
+                      className="w-full outline-none"
+                      placeholder="2025"
+                    />
                   </div>
+                </div>
 
-                  {/* 건물 높이 */}
-                  <div>
-                    <label htmlFor="buildingHeight" 
-                      className="block mb-2 font-semibold">건물 높이 (m)
-                      <span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <div className="flex items-center border rounded-md px-4 py-2">
-                      <input 
-                        type="number" 
-                        id="buildingHeight" 
-                        className="w-full outline-none"
-                        placeholder="0"
-                      />
-                      <span className="text-gray-500 ml-2">m</span>
-                    </div>
-                  </div>
-
-                  {/* 건물 층수 */}
-                  <fieldset>
-                    <legend className="block mb-2 font-semibold">
-                      건물 층수 <span className="text-red-500 ml-1">*</span>
-                    </legend>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      {/* 지상 */}
-                      <div>
-                        <label htmlFor="aboveFloors" className="block mb-1 text-sm">지상</label>
-                        <div className="flex items-center border rounded-md px-4 py-2">
-                          <input 
-                            type="number" 
-                            id="aboveFloors" 
-                            className="w-full outline-none"
-                            placeholder="1"
-                          />
-                          <span className="text-gray-500 ml-2">F</span>
-                        </div>
-                      </div>
-
+                {/* 건물 규모 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group'>
+                    <label>건물 규모 <span className="text-red-500 ml-1">*</span></label>
+                    <div className="grid grid-cols-2 gap-2">
                       {/* 지하 */}
                       <div>
-                        <label htmlFor="belowFloors" className="block mb-1 text-sm">지하</label>
-                        <div className="flex items-center border rounded-md px-4 py-2">
+                        <label htmlFor="belowFloors" className="small">지하</label>
+                        <div className="input-unit-wrap">
                           <input 
                             type="number" 
                             id="belowFloors" 
-                            className="w-full outline-none"
+                            placeholder="1"
+                          />
+                          <span className="text-gray-500 ml-2">F</span>
+                        </div>
+                      </div>
+
+                      {/* 지상 */}
+                      <div>
+                        <label htmlFor="aboveFloors" className='small'>지상</label>
+                        <div className="input-unit-wrap">
+                          <input 
+                            type="number" 
+                            id="aboveFloors" 
                             placeholder="1"
                           />
                           <span className="text-gray-500 ml-2">F</span>
                         </div>
                       </div>
                     </div>
-                  </fieldset>
+                  </div>
                 </div>
-              </div>
+
+                {/* 건물 높이 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group'>
+                    <label htmlFor="buildingHeight">건물 높이 (m)<span className="text-red-500 ml-1">*</span></label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="input-unit-wrap w-full">
+                        <input 
+                          type="number" 
+                          id="buildingHeight" 
+                          placeholder="0"
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
+                      </div>
+                      <TooltipButton 
+                        position="bottom"
+                        tooltipText="지표면으로부터 건축물 상단까지 수직 거리"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 건물 용도 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group' 
+                    style={{alignItems: 'flex-start', marginBottom: 0}}>
+                    <label>건물 용도<span className="text-red-500 ml-1">*</span></label>
+
+                    <div className='radio-group'>
+                      {[
+                        { label: '공동주택', value: '1' },
+                        { label: '업무시설', value: '2' },
+                        { label: '판매시설', value: '3' },
+                        { label: '근린생활시설', value: '4' },
+                        { label: '문화/집회시설', value: '5' },
+                      ].map((opt) => (
+                        <label key={opt.value}>
+                          <input
+                            type="checkbox"
+                            name="buildingPurpose"
+                            value={opt.value}
+                            checked={selectedPurpose.includes(opt.value)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedPurpose([...selectedPurpose, opt.value]);
+                              } else {
+                                setSelectedPurpose(selectedPurpose.filter((v) => v !== opt.value));
+                              }
+                            }}
+                          />
+                          {opt.label}
+                        </label>
+                      ))}
+
+                      {/* 기타 + 입력 */}
+                      <label className='radio-etc'>
+                        <div>
+                          <input
+                            type="checkbox"
+                            name="buildingPurpose"
+                            value="custom"
+                            checked={selectedPurpose.includes('custom')}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedPurpose([...selectedPurpose, 'custom']);
+                              } else {
+                                setSelectedPurpose(selectedPurpose.filter((v) => v !== 'custom'));
+                              }
+                            }}
+                            // disabled
+                          />
+                          <span>기타:</span>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="용도를 입력하세요"
+                          value={customPurpose}
+                          onChange={(e) => setCustomPurpose(e.target.value)}
+                          // disabled={!selectedPurpose.includes('custom')}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>  {/* 1. 건물 일반 정보 : 왼쪽 영역 끝 */}
+
               <div className='w-full md:w-1/2 right'>
                 <ImagePreview previewUrl={preview} />
-                <div className='flex flex-col md:flex-row gap-8 mt-6'
-                  style={{height: 'calc(50% - 2rem)'}}>
-                  <div className='w-full md:w-1/2 left center'>차트1</div>
-                  <div className='w-full md:w-1/2 right center'>차트2</div>
-                </div>
               </div>
+
             </div>
           </section>
 
           {/* 2. 건물 매스 계획 */}
-          <section className='mt-8'>
+          <h2 className='mt-8'>2. 건물 매스 계획</h2>
+          <section>
             <div className='flex flex-col md:flex-row gap-8'>
               <div className='w-full md:w-1/2 left'>
-                <fieldset>
-                  <legend className="text-xl font-bold mb-6">
-                    2. 건물 매스 계획
-                  </legend>
 
-                  <div className="grid grid-cols-1 md:grid-cols-1 gap-6" style={{ columnGap: '4rem' }}>
-                    {/* 스위치 */}
-                    <label className="switch-container">
-                      <input
-                        type="checkbox"
-                        checked={hasPodium}
-                        onChange={(e) => setHasPodium(e.target.checked)}
-                        className="switch-input"
-                      />
-                      <span className={`switch-slider ${hasPodium ? 'active' : ''}`} />
-                      <span className="font-medium">저층부 포디움</span>
-                    </label>
+                {/* 스위치 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <h3>저층부 포디움</h3>
+                  <label className="switch-container">
+                    <input
+                      type="checkbox"
+                      checked={hasPodium}
+                      onChange={(e) => setHasPodium(e.target.checked)}
+                      className="switch-input"
+                    />
+                    <span className={`switch-slider ${hasPodium ? 'active' : ''}`} />
+                  </label>
+                </div>
 
-                    {/* 포디움 용도 */}
-                    <div>
-                      <label htmlFor="podiumPurpose" className="block mb-2">
-                        포디움 용도
-                      </label>
-                      <input
-                        type="text"
-                        id="podiumPurpose"
-                        placeholder="예: 판매시설"
-                        disabled={!hasPodium}
-                        className={`w-full px-4 py-2 border rounded-md transition ${
-                          !hasPodium ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''
-                        }`}
-                      />
-                    </div>
-
-                    {/* 포디움 높이 */}
-                    <div>
-                      <label htmlFor="podiumHeight" className="block mb-2">
-                        포디움 높이 (m)
-                      </label>
+                {/* 포디움 높이 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group sub'>
+                    <label htmlFor="podiumHeight">포디움 높이 (m)<span className="text-red-500 ml-1">*</span></label>
+                    <div className="flex items-center gap-2 w-full">
                       <div
-                        className={`flex items-center border rounded-md px-4 py-2 transition ${
+                        className={`input-unit-wrap transition ${
                           !hasPodium ? 'bg-gray-100' : 'bg-white'
                         }`}
                       >
@@ -330,403 +361,475 @@ export default function EvaluationPage() {
                           id="podiumHeight"
                           placeholder="0"
                           disabled={!hasPodium}
-                          className={`w-full outline-none bg-transparent transition ${
+                          className={`bg-transparent transition ${
                             !hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-black'
                           }`}
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
+                      <TooltipButton 
+                        tooltipText="포디움 높이 (m)"
+                      />
                     </div>
                   </div>
-                </fieldset>
-              </div>
+                </div>
+
+                {/* 외피 둘레비율 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group sub'>
+                    <label htmlFor="">외피 둘레비율<span className="text-red-500 ml-1">*</span></label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div
+                        className={`input-unit-wrap transition ${
+                          !hasPodium ? 'bg-gray-100' : 'bg-white'
+                        }`}
+                      >
+                        <input
+                          type="number"
+                          id=""
+                          placeholder="0"
+                          disabled={!hasPodium}
+                          className={`bg-transparent transition ${
+                            !hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-black'
+                          }`}
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
+                      </div>
+                      <TooltipButton 
+                        tooltipText="외피 둘레비율 (m)"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 건물용도 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group sub top'
+                    style={{alignItems: 'flex-start', marginBottom: 0}}>
+                    <label>건물 용도<span className="text-red-500 ml-1">*</span></label>
+
+                    <div className='radio-group'>
+                      {[
+                        { label: '공동주택', value: '1' },
+                        { label: '업무시설', value: '2' },
+                        { label: '판매시설', value: '3' },
+                        { label: '근린생활시설', value: '4' },
+                        { label: '문화/집회시설', value: '5' },
+                      ].map((opt) => (
+                        <label key={opt.value} className={!hasPodium ? 'disabled' : ''}>
+                          <input
+                            type="checkbox"
+                            name="buildingPurpose"
+                            value={opt.value}
+                            checked={selectedPurpose.includes(opt.value)}
+                            disabled={!hasPodium}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedPurpose([...selectedPurpose, opt.value]);
+                              } else {
+                                setSelectedPurpose(selectedPurpose.filter((v) => v !== opt.value));
+                              }
+                            }}
+                          />
+                          {opt.label}
+                        </label>
+                      ))}
+
+                      {/* 기타 + 입력 */}
+                      <label className={`radio-etc ${!hasPodium ? 'disabled' : ''}`}>
+                        <div>
+                          <input
+                            type="checkbox"
+                            name="buildingPurpose"
+                            value="custom"
+                            checked={selectedPurpose.includes('custom')}
+                            disabled={!hasPodium}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedPurpose([...selectedPurpose, 'custom']);
+                              } else {
+                                setSelectedPurpose(selectedPurpose.filter((v) => v !== 'custom'));
+                              }
+                            }}
+                          />
+                          <span>기타:</span>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="용도를 입력하세요"
+                          value={customPurpose}
+                          disabled={!hasPodium}
+                          onChange={(e) => setCustomPurpose(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>    {/* 2. 물 매스 계획 : 왼쪽 영역 끝 */}
+
               <div className='w-full md:w-1/2 right'>
-                2. 건물 매스 계획 이미지 영역(건물매스형상)
+                <div className='chart-wrap'>
+                  <RangeBarWithBullet 
+                    ranges={chartData.ranges} 
+                    bullets={chartData.bullets} 
+                    height={340}
+                    width="100%"
+                  />
+                </div>
               </div>
             </div>
           </section>
 
           {/* 3. 승객용 엘리베이터 샤프트 계획 */}
-          <section className='mt-8'>
+          <h2 className="mt-8">3. 승객용 엘리베이터 샤프트 계획</h2>
+          <section>
             <div className='flex flex-col md:flex-row gap-8'>
               <div className='w-full md:w-1/2 left'>
-                <h2 className="text-xl font-bold mb-6">
-                  3. 승객용 엘리베이터 샤프트 계획
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-6"
-                  style={{columnGap: '4rem'}}
-                >
-                  {/* 수직조닝 */}
-                  <fieldset className="space-y-4">
-                    <legend className="font-semibold">수직조닝
-                      <span className="text-red-500 ml-1">*</span>
-                    </legend>
-                    {/* 라디오 버튼 */}
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="single"
-                          checked={zoningType === 'single'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
-                        싱글존
-                      </label>
 
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="two"
-                          checked={zoningType === 'two'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
+                {/* 수직조닝 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 mb-5">
+                  <div className='flex items-center gap-2 mb-2'>
+                    <h3 style={{marginBottom: 0}}>수직조닝<span className="text-red-500 ml-1">*</span></h3>
+                    <TooltipButton position="right" tooltipText="설명" />
+                  </div>
+
+                  {/* 라디오 버튼 */}
+                  <div className='radio-group'>
+                    <label>
+                      <input
+                        type="radio"
+                        name="zoningType"
+                        value="single"
+                        checked={zoningType === 'single'}
+                        onChange={(e) => setZoningType(e.target.value)}
+                      />
+                      싱글존
+                    </label>
+
+                    <label>
+                      <input
+                        type="radio"
+                        name="zoningType"
+                        value="two"
+                        checked={zoningType === 'two'}
+                        onChange={(e) => setZoningType(e.target.value)}
+                      />
                         투존 (저층존 - 고층존)
-                      </label>
+                    </label>
 
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="multi"
-                          checked={zoningType === 'multi'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
+                    <label>
+                      <input
+                        type="radio"
+                        name="zoningType"
+                        value="multi"
+                        checked={zoningType === 'multi'}
+                        onChange={(e) => setZoningType(e.target.value)}
+                      />
                         멀티존 (저층존 - 중층존 - 고층존)
-                      </label>
+                    </label>
+                  </div>
+                </div>
+
+                {/* 샤프트별 최고운행층 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6 mb-5">
+                  <div className='flex items-center gap-2 mb-2 sub'>
+                    <h3 style={{marginBottom: 0}}>샤프트별 최고운행층<span className="text-red-500 ml-1">*</span></h3>
+                    <TooltipButton position="right" tooltipText="설명" />
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+                    {/* 지하 */}
+                    <div>
+                      <label htmlFor="belowFloors" className="small">지하</label>
+                      <div className="input-unit-wrap">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
                     </div>
 
-                    {/* 체크박스 */}
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={skyLobby}
-                          onChange={(e) => setSkyLobby(e.target.checked)}
-                          className="accent-blue-500"
+                    {/* 지상 */}
+                    <div>
+                      <label htmlFor="aboveFloors" className='small'>지상</label>
+                      <div className="input-unit-wrap">
+                        <input 
+                          type="number" 
+                          id="aboveFloors" 
+                          placeholder="1"
                         />
-                        스카이로비
-                      </label>
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                    </div>
 
-                      <label className="flex items-center gap-2">
+                    {/* 추가가 */}
+                    <div>
+                      <label htmlFor="aboveFloors" className='small'>추가</label>
+                      <div className="input-unit-wrap">
+                        <input 
+                          type="number" 
+                          id="aboveFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 특이사항 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group flex-col sub top' 
+                    style={{alignItems: 'flex-start', marginBottom: 0}}>
+                    <label>특이사항</label>
+
+                    {/* 체크박스 */}
+                    <div className='radio-group'>
+                      <label>
                         <input
                           type="checkbox"
                           checked={shuttleElevator}
                           onChange={(e) => setShuttleElevator(e.target.checked)}
-                          className="accent-blue-500"
                         />
                         지하층 셔틀 엘리베이터
                       </label>
-                    </div>
-                  </fieldset>
 
-                  {/* 샤프트별 최상층 */}
-                  <fieldset className="space-y-4">
-                    <legend className="font-semibold">
-                      샤프트 별 최상층 <span className="text-red-500">*</span>
-                    </legend>
-
-                    {/* 저층존 */}
-                    <div>
-                      <label htmlFor="lowZone" className="block mb-1 text-sm">
-                        저층존
-                      </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
+                      <label>
                         <input
-                          type="number"
-                          id="lowZone"
-                          value={lowZone}
-                          onChange={(e) => setLowZone(Number(e.target.value))}
-                          placeholder="0"
-                          className="w-full outline-none bg-transparent"
+                          type="checkbox"
+                          checked={skyLobby}
+                          onChange={(e) => setSkyLobby(e.target.checked)}
                         />
-                        <span className="ml-2 text-gray-500">F</span>
-                      </div>
-                    </div>
-
-                    {/* 중층존 */}
-                    <div>
-                      <label htmlFor="midZone" className="block mb-1 text-sm">
-                        중층존
+                        스카이로비
+                        <span className="ml-3 mt-0.5">
+                          <TooltipButton position="right" tooltipText="설명" />
+                        </span>
                       </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
-                        <input
-                          type="number"
-                          id="midZone"
-                          value={midZone}
-                          onChange={(e) => setMidZone(Number(e.target.value))}
-                          placeholder="0"
-                          className="w-full outline-none bg-transparent"
-                        />
-                        <span className="ml-2 text-gray-500">F</span>
-                      </div>
                     </div>
-
-                    {/* 고층존 */}
-                    <div>
-                      <label htmlFor="highZone" className="block mb-1 text-sm">
-                        고층존
-                      </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
-                        <input
-                          type="number"
-                          id="highZone"
-                          value={highZone}
-                          onChange={(e) => setHighZone(Number(e.target.value))}
-                          placeholder="0"
-                          className="w-full outline-none bg-transparent"
-                        />
-                        <span className="ml-2 text-gray-500">F</span>
-                      </div>
-                    </div>
-                  </fieldset>
+                  </div>
                 </div>
-              </div>
+              </div>    {/* 3. 승객용 엘리베이터 샤프트 계획 : 왼쪽 영역 끝 */}
+
               <div className='w-full md:w-1/2 right'>
-                3. 승객용 엘리베이터 샤프트 계획 이미지 영역(샤프트형상)
+                <div className='chart-wrap'>
+                  <RangeBarWithBullet 
+                    ranges={chartData.ranges} 
+                    bullets={chartData.bullets} 
+                    height={340}
+                    width="100%"
+                  />
+                </div>
               </div>
             </div>
           </section>
-
+          
           {/* 4. 계단실 샤프트 계획 */}
-          <section className='mt-8'>
+          <h2 className="mt-8">4. 계단실 샤프트 계획</h2>
+          <section>
             <div className='flex flex-col md:flex-row gap-8'>
               <div className='w-full md:w-2/2 left'>
-                <h2 className="text-xl font-bold mb-6">
-                  4. 계단실 샤프트 계획
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-6"
-                  style={{columnGap: '4rem'}}
-                >
-                  {/* 수직조닝 */}
-                  <fieldset className="space-y-4">
-                    <legend className="font-semibold">수직조닝
-                      <span className="text-red-500 ml-1">*</span>
-                    </legend>
-                    {/* 라디오 버튼 */}
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="single"
-                          checked={zoningType === 'single'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
-                        싱글존
-                      </label>
-
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="two"
-                          checked={zoningType === 'two'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
-                        투존 (저층존 - 고층존)
-                      </label>
-
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="zoningType"
-                          value="multi"
-                          checked={zoningType === 'multi'}
-                          onChange={(e) => setZoningType(e.target.value)}
-                          className="accent-blue-500"
-                        />
-                        멀티존 (저층존 - 중층존 - 고층존)
-                      </label>
-                    </div>
-
-                    {/* 체크박스 */}
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={skyLobby}
-                          onChange={(e) => setSkyLobby(e.target.checked)}
-                          className="accent-blue-500"
-                        />
-                        스카이로비
-                      </label>
-
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={shuttleElevator}
-                          onChange={(e) => setShuttleElevator(e.target.checked)}
-                          className="accent-blue-500"
-                        />
-                        지하층 셔틀 엘리베이터
-                      </label>
-                    </div>
-                  </fieldset>
-
-                  {/* 샤프트별 최상층 */}
-                  <fieldset className="space-y-4">
-                    <legend className="font-semibold">
-                      샤프트 별 최상층 <span className="text-red-500">*</span>
-                    </legend>
-
-                    {/* 저층존 */}
-                    <div>
-                      <label htmlFor="lowZone" className="block mb-1 text-sm">
-                        저층존
-                      </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
-                        <input
-                          type="number"
-                          id="lowZone"
-                          value={lowZone}
-                          onChange={(e) => setLowZone(Number(e.target.value))}
+                
+                {/* 피난안전구역 개소 */}
+                <div className="grid grid-cols-1 md:grid-cols-1">
+                  <div className='form-group'>
+                    <label htmlFor="buildingHeight">피난안전구역 개소</label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="input-unit-wrap w-50">
+                        <input 
+                          type="number" 
+                          id="buildingHeight" 
                           placeholder="0"
-                          className="w-full outline-none bg-transparent"
                         />
-                        <span className="ml-2 text-gray-500">F</span>
+                        <span className="text-gray-500 ml-2">개소</span>
                       </div>
+                      <TooltipButton 
+                        position="right"
+                        tooltipText="설명"
+                      />
                     </div>
-
-                    {/* 중층존 */}
-                    <div>
-                      <label htmlFor="midZone" className="block mb-1 text-sm">
-                        중층존
-                      </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
-                        <input
-                          type="number"
-                          id="midZone"
-                          value={midZone}
-                          onChange={(e) => setMidZone(Number(e.target.value))}
-                          placeholder="0"
-                          className="w-full outline-none bg-transparent"
-                        />
-                        <span className="ml-2 text-gray-500">F</span>
-                      </div>
-                    </div>
-
-                    {/* 고층존 */}
-                    <div>
-                      <label htmlFor="highZone" className="block mb-1 text-sm">
-                        고층존
-                      </label>
-                      <div className="flex items-center border rounded-md px-4 py-2">
-                        <input
-                          type="number"
-                          id="highZone"
-                          value={highZone}
-                          onChange={(e) => setHighZone(Number(e.target.value))}
-                          placeholder="0"
-                          className="w-full outline-none bg-transparent"
-                        />
-                        <span className="ml-2 text-gray-500">F</span>
-                      </div>
-                    </div>
-                  </fieldset>
+                  </div>
                 </div>
-              </div>
+
+                {/* 위치 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group flex-col sub top' 
+                    style={{alignItems: 'flex-start', marginBottom: 0}}>
+                    <label>위치</label>
+
+                    <div className="grid grid-cols-3 gap-2 lg:grid-cols-5">
+                      <div className="input-unit-wrap w-full disabled">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                          disabled={true}
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                      <div className="input-unit-wrap w-full">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                      <div className="input-unit-wrap w-full">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                      <div className="input-unit-wrap w-full">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                      <div className="input-unit-wrap w-full">
+                        <input 
+                          type="number" 
+                          id="belowFloors" 
+                          placeholder="1"
+                        />
+                        <span className="text-gray-500 ml-2">F</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>    {/* 4. 계단실 샤프트 계획 : 왼쪽 영역 끝 - right 없음 */}
             </div>
           </section>
 
           {/* 5. 기본 건축계획 */}
-          <section className='mt-8'>
+          <h2 className="mt-8">5. 기본 건축계획</h2>
+          <section style={{borderBottom: 0}}>
             <div className='flex flex-col md:flex-row gap-8'>
               <div className='w-full md:w-2/2 left'>
-                <fieldset>
-                  <legend className="text-xl font-bold mb-6">
-                    5. 기본 건축계획
-                  </legend>
 
-                  <div className="space-y-4">
-                    {/* 엘리베이터 홀 구획 */}
-                    <label className="flex items-start gap-2">
-                      <input type="checkbox" className="mt-1.5 accent-blue-500" />
-                      <div>
-                        <span className="font-medium">엘리베이터 홀 구획</span>
-                        <div className="text-sm text-gray-500">
-                          (엘리베이터 홀과 복도 또는 주요 공간이 벽과 도어로 구획되어 있음)
-                        </div>
+                <div className='title-divider'>로비층</div>
+                {/* 로비 층고 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='form-group'>
+                    <label htmlFor="buildingHeight">로비 층고</label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="input-unit-wrap w-1/3">
+                        <input 
+                          type="number" 
+                          id="buildingHeight" 
+                          placeholder="0"
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
                       </div>
-                    </label>
-
-                    {/* 나머지 선택사항들 동일 */}
-                    {[1, 2, 3].map((_, idx) => (
-                      <label key={idx} className="flex items-start gap-2">
-                        <input type="checkbox" className="mt-1.5 accent-blue-500" />
-                        <div>
-                          <span className="font-medium">(선택사항)</span>
-                          <div className="text-sm text-gray-500">(선택사항)에 대한 설명</div>
-                        </div>
-                      </label>
-                    ))}
+                      <TooltipButton 
+                        position="right"
+                        tooltipText="설명"
+                      />
+                    </div>
                   </div>
-                </fieldset>
-              </div>
-            </div>
-          </section>
+                </div>
 
-          {/* 6. 공기유동 특이사항 */}
-          <section className='mt-8'>
-            <div className='flex flex-col md:flex-row gap-8'>
-              <div className='w-full md:w-2/2 left'>
-                <fieldset>
-                  <legend className="text-xl font-bold mb-6">
-                    6. 공기유동 특이사항
-                  </legend>
-
-                  <div className="space-y-4">
-                    {/* 옥상정원 */}
-                    <label className="flex items-start gap-2">
-                      <input type="checkbox" className="mt-1.5 accent-blue-500" />
+                {/* 체크박스 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='checkbox-group'>
+                    <label>
+                      <input type="checkbox" />
                       <div>
-                        <span className="font-medium">옥상정원</span>
-                        <div className="text-sm text-gray-500">
-                          (선택사항)에 대한 설명
+                        <span>승객용 엘리베이터 홀 구획</span>
+                        <div className="checkbox-sub">
+                          로비층 내 엘리베이터 홀이 벽체 및 도어로 구획되어 있는지 여부를 체크해 주세요.
                         </div>
                       </div>
                     </label>
-
-                    {/* 로비층 외 출입층 */}
-                    <label className="flex items-start gap-2">
-                      <input type="checkbox" className="mt-1.5 accent-blue-500" />
-                      <div>
-                        <span className="font-medium">로비층 외 출입층</span>
-                        <div className="text-sm text-gray-500">
-                          (선택사항)에 대한 설명
-                        </div>
-                      </div>
-                    </label>
-
-                    {/* 나머지 선택사항들 동일 */}
-                    {[1, 2, 3, 4].map((_, idx) => (
-                      <label key={idx} className="flex items-start gap-2">
-                        <input type="checkbox" className="mt-1.5 accent-blue-500" />
-                        <div>
-                          <span className="font-medium">(선택사항)</span>
-                          <div className="text-sm text-gray-500">(선택사항)에 대한 설명</div>
-                        </div>
-                      </label>
-                    ))}
                   </div>
-                </fieldset>
-              </div>
+
+                  <div className='checkbox-group mt-2'>
+                    <label>
+                      <input type="checkbox" />
+                      <div>
+                        <span>로비층 외 출입층</span>
+                        <div className="checkbox-sub">
+                          로비층 외에도 주요 출입이 이루어지는 층이 있는 경우 해당 여부를 표시해 주세요. (예: 지하철 연결층 등)
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className='title-divider mt-8'>기준층</div>
+                {/* 체크박스 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='checkbox-group'>
+                    <label>
+                      <input type="checkbox" />
+                      <div>
+                        <span>엘리베이터 홀 구획</span>
+                        <div className="checkbox-sub">
+                          기준층 내 엘리베이터 홀이 벽체 및 도어로 복도 또는 주요 공간과 분리되어 있는지 여부를 체크해 주세요.
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className='checkbox-group mt-2'>
+                    <label>
+                      <input type="checkbox" />
+                      <div>
+                        <span>발코니</span>
+                        <div className="checkbox-sub">
+                          외부로 연결되는 발코니가 있는 경우 해당 여부를 체크해 주세요.
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className='title-divider mt-8'>특수목적</div>
+                {/* 체크박스 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                  <div className='checkbox-group'>
+                    <label>
+                      <input type="checkbox" />
+                      <div>
+                        <span>전망층</span>
+                        <div className="checkbox-sub">
+                          최상층 등에 전망 목적의 층이 계획되어 있는 경우 해당 여부를 체크해 주세요.
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className='checkbox-group mt-2'>
+                    <label>
+                      <input type="checkbox" />
+                      <div>
+                        <span>옥상정원</span>
+                        <div className="checkbox-sub">
+                          옥상에 사용자 접근 가능한 옥상정원이 계획되어 있고, 출입통로와 도어가 있는 경우 체크해 주세요.
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+              </div>    {/* 5. 기본 건축계획 : 왼쪽 영역 끝 - right 없음 */}
             </div>
           </section>
 
           {/* 평가하기 버튼 */}
-          <div className="flex justify-center gap-4 p-6 pb-0 mt-6">
+          <div className="flex justify-end gap-4">
             {isProcessing ? (
               <button 
-                className="btn-primary btn-large disabled"
+                className="btn-primary btn-50 disabled rounded-xl"
                 disabled
-                style={{ width: "25%" }}
+                style={{width: "120px"}}
               >
                 처리 중...
               </button>
@@ -734,15 +837,15 @@ export default function EvaluationPage() {
               <>
                 <button 
                   onClick={handleSave}
-                  className="btn-secondary btn-large"
-                  style={{ width: "25%" }}
+                  className="btn-secondary btn-50 rounded-xl"
+                  style={{width: "120px"}}
                 >
                   저장하기
                 </button>
                 <button 
                   onClick={handleEvaluate}
-                  className="btn-primary btn-large"
-                  style={{ width: "25%" }}
+                  className="btn-primary btn-50 rounded-xl"
+                  style={{width: "120px"}}
                 >
                   평가하기
                 </button>
@@ -759,6 +862,10 @@ export default function EvaluationPage() {
         title={"홍보 영상"}
         footer={" "}
         width={'60%'}
+        hideCloseButton={true}
+        headerPadding={'1.5rem 2.5rem 0 2.5rem'}
+        titlePadding={'0 0 1rem 0'}
+        bodyPadding={'1.5rem 2.5rem 1.5rem 2.5rem'}
       >
         <div className="flex flex-col items-center justify-center">
           <video
@@ -766,18 +873,21 @@ export default function EvaluationPage() {
             width="100%"
             controls
             autoPlay
-            style={{ borderRadius: '12px', background: '#000' }}
+            muted
+            style={{ borderRadius: '12px', background: '#000', objectFit: 'cover' }}
           >
             <source src="/promo.mp4" type="video/mp4" />
             브라우저가 video 태그를 지원하지 않습니다.
           </video>
-          <button
-            className="btn-primary btn-large mt-6"
-            onClick={handlePromoModalClose}
-            style={{ width: "50%" }}
-          >
-            분석결과 및 해결방안 확인하기
-          </button>
+          {showPromoButton && (
+            <button
+              className="btn-primary btn-50 mt-6"
+              onClick={handlePromoModalClose}
+              style={{ width: "50%" }}
+            >
+              분석결과 및 해결방안 확인하기
+            </button>
+          )}
         </div>
       </Modal>
     </div>

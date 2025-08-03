@@ -4,6 +4,8 @@ import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import "@/app/globals.css";
+import "@/css/login.css";
+import TooltipButton from '@/components/common/TooltipButton';
 
 function LoginForm() {
   const router = useRouter();
@@ -109,29 +111,9 @@ function LoginForm() {
   };
 
   return (
-    <div className={`max-w-md mx-auto rounded-lg shadow-md p-8 ${isLogin ? 'bg-white' : 'bg-orange'}`}>
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        {isLogin ? '로그인' : '회원가입'}
-      </h1>
-      
-      <div className="flex mb-6">
-        <button
-          className={`flex-1 py-2 text-center ${
-            isLogin ? 'login-active' : 'login-inactive'
-          }`}
-          onClick={() => setIsLogin(true)}
-        >
-          로그인
-        </button>
-        <button
-          className={`flex-1 py-2 text-center ${
-            !isLogin ? 'login-active' : 'login-inactive'
-          }`}
-          onClick={() => setIsLogin(false)}
-        >
-          회원가입
-        </button>
-      </div>
+    // <div className={`login-wrap p-8 ${isLogin ? 'bg-white' : 'bg-orange'}`}>
+    <div className="login-wrap">
+      <h1>{isLogin ? '로그인' : '사용자 등록'}</h1>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -140,16 +122,13 @@ function LoginForm() {
       )}
       
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block mb-2">
-            아이디(이메일)<span className="text-red-500 ml-1">*</span>
-          </label>
+        <div className="form-group">
+          <label htmlFor="email">아이디(이메일)<span className="text-red-500 ml-1">*</span></label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
             placeholder="이메일 주소를 입력하세요"
             required
           />
@@ -160,18 +139,15 @@ function LoginForm() {
                 maxLength={6}
                 value={emailCode}
                 onChange={e => setEmailCode(e.target.value.replace(/[^0-9]/g, ''))}
-                className="flex-1 px-4 py-2 border rounded-md"
                 placeholder="인증번호 6자리"
               />
-              <button type="button" className="px-4 py-2 btn-basic whitespace-nowrap">인증하기</button>
+              <button type="button" className="btn-basic whitespace-nowrap">인증하기</button>
             </div>
           )}
         </div>
         
-        <div className="mb-4">
-          <label htmlFor="password" className="block mb-2">
-            비밀번호<span className="text-red-500 ml-1">*</span>
-          </label>
+        <div className="form-group">
+          <label htmlFor="password">비밀번호<span className="text-red-500 ml-1">*</span></label>
           <input
             type="password"
             id="password"
@@ -184,7 +160,6 @@ function LoginForm() {
                 setPasswordMatchError('');
               }
             }}
-            className="w-full px-4 py-2 border rounded-md"
             placeholder={isLogin ? "비밀번호를 입력하세요" : "영문, 숫자, 특수문자를 포함한 6-20자리"}
             required
           />
@@ -202,7 +177,7 @@ function LoginForm() {
                     setPasswordMatchError('');
                   }
                 }}
-                className="w-full px-4 py-2 border rounded-md mt-2"
+                className="mt-2"
                 placeholder="비밀번호 재입력"
                 required
               />
@@ -215,46 +190,42 @@ function LoginForm() {
         
         {!isLogin && (
           <>
-            <div className="mb-4">
-              <label htmlFor="name" className="block mb-2">
-                이름<span className="text-red-500 ml-1">*</span>
-              </label>
+            <div className="form-group">
+              <label htmlFor="name">이름<span className="text-red-500 ml-1">*</span></label>
               <input
                 type="text"
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md"
                 placeholder="이름을 입력하세요"
                 required
               />
             </div>
             
-            <div className="mb-4">
-              <label htmlFor="organization" className="block mb-2">
-                소속<span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
-                type="text"
-                id="organization"
-                value={organization}
-                onChange={(e) => setOrganization(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md"
-                placeholder="소속을 입력하세요"
-                required
-              />
+            <div className="form-group">
+              <label htmlFor="organization">소속<span className="text-red-500 ml-1">*</span></label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  id="organization"
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                  placeholder="소속을 입력하세요"
+                  required
+                />
+                <TooltipButton 
+                  tooltipText="소속하신 회사나 조직명을 입력해주세요"
+                />
+              </div>
             </div>
             
-            <div className="mb-6">
-              <label htmlFor="phone" className="block mb-2">
-                연락처<span className="text-red-500 ml-1">*</span>
-              </label>
+            <div className="form-group" style={{ marginBottom: '0' }}>
+              <label htmlFor="phone">연락처<span className="text-red-500 ml-1">*</span></label>
               <input
                 type="tel"
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md"
                 placeholder="연락처를 입력하세요"
                 required
               />
@@ -263,12 +234,12 @@ function LoginForm() {
         )}
         
         {isLogin && (
-          <div className="flex justify-between mb-6">
-            <label className="flex items-center">
-              <input type="checkbox" className="mr-2" />
-              <span className="text-sm">자동 로그인</span>
+          <div className="flex justify-between checkbox-group">
+            <label>
+              <input type="checkbox" />
+              <span>자동 로그인</span>
             </label>
-            <Link href="#" className="text-sm text-[var(--primary-color)]">
+            <Link href="#" className="login-link-btn">
               비밀번호 찾기
             </Link>
           </div>
@@ -276,48 +247,46 @@ function LoginForm() {
         
         <button
           type="submit"
-          className="w-full py-2 px-4 btn-basic mb-4"
+          className="w-full btn-50 rounded-xl btn-primary mt-8 mb-8"
         >
-          {isLogin ? '로그인' : '회원가입'}
+          {isLogin ? '로그인' : '등록하기'}
         </button>
         
         {isLogin && (
-          <div className="text-center mt-4">
-            <p className="text-sm">
-              아직 계정이 없으신가요?{' '}
+          <div className="text-center">
+            <p className="font-15 font-gray-9">아직 계정이 없으신가요?
               <button
                 type="button"
-                onClick={() => setIsLogin(false)}
-                className="text-[var(--primary-color)]"
+                onClick={() => {
+                  setIsLogin(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="login-link-btn ml-2"
               >
-                회원가입
+                사용자등록
+              </button>
+            </p>
+          </div>
+        )}
+
+        {!isLogin && (
+          <div className="text-center">
+            <p className="font-15 font-gray-9">이미 계정이 있으신가요?
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(true);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="login-link-btn ml-2"
+              >
+                로그인하기
               </button>
             </p>
           </div>
         )}
       </form>
       
-      {isLogin && (
-        <div className="mt-6 pt-6 border-t">
-          <div className="wireframe-section">
-            <p className="text-center mb-4 text-sm text-gray-600">비회원으로 이용 가능한 서비스</p>
-            <div className="grid grid-cols-2 gap-4">
-              <Link
-                href="/intro"
-                className="text-center py-2 px-4 btn-basic"
-              >
-                연돌현상 소개
-              </Link>
-              <Link
-                href="/service-request"
-                className="text-center py-2 px-4 btn-basic"
-              >
-                서비스 요청하기
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -342,7 +311,10 @@ function LoginFormFallback() {
 
 export default function LoginPage() {
   return (
-    <div className="container mx-auto py-8">
+    <div className="container login">
+      {/* 배경 디자인 요소들 */}
+      <div className="login-bg-l"></div>
+      <div className="login-bg-r"></div>
       <Suspense fallback={<LoginFormFallback />}>
         <LoginForm />
       </Suspense>

@@ -2,9 +2,10 @@ import React from "react";
 // 주요층 압력차
 interface Props {
   value: number; // 퍼센트 값 (예: 149)
+  className?: string;
 }
 
-const HorizontalCriteriaBar: React.FC<Props> = ({ value }) => {
+const HorizontalCriteriaBar: React.FC<Props> = ({ value, className = '' }) => {
   const fullBarWidth = 250;
   const cappedValue = Math.min(value, 200);
   const fillWidth = (cappedValue / 100) * fullBarWidth;
@@ -13,8 +14,10 @@ const HorizontalCriteriaBar: React.FC<Props> = ({ value }) => {
 
   return (
     <div
+      className={className}
       style={{
         width: fullBarWidth + 40,
+        height: 'auto',
         paddingBottom: 30,
         position: "relative",
         left: -90,

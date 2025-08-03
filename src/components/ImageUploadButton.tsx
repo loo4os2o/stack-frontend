@@ -19,21 +19,25 @@ export default function ImageUploadButton({ onImageSelect }: Props) {
   };
 
   return (
-    <label className="upload-button">
-      📁
-      <input type="file" accept="image/*" onChange={handleChange} hidden />
-      <style jsx>{`
-        .upload-button {
-          font-size: 1.5rem;
-          font-weight: bold;
-          cursor: pointer;
-          user-select: none;
-          display: inline-block;
-          // padding: 1rem;
-          // border: 2px dashed #ccc;
-          border-radius: 8px;
-        }
-      `}</style>
-    </label>
+    <>
+      <input type="file" accept="image/*" onChange={handleChange} />
+    </>
+
+    // <label className="upload-button">
+    //   📁
+    //   <input type="file" accept="image/*" onChange={handleChange} hidden />
+    //    <style jsx>{`
+    //     .upload-button {
+    //       font-size: 1.5rem;
+    //       font-weight: bold;
+    //       cursor: pointer;
+    //       user-select: none;
+    //       display: inline-block;
+    //       // padding: 1rem;
+    //       // border: 2px dashed #ccc;
+    //       border-radius: 8px;
+    //     }
+    //   `}</style>
+    // </label>
   );
 }

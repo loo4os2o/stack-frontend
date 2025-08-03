@@ -1,0 +1,132 @@
+.tooltipButton {
+  position: relative;
+  display: inline-block;
+}
+
+.helpButton {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.helpButton:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.helpButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 1);
+}
+
+.helpIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: url('../../assets/icons/icon-help.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 16px;
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  border-radius: 6px;
+  /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); */
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+  white-space: normal;
+  z-index: 1000;
+  max-width: 250px;
+  word-wrap: break-word;
+  line-height: 160%;
+}
+
+.tooltipArrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Top position */
+.tooltipTop {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  min-width: 250px;
+}
+
+.tooltipTop .tooltipArrow {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #ffffff;
+}
+
+/* Bottom position */
+.tooltipBottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  min-width: 250px;
+}
+
+.tooltipBottom .tooltipArrow {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #ffffff;
+}
+
+/* Left position */
+.tooltipLeft {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 8px;
+  min-width: 250px;
+}
+
+.tooltipLeft .tooltipArrow {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid #ffffff;
+}
+
+/* Right position */
+.tooltipRight {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  min-width: 250px;
+}
+
+.tooltipRight .tooltipArrow {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 4px solid #ffffff;
+} 
