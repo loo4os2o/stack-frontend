@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import "@/css/projects.css";
+import { useUserStore } from '@/utils/store';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -124,17 +125,16 @@ export default function AdminPage() {
     setSelectedProjectIds([]);
   };
 
+  const user = useUserStore((state) => state.user);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    const userRole = localStorage.getItem('userRole');
-    
-    if (!userLogin || userLogin !== 'true' || userRole !== 'admin') {
+    if (!user || !user.email || user.role !== 'admin') {
       router.push('/login?redirect=admin'); // 로그인 페이지로 리다이렉트
     } else {
       setIsLoggedIn(true);
     }
-  }, [router]);
+  }, [router, user]);
 
   // 더미 데이터
   const members = [

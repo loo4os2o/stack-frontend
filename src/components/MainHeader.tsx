@@ -1,33 +1,41 @@
 'use client';
 
+import { useUserStore } from '@/utils/store';
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const MainHeader = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
+  const user = useUserStore((state) => state.user);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    if (userLogin === 'true') {
+    if (user && user.email) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, []);
+  }, [user]);
 
+  const clearUser = useUserStore((state) => state.updateUser);
+  const clearAccessToken = useUserStore((state) => state.setAccessToken);
+  const clearRefreshToken = useUserStore((state) => state.setRefreshToken);
+  const { updateUser } = useUserStore();
+  
   const handleLogin = () => {
-    if (isLoggedIn) {
-      localStorage.removeItem('userLogin');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userRole');
-      setIsLoggedIn(false);
-      router.push('/');
-    } else {
+
       router.push('/login');
-    }
+  };
+
+  const handleLogout = () => {
+    clearUser(null);
+    updateUser(null)
+    clearAccessToken(null);
+    clearRefreshToken(null);
+    setIsLoggedIn(false);
   };
 
   return (
@@ -36,7 +44,7 @@ const MainHeader = () => {
         메인 시안2 바로가기
       </Link>
       <button 
-        onClick={handleLogin} 
+        onClick={isLoggedIn ? handleLogout : handleLogin} 
         className="login-icon"
         aria-label={isLoggedIn ? "로그아웃" : "로그인"}
       >

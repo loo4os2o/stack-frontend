@@ -1,14 +1,15 @@
 'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Background from "@/assets/images/architecture-1867194_1920.jpg";
-import slideImg1 from '@/assets/images/lotte-tower.jpg';
-import slideImg2 from '@/assets/images/haeundae.jpg';
 import slideImg3 from '@/assets/images/acro.jpg';
+import Background from "@/assets/images/architecture-1867194_1920.jpg";
+import slideImg2 from '@/assets/images/haeundae.jpg';
+import slideImg1 from '@/assets/images/lotte-tower.jpg';
 import slideImg4 from '@/assets/images/lusail.png';
+import { useUserStore } from '@/utils/store';
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -26,15 +27,16 @@ export default function Home() {
   const prevSlide = () => setSlideIdx((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   const nextSlide = () => setSlideIdx((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
 
+  const user = useUserStore((state) => state.user);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    if (userLogin === 'true') {
+    if (user && user.email) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, []);
+  }, [user]);
 
   const toggleDropdown = (dropdownId: string) => {
     if (activeDropdown === dropdownId) {

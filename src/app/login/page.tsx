@@ -1,19 +1,33 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import "@/app/globals.css";
+import TooltipButton from '@/components/common/TooltipButton';
+import "@/css/login.css";
+import { useUserStore } from '@/utils/store';
+import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import "@/app/globals.css";
-import "@/css/login.css";
-import TooltipButton from '@/components/common/TooltipButton';
+import { Suspense, useEffect, useState } from 'react';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY as string;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Supabase 클라이언트 초기화
 
 function LoginForm() {
+  const setAccessToken = useUserStore((state) => state.setAccessToken);
+  const setRefreshToken = useUserStore((state) => state.setRefreshToken);
+  const updateUser = useUserStore((state) => state.updateUser);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(localStorage.getItem('userEmail') || '');
+  // 암호화된 비밀번호를 복호화하여 설정
+  const encryptedPassword = localStorage.getItem('userPassword');
+  const [rememberPassword, setRememberPassword] = useState(encryptedPassword ? atob(encryptedPassword) : '');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
@@ -22,6 +36,26 @@ function LoginForm() {
   const [emailCode, setEmailCode] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [rememberMe, setRememberMe] = useState(localStorage.getItem('rememberMe') === 'true');
+
+  useEffect(() => {
+    if (rememberMe) {
+      const storedEmail = localStorage.getItem('userEmail');
+      const storedPassword = localStorage.getItem('userPassword');
+      if (storedEmail) setEmail(storedEmail);
+      if (storedPassword) setPassword(atob(storedPassword));
+    }
+  }, [rememberMe]);
+
+  useEffect(() => {
+    if (rememberMe) {
+      localStorage.setItem('rememberMe', 'true');
+    } else {
+      localStorage.removeItem('rememberMe');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPassword');
+    }
+  }, [rememberMe]);
 
   // 유저 계정 더미 데이터
   const users = [
@@ -66,47 +100,67 @@ function LoginForm() {
     }
   ];
 
+  const handleSignup = async () => {
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+            organization,
+            phone,
+          },
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setIsLogin(true);
+        setError('회원가입이 완료되었습니다. 이메일을 확인해 주세요.');
+      }
+    } catch  {
+      setError('회원가입 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      const { error, data } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
+      } else {
+        if (rememberMe) {
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('userPassword', btoa(password)); // Base64 encoding
+        }
+        setAccessToken(data.session.access_token);
+        setRefreshToken(data.session.refresh_token);
+        updateUser({...data.user.user_metadata, email: data.user?.user_metadata?.email ?? data.user.email});
+        router.push(redirectTo || '/');
+      }
+    } catch {
+      alert('로그인 중 오류가 발생했습니다.');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     if (isLogin) {
-      // 로그인 체크
-      const user = users.find(user => user.email === email && user.password === password);
-      
-      if (user) {
-        // 로그인 성공
-        localStorage.setItem('userLogin', 'true');
-        localStorage.setItem('userName', user.name);
-        localStorage.setItem('userRole', user.role);
-        localStorage.setItem('userEmail', user.email);
-        localStorage.setItem('userPhone', user.phone);
-        localStorage.setItem('userCompanyName', user.company.name);
-        localStorage.setItem('userCompanyAddress', user.company.address);
-        localStorage.setItem('userCompanyBusinessType', user.company.business_type);
-        localStorage.setItem('userCompanyPhone', user.company.phone);
-        
-        if (user.role === 'admin' && redirectTo === 'admin') {
-          router.push('/admin');
-        } else {
-          router.push('/');
-        }
-        return;
-      }
-      
-      // 로그인 실패
-      setError('이메일 또는 비밀번호가 올바르지 않습니다.');
+      handleLogin();
     } else {
-      // 비밀번호 일치 확인
       if (password !== passwordCheck) {
         setPasswordMatchError('비밀번호가 일치하지 않습니다.');
         return;
       }
-      // 회원가입 처리 (실제 구현에서는 API 호출 등이 필요함)
-      console.log('회원가입 시도', { email, password, name, organization, phone });
-      // 회원가입 성공 후 로그인 화면으로 전환
-      setIsLogin(true);
-      setError('');
+      handleSignup();
     }
   };
 
@@ -236,8 +290,12 @@ function LoginForm() {
         {isLogin && (
           <div className="flex justify-between checkbox-group">
             <label>
-              <input type="checkbox" />
-              <span>자동 로그인</span>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              자동 로그인
             </label>
             <Link href="#" className="login-link-btn">
               비밀번호 찾기

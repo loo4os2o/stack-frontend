@@ -1,8 +1,9 @@
 'use client';
 
+import { useUserStore } from '@/utils/store';
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const MainHeader2 = () => {
   const router = useRouter();
@@ -11,27 +12,29 @@ const MainHeader2 = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.updateUser);
+  const clearAccessToken = useUserStore((state) => state.setAccessToken);
+  const clearRefreshToken = useUserStore((state) => state.setRefreshToken);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    const storedUserName = localStorage.getItem('userName');
-    
-    if (userLogin === 'true') {
+    if (user && user.email) {
       setIsLoggedIn(true);
-      if (storedUserName) {
-        setUserName(storedUserName);
+      if (user.name) {
+        setUserName(user.name);
       }
     } else {
       setIsLoggedIn(false);
       setUserName('');
     }
-  }, []);
+  }, [user]);
 
   const handleLogin = () => {
     if (isLoggedIn) {
-      localStorage.removeItem('userLogin');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userRole');
+      clearUser(null);
+      clearAccessToken(null);
+      clearRefreshToken(null);
       setIsLoggedIn(false);
       setUserName('');
       router.push('/');

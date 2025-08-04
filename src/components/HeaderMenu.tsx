@@ -1,11 +1,12 @@
 'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
-import logo from '@/assets/images/logo-STACK.png';
 import logoDrawer from '@/assets/images/logo-STACK-bg-w.png';
+import logo from '@/assets/images/logo-STACK.png';
+import { useUserStore } from '@/utils/store';
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function HeaderMenu() {
   const router = useRouter();
@@ -15,27 +16,29 @@ export function HeaderMenu() {
   const [userName, setUserName] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const user = useUserStore((state) => state.user);
+  const { updateUser } = useUserStore();
+  const clearAccessToken = useUserStore((state) => state.setAccessToken);
+  const clearRefreshToken = useUserStore((state) => state.setRefreshToken);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    const userRole = localStorage.getItem('userRole');
-    const storedUserName = localStorage.getItem('userName');
-    
-    if (userLogin === 'true' && storedUserName) {
+    if (user && user.email && user.name) {
       setIsLoggedIn(true);
-      setUserName(storedUserName);
-      setIsAdmin(userRole === 'admin');
+      setUserName(user.name);
+      setIsAdmin(user.role === 'admin');
     } else {
       setIsLoggedIn(false);
       setIsAdmin(false);
       setUserName('');
     }
-  }, [pathname]); // 페이지 변경시 로그인 상태 확인
+  }, [user, pathname]); // 페이지 변경시 로그인 상태 확인
 
   const handleLogout = () => {
-    localStorage.removeItem('userLogin');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userRole');
+    updateUser(null);
+    // clearUser({});
+    clearAccessToken(null);
+    clearRefreshToken(null);
     setIsLoggedIn(false);
     setIsAdmin(false);
     setUserName('');

@@ -1,53 +1,137 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useUserStore } from '@/utils/store';
+import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-
-interface UserData {
-  id: string;
-  name: string;
-  phone: string;
-  company: {
-    name: string;
-    address: string;
-    business_type: string;
-    phone: string;
-  };
-}
+import { useEffect, useState } from 'react';
 
 export default function MyPage() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY as string;
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
   const router = useRouter();
   const [showPasswordChange, setShowPasswordChange] = useState(false);
-  const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState<{
+    name: string ;
+    phone: string ;
+    organization: string ;
+    companyAddress: string ;
+    companyBusinessType: string ;
+    companyPhone: string ;
+  }>({
+    name: '',
+    phone: '',
+    organization: '',
+    companyAddress: '',
+    companyBusinessType: '',
+    companyPhone: '',
+  });
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        phone: user.phone || '',
+        organization: user.organization || '',
+        companyAddress: user.companyAddress || '',
+        companyBusinessType: user.companyBusinessType || '',
+        companyPhone: user.companyPhone || '',
+      });
+    }
+  }, [user]);
+  const updateUser = useUserStore((state) => state.updateUser);
 
   useEffect(() => {
-    const userLogin = localStorage.getItem('userLogin');
-    if (userLogin !== 'true') {
-      router.push('/login');
-      return;
-    }
-
-    // 임시 데이터 - API 연동 시 실제 데이터로 교체
-    const mockUserData = {
-      id: localStorage.getItem('userEmail') || '',
-      name: localStorage.getItem('userName') || '',
-      phone: localStorage.getItem('userPhone') || '',
-      company: {
-        name: localStorage.getItem('userCompanyName') || '',
-        address: localStorage.getItem('userCompanyAddress') || '',
-        business_type: localStorage.getItem('userCompanyBusinessType') || '',
-        phone: localStorage.getItem('userCompanyPhone') || ''
+    const checkLogin = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (!data.user || error) {
+        router.push('/login');
+      } else {
+        setIsLoading(false);
       }
     };
 
-    setUserData(mockUserData);
-    setIsLoading(false);
-  }, [router]);
+    checkLogin();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handlePasswordChange = () => {
-    // TODO: 비밀번호 변경 로직 구현
-    setShowPasswordChange(false);
+  const handlePasswordChange = async () => {
+    const currentPassword = (document.getElementById('current-password') as HTMLInputElement)?.value;
+    const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
+    const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
+
+    if (newPassword !== confirmPassword) {
+      alert('새 비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    if (!user || !user.email) {
+      alert('사용자 정보가 없습니다.');
+      return;
+    }
+
+    try {
+      // 현재 비밀번호 확인
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (signInError) {
+        alert('현재 비밀번호가 올바르지 않습니다.');
+        return;
+      }
+
+      // 비밀번호 변경
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (updateError) {
+        alert('비밀번호 변경에 실패했습니다.');
+      } else {
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        setShowPasswordChange(false);
+      }
+    } catch (error) {
+      console.error('비밀번호 변경 중 오류 발생:', error);
+      alert('비밀번호 변경 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          name: formData.name,
+          phone: formData.phone,
+          organization: formData.organization,
+          companyAddress: formData.companyAddress,
+          companyBusinessType: formData.companyBusinessType,
+          companyPhone: formData.companyPhone,
+        },
+      });
+
+      if (error) {
+        alert('사용자 정보 저장에 실패했습니다.');
+      } else {
+        alert('사용자 정보가 성공적으로 저장되었습니다.');
+        updateUser({
+          name: formData.name,
+          phone: formData.phone,
+          organization: formData.organization,
+          companyAddress: formData.companyAddress,
+          companyBusinessType: formData.companyBusinessType,
+          companyPhone: formData.companyPhone,
+        });
+      }
+    } catch (error) {
+      console.error('사용자 정보 저장 중 오류 발생:', error);
+      alert('사용자 정보 저장 중 오류가 발생했습니다.');
+    }
   };
 
   if (isLoading) {
@@ -60,7 +144,7 @@ export default function MyPage() {
     );
   }
 
-  if (!userData) {
+  if (!user) {
     return (
       <div className="container mx-auto pt-16 pb-24">
         <div className="flex justify-center items-center h-64">
@@ -82,7 +166,7 @@ export default function MyPage() {
               <input
                 type="text"
                 className="w-full px-4 py-2 border rounded-md bg-gray-100"
-                value={userData.id}
+                value={user.email}
                 disabled
               />
             </div>
@@ -104,6 +188,7 @@ export default function MyPage() {
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
+                      id="current-password"
                     />
                   </div>
                   <div>
@@ -111,6 +196,7 @@ export default function MyPage() {
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
+                      id="new-password"
                     />
                   </div>
                   <div>
@@ -118,6 +204,7 @@ export default function MyPage() {
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
+                      id="confirm-password"
                     />
                   </div>
                   <div className="flex justify-end space-x-2">
@@ -144,8 +231,8 @@ export default function MyPage() {
                 type="text"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="이름"
-                value={userData.name}
-                onChange={(e) => setUserData({...userData, name: e.target.value})}
+                value={formData.name}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
               />
             </div>
 
@@ -155,8 +242,8 @@ export default function MyPage() {
                 type="tel"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="010-0000-0000"
-                value={userData.phone}
-                onChange={(e) => setUserData({...userData, phone: e.target.value})}
+                value={formData.phone}
+                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
               />
             </div>
           </div>
@@ -172,11 +259,8 @@ export default function MyPage() {
                 type="text"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="회사명"
-                value={userData.company.name}
-                onChange={(e) => setUserData({
-                  ...userData,
-                  company: {...userData.company, name: e.target.value}
-                })}
+                value={formData.organization}
+                onChange={(e) => setFormData((prev) => ({ ...prev, organization: e.target.value }))}
               />
             </div>
 
@@ -186,11 +270,8 @@ export default function MyPage() {
                 type="text"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="회사주소"
-                value={userData.company.address}
-                onChange={(e) => setUserData({
-                  ...userData,
-                  company: {...userData.company, address: e.target.value}
-                })}
+                value={formData.companyAddress}
+                onChange={(e) => setFormData((prev) => ({ ...prev, companyAddress: e.target.value }))}
               />
             </div>
 
@@ -200,11 +281,8 @@ export default function MyPage() {
                 type="text"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="업태"
-                value={userData.company.business_type}
-                onChange={(e) => setUserData({
-                  ...userData,
-                  company: {...userData.company, business_type: e.target.value}
-                })}
+                value={formData.companyBusinessType}
+                onChange={(e) => setFormData((prev) => ({ ...prev, companyBusinessType: e.target.value }))}
               />
             </div>
 
@@ -214,11 +292,8 @@ export default function MyPage() {
                 type="tel"
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="02-0000-0000"
-                value={userData.company.phone}
-                onChange={(e) => setUserData({
-                  ...userData,
-                  company: {...userData.company, phone: e.target.value}
-                })}
+                value={formData.companyPhone}
+                onChange={(e) => setFormData((prev) => ({ ...prev, companyPhone: e.target.value }))}
               />
             </div>
           </div>
@@ -226,7 +301,7 @@ export default function MyPage() {
 
         {/* 저장 버튼 */}
         <div className="mt-12 flex justify-center">
-          <button className="btn-primary btn-50" style={{width: '240px'}}>
+          <button className="btn-primary btn-50" style={{width: '240px'}} onClick={handleSave}>
             저장하기
           </button>
         </div>

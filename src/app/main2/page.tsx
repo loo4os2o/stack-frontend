@@ -1,26 +1,28 @@
 'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Background from "@/assets/images/man-architect-working-project-with-vr-glasses-new-technologies-3d.jpg";
 import MainHeader2 from "@/components/MainHeader2";
 import "@/css/main.css";
+import { useUserStore } from '@/utils/store';
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Main2() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const user = useUserStore((state) => state.user);
+
   useEffect(() => {
     // 로컬 스토리지에서 로그인 상태 확인
-    const userLogin = localStorage.getItem('userLogin');
-    if (userLogin === 'true') {
+    if (user && user.email) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, []);
+  }, [user]);
 
   // 로그인 검사 후 리다이렉트 핸들러
   const handleNavigation = (e: React.MouseEvent, path: string) => {
