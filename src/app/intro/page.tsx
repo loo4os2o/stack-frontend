@@ -2,11 +2,12 @@
 import React, { useState } from "react";
 import '@/css/projects.css'
 import Image from 'next/image';
-import { FaBookOpen } from "react-icons/fa";
 import pdfFileIcon from '@/assets/icons/icon-pdf.png';
 import ExImgIntro1 from "@/assets/images/ex/sample-intro-1.png";
 import ExImgIntro2 from "@/assets/images/ex/sample-intro-2.png";
 import ExImgIntro3 from "@/assets/images/ex/sample-intro-3.png";
+import accMinus from '@/assets/icons/icon-minus.png';
+import accPlus from '@/assets/icons/icon-plus.png';
 
 const accordionData = [
   {
@@ -251,7 +252,7 @@ const techDocs = [
     url: "#",
   },
   {
-    title: "연돌현상 관련 최신 연구 동향 및 사례 분석",
+    title: "연돌현상 관련 최신 연구 동향 및 사례 분석 / 연돌현상 관련 최신 연구 동향 및 사례 분석",
     url: "#",
   },
   {
@@ -264,10 +265,10 @@ export default function IntroPage() {
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
   return (
-    <div className="container mx-auto pt-16 pb-24">
-      <h1 className="text-3xl font-bold mb-10">연돌현상 소개</h1>
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-5">연돌현상 소개</h1>
 
-      <div className="bg-white rounded-lg shadow py-2 px-8 mb-12">
+      <div className="flex flex-col gap-2 mb-8">
         {accordionData.map((item, idx) => {
           const isOpen = openIndexes.includes(idx);
           return (
@@ -283,7 +284,11 @@ export default function IntroPage() {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold">{isOpen ? '➖' : '➕'}</span>
+                  <span className="text-xl font-bold">
+                    {isOpen ? 
+                      <Image src={accMinus} alt="펼쳐진 상태 마이너스 아이콘" width={24} height={24} /> 
+                      : <Image src={accPlus} alt="접힌 상태 플러스 아이콘" width={24} height={24} /> }
+                  </span>
                   <span className="font-semibold text-lg text-left">{item.title}</span>
                 </div>
               </button>
@@ -298,29 +303,30 @@ export default function IntroPage() {
       </div>
 
       {/* 기술자료 게시판 */}
-      <div className="rounded-lg py-8 px-4 md:px-10" 
-        style={{ background: 'linear-gradient(90deg, #2563eb 0%, #1e40af 100%)' }}>
-        <h2 className="text-white text-2xl font-bold mb-5 flex items-center gap-3">
-          <FaBookOpen className="text-3xl mt-1" />기술자료
-        </h2>
-        <div className="bg-transparent rounded-lg divide-y overflow-hidden">
+      <div className="board-wrap">
+        <h2>기술자료</h2>
+        <div className="grid grid-cols-3 gap-5">
           {techDocs.map((doc, i) => (
             <a
               key={i}
               href={doc.url}
-              className="flex items-center px-4 py-3 gap-4 group hover:bg-blue-200 transition duration-300"
+              className="board-item"
               // target="_blank"
               target="_self"
               rel="noopener noreferrer"
             >
-              <span className="truncate text-white text-base flex-1 group-hover:text-blue-700"
-                style={{
-                  maxWidth: 'calc(100% - 40px)',
-                }}
-              >
-                {doc.title}
-              </span>
-              <Image src={pdfFileIcon} alt={"pdf 다운로드"} className="icon-img-40" />
+              <div className="flex items-center gap-4">
+                <Image src={pdfFileIcon} alt={"pdf 다운로드"} className="icon-img-40" />
+                <span 
+                  className="text-ellipsis-2line"
+                  style={{
+                    maxWidth: 'calc(100% - 40px)',
+                  }}
+                >
+                  {doc.title}
+                </span>
+              </div>
+              <button className="btn-secondary mt-7 ml-auto">다운로드</button>
             </a>
           ))}
         </div>

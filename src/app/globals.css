@@ -189,6 +189,12 @@ body {
   .btn-50{
     height: 3.125rem;
   }
+  .btn-32{
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .btn-large {
     /* @apply px-6 py-3 border border-gray-300 rounded-md transition-all duration-200; */
@@ -541,14 +547,6 @@ body {
 }
 
 
-/* 임시 - 연돌현상 평가 프로세스 */
-.active-process{
-  color: var(--primary-color);
-}
-.active-process-bg{
-  background-color: var(--primary-color);
-}
-
 /* 공통 이너 (1200px) */
 .container .inner{
   max-width: 1200px;
@@ -616,4 +614,43 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+/* =============================== */
+/* 공통 pagenation */
+/* =============================== */
+.pagenation{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.pagenation button{
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #DDDDDD;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  color: #666666;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.938rem;
+  line-height: 160%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pagenation button.active{
+  background: #FF4500;
+  color: #ffffff;
+  /* border: 1px solid #FF4500; */
+}
+
+
+/* 임시 - 연돌현상 평가 프로세스 */
+.active-process{
+  color: var(--primary-color);
+}
+.active-process-bg{
+  background-color: var(--primary-color);
 }

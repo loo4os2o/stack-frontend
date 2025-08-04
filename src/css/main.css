@@ -524,7 +524,7 @@
 }
 
 .nav-link:hover {
-  color: var(--primary-color);
+  color: #FF4500;
 }
 
 .nav-link:after {
@@ -534,7 +534,7 @@
   height: 3px !important;
   bottom: 0;
   left: 0;
-  background-color: var(--primary-color);
+  background-color: #FF4500;
   transition: width 0.3s ease;
 }
 
@@ -576,8 +576,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
+}
+.drawer-header .border-wrap{
   border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  width: 100%;
 }
 
 .drawer-title {
@@ -590,10 +597,20 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  background: #F4F4F4;
+  border-radius: 0.5rem;
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #8E8E8E;
 }
 
 .drawer-content {
-  padding: 1.5rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -615,15 +632,18 @@
   padding: 0;
   padding-top: 1.2rem !important;
   padding-bottom: 1.2rem !important;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee; */
   transition: all 0.2s ease;
   display: block;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 140%;
+  color: #333333;
 }
 
 .drawer-link:hover {
-  color: var(--primary-color);
-  padding-left: 0.5rem;
+  color: #FF4500;
+  /* padding-left: 0.5rem; */
 }
 
 .drawer-footer {
@@ -634,52 +654,16 @@
 
 .drawer-user-info {
   margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 140%;
+  color: #666666;
 }
 
 .drawer-login-btns {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.drawer-btn {
-  background-color: #f5f5f5;
-  color: var(--text-color);
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  text-align: center;
-  margin-top: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.drawer-btn:hover {
-  background-color: #e5e5e5;
-}
-
-.drawer-btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.drawer-btn-primary:hover {
-  background-color: var(--primary-color-dark, #0056b3);
-}
-
-.drawer-btn-secondary {
-  background-color: #f5f5f5;
-  color: var(--text-color);
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.drawer-btn-secondary:hover {
-  background-color: #e5e5e5;
 }
 
 /* 모바일 대응 */

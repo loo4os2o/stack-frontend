@@ -10,6 +10,10 @@ import lusailImg from '@/assets/images/lusail.png';
 import type { StaticImageData } from 'next/image';
 import ImageUploadButton from '@/components/ImageUploadButton';
 import ImagePreview from '@/components/ImagePreview';
+import accMinus from '@/assets/icons/icon-minus.png';
+import accPlus from '@/assets/icons/icon-plus.png';
+import pagenationPrev from '@/assets/icons/icon-prev.png';
+import pagenationNext from '@/assets/icons/icon-next.png';
 
 // 프로젝트 타입 정의
 type ProjectDetail = {
@@ -233,29 +237,27 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="container mx-auto pt-16 pb-24">
-      <h1 className="text-3xl font-bold mb-10">
-        엔지니어링 프로젝트 실적
-      </h1>
+    <div className="container mx-auto py-10 projects-page">
+      <h1 className="text-3xl font-bold mb-5">엔지니어링 프로젝트 실적</h1>
       
       {/* 대표 이미지 3개 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
         {baseProjects.filter(p => p.repProject).map((p, i) => (
-          <div key={i} className="flex flex-col items-center bg-white rounded-lg shadow p-4">
-            <div className="w-full h-46 bg-gray-200 rounded mb-4 flex items-center justify-center overflow-hidden">
+          <div key={i} className="main-img-wrap">
+            <div className="img-wrap">
               <Image src={p.image} alt={p.title} width={400} height={200} className="object-cover w-full h-full" />
             </div>
-            <div className="font-bold mb-2 text-center">{p.title}</div>
-            <div className="text-sm text-gray-600 text-center whitespace-pre-line">{p.desc}</div>
+            <div className="title">{p.title}</div>
+            <div className="desc">{p.desc}</div>
           </div>
         ))}
       </div>
       
       {/* 필터 */}
-      <div className="bg-white rounded-lg shadow-sm py-4 px-8 mb-8">
-        <form className="flex flex-col sm:flex-row sm:flex-wrap gap-4 gap-x-10 w-full">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2">
-            <label htmlFor="buildingType" className="text-sm w-fit sm:w-fit font-medium">건물 용도</label>
+      <div className="filter-wrap">
+        <form className="flex flex-col gap-5 md:flex-row">
+          <div className="form-group">
+            <label htmlFor="buildingType">건물 용도</label>
             <select id="buildingType" className="px-2 py-1.5 border rounded-md w-full flex-1" value={filter.buildingType} onChange={handleFilterChange}>
               <option value="">전체</option>
               <option value="업무시설">업무시설</option>
@@ -264,8 +266,8 @@ export default function ProjectsPage() {
               <option value="호텔">호텔</option>
             </select>
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2">
-            <label htmlFor="height" className="text-sm w-fit sm:w-fit font-medium">최고 높이</label>
+          <div className="form-group">
+            <label htmlFor="height">최고 높이</label>
             <select id="height" className="px-2 py-1.5 border rounded-md w-full flex-1" value={filter.height} onChange={handleFilterChange}>
               <option value="">전체</option>
               <option value="under100">100m 미만</option>
@@ -273,16 +275,9 @@ export default function ProjectsPage() {
               <option value="over200">200m 이상</option>
             </select>
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2">
-            <label htmlFor="client" className="text-sm w-fit sm:w-fit font-medium">발주처</label>
-            <select id="client" className="px-2 py-1.5 border rounded-md w-full flex-1" value={filter.client} onChange={handleFilterChange}>
-              <option value="">전체</option>
-              <option value="인터파크">인터파크</option>
-              <option value="서울A건설">서울A건설</option>
-            </select>
-          </div>
+          
           <div className="flex items-end w-full sm:w-auto">
-            <button type="button" className="btn-primary w-full sm:w-auto" onClick={handleApplyFilter}>
+            <button type="button" className="btn-primary w-full" onClick={handleApplyFilter}>
               필터 적용
             </button>
           </div>
@@ -290,7 +285,7 @@ export default function ProjectsPage() {
       </div>
       
       {/* 아코디언 프로젝트 목록 */}
-      <div className="bg-white rounded-lg shadow py-4 px-8 mb-8 eng-projects">
+      <div className="py-4 px-8 mb-8 eng-projects">
         {/* {isAdmin && (
           <div className="flex justify-end">
           <button className="btn-primary login-active px-4 py-2 text-sm" onClick={handleAdd}>
@@ -298,102 +293,135 @@ export default function ProjectsPage() {
             </button>
           </div>
         )} */}
-        {pagedProjects.map((project) => {
-          // projectList에서의 실제 인덱스 찾기
-          const realIdx = projectList.findIndex(p => p === project);
-          return (
-            <div key={realIdx} className="border-b project-item">
-              <div className="flex flex-col justify-between sm:flex-row">
-                <button
-                  className="flex-1 flex items-start gap-2 py-4 text-left focus:outline-none"
-                  onClick={() => setOpenIndex(openIndex === realIdx ? null : realIdx)}
-                >
-                  <span className="text-xl font-bold">{openIndex === realIdx ? '➖' : '➕'}</span>
-                  <span className="font-semibold text-lg text-left">{project.title}</span>
-                </button>
-                {/* {isAdmin && (
-                  <div className="flex items-center gap-2 ml-2 mb-4 sm:mb-0">
-                    <label className="flex items-center gap-1 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={project.repProject}
-                        onChange={() => {
-                          setProjectList(prev => prev.map((item, i) =>
-                            i === realIdx ? { ...item, repProject: !item.repProject } : item
-                          ));
-                        }}
-                      /> 대표프로젝트
-                    </label>
-                    <button className="px-2 py-1 text-sm border rounded hover:bg-gray-100" onClick={() => handleEdit(realIdx)}>수정</button>
-                    <button className="px-2 py-1 text-sm border rounded text-red-500 hover:bg-red-50" onClick={() => handleDelete(realIdx)}>삭제</button>
-                  </div>
-                )} */}
-              </div>
-              {openIndex === realIdx && (
-                <div className="flex flex-col-reverse md:flex-row gap-6 py-6 acc-info-wrap">
-                  {/* 왼쪽: 정보 */}
-                  <div className="flex-1">
-                    {project.detail ? (
-                      <div className="space-y-3 acc-info">
-                        <div><span className="font-bold">대상건물<b>:</b></span> {project.detail.building}</div>
-                        <div><span className="font-bold">규모<b>:</b></span> {project.detail.scale}</div>
-                        <div><span className="font-bold">최고 높이<b>:</b></span> {project.detail.height}</div>
-                        <div><span className="font-bold">용도<b>:</b></span> {project.detail.usage}</div>
-                        <div><span className="font-bold">발주처<b>:</b></span> {project.detail.client}</div>
-                        <div><span className="font-bold">컨설팅 내용<b>:</b></span> {project.detail.content}</div>
+        {pagedProjects.length > 0 ? (
+          pagedProjects.map((project) => {
+            // projectList에서의 실제 인덱스 찾기
+            const realIdx = projectList.findIndex(p => p === project);
+            return (
+              <div key={realIdx} className="project-item">
+                <div className="">
+                  <button
+                    className=""
+                    onClick={() => setOpenIndex(openIndex === realIdx ? null : realIdx)}
+                  >
+                    <span className="">
+                      {openIndex === realIdx ? 
+                        <Image src={accMinus} alt="펼쳐진 상태 마이너스 아이콘" width={24} height={24} /> 
+                        : <Image src={accPlus} alt="접힌 상태 플러스 아이콘" width={24} height={24} /> }
+                    </span>
+                    <span className="font-semibold text-lg text-left">{project.title}</span>
+                  </button>
+                  {/* {isAdmin && (
+                    <div className="flex items-center gap-2 ml-2 mb-4 sm:mb-0">
+                      <label className="flex items-center gap-1 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={project.repProject}
+                          onChange={() => {
+                            setProjectList(prev => prev.map((item, i) =>
+                              i === realIdx ? { ...item, repProject: !item.repProject } : item
+                            ));
+                          }}
+                        /> 대표프로젝트
+                      </label>
+                      <button className="px-2 py-1 text-sm border rounded hover:bg-gray-100" onClick={() => handleEdit(realIdx)}>수정</button>
+                      <button className="px-2 py-1 text-sm border rounded text-red-500 hover:bg-red-50" onClick={() => handleDelete(realIdx)}>삭제</button>
+                    </div>
+                  )} */}
+                </div>
+                {openIndex === realIdx && (
+                  <div className="acc-info-wrap">
+                    {/* 왼쪽쪽: 이미지 */}
+                    {project.detail && project.detail.photo ? (
+                      <div className="img-wrap">
+                        <Image
+                          src={typeof project.detail.photo === 'string' ? project.detail.photo : project.detail.photo}
+                          alt={project.title + ' 사진'}
+                          className="object-cover"
+                          fill
+                        />
                       </div>
                     ) : (
-                      <div className="text-gray-500 acc-info"><div>상세 정보 준비중</div></div>
+                      <div className="img-wrap bg-gray-100">
+                        <span className="text-gray-400">프로젝트 사진</span>
+                      </div>
                     )}
+                    
+                    {/* 오른쪽: 정보 */}
+                    <div className="flex-1">
+                      {project.detail ? (
+                        <div className="acc-info">
+                          <div className="flex items-start gap-3">
+                            <div className="label">대상건물</div>
+                            <div className="value">{project.detail.building}</div>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="label">규모</div>
+                            <div className="value">{project.detail.scale}</div>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="label">최고 높이</div>
+                            <div className="value">{project.detail.height}</div>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="label">용도</div>
+                            <div className="value">{project.detail.usage}</div>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="label">발주처</div>
+                            <div className="value">{project.detail.client}</div>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="label">컨설팅 내용</div>
+                            <div className="value">{project.detail.content}</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="acc-info flex-row-center"><div>상세 정보 준비중</div></div>
+                      )}
+                    </div>
+                    
                   </div>
-                  {/* 오른쪽: 이미지 */}
-                  <div className="w-full md:w-80 h-60 bg-gray-100 rounded flex items-center justify-center overflow-hidden relative">
-                    {project.detail && project.detail.photo ? (
-                      <Image
-                        src={typeof project.detail.photo === 'string' ? project.detail.photo : project.detail.photo}
-                        alt={project.title + ' 사진'}
-                        className="object-cover"
-                        fill
-                      />
-                    ) : (
-                      <span className="text-gray-400">프로젝트 사진</span>
-                    )}
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div className="empty-state">
+            <div className="empty-message">
+              <p>선택하신 조건에 해당하는 실적이 없어요.</p>
+              <p>필터를 변경해 다시 검색해보세요.</p>
             </div>
-          );
-        })}
+          </div>
+        )}
       </div>
       
       {/* 페이지네이션 */}
-      <div className="flex justify-center mt-8">
-        <div className="flex">
+      {pagedProjects.length > 0 && (
+        <div className="mt-8 pagenation">
           <button
-            className="w-10 h-10 flex items-center justify-center border rounded-l-md"
             onClick={() => setPage(page > 1 ? page - 1 : 1)}
             disabled={page === 1}
           >
-            &lt;
+            <Image src={pagenationPrev} alt="이전 페이지" width={16} height={16} />
           </button>
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
-              className={`w-10 h-10 flex items-center justify-center border ${page === i + 1 ? 'active-process-bg text-white' : ''}`}
+              className={`${page === i + 1 ? 'active' : ''}`}
               onClick={() => setPage(i + 1)}
             >
               {i + 1}
             </button>
           ))}
           <button
-            className="w-10 h-10 flex items-center justify-center border rounded-r-md"
             onClick={() => setPage(page < totalPages ? page + 1 : totalPages)}
             disabled={page === totalPages}
           >
-            &gt;
+            <Image src={pagenationNext} alt="다음 페이지" width={16} height={16} />
           </button>
         </div>
-      </div>
+      )}
 
       {/* 모달 - 추가/수정 */}
       {modalOpen && (

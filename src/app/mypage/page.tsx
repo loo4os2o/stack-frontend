@@ -226,7 +226,7 @@ export default function MyPage() {
 
         {/* 저장 버튼 */}
         <div className="mt-12 flex justify-center">
-          <button className="btn-primary btn-large">
+          <button className="btn-primary btn-50" style={{width: '240px'}}>
             저장하기
           </button>
         </div>

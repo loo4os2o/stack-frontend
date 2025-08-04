@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from '@/assets/images/logo-STACK.png';
+import logoDrawer from '@/assets/images/logo-STACK-bg-w.png';
 
 export function HeaderMenu() {
   const router = useRouter();
@@ -86,7 +87,7 @@ export function HeaderMenu() {
       <div className="top-bar">
         <div className="container mx-auto flex justify-between items-center py-2">
           <Link href="/">
-            <Image src={logo} alt="logo" width={140} />
+            <Image src={logo} alt="logo" width={152} />
           </Link>
           <div className="flex items-center space-x-2">
             {isLoggedIn ? (
@@ -119,7 +120,7 @@ export function HeaderMenu() {
             {/* 햄버거 메뉴 아이콘 */}
             <button 
               id="hamburger-btn"
-              className="hamburger-menu lg:hidden" 
+              className="hamburger-menu" 
               onClick={toggleDrawer}
               aria-label="메뉴 열기"
             >
@@ -184,22 +185,30 @@ export function HeaderMenu() {
       {/* 드로어 메뉴 */}
       <div id="drawer-menu" className={`drawer-menu ${isDrawerOpen ? 'open' : ''}`}>
         <div className="drawer-header">
-          <h3 className="drawer-title">메뉴</h3>
-          <button 
-            className="drawer-close"
-            onClick={toggleDrawer}
-            aria-label="메뉴 닫기"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="border-wrap">
+            <h3 className="drawer-title">
+              <Image src={logoDrawer} alt="logo" width={140} />
+            </h3>
+            <button 
+              className="drawer-close"
+              onClick={toggleDrawer}
+              aria-label="메뉴 닫기"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
         
         <div className="drawer-content">
           <nav className="drawer-nav">
             <Link href="/about" className="drawer-link">
-              About S<span className="font-orange">T</span>ACK
+              {/* About &nbsp;S&nbsp;<span className="font-orange">T</span>&nbsp;A C K */}
+              <div className="flex items-center gap-3">
+                <span>About</span>
+                <Image src={logoDrawer} alt="logo" width={92} />
+              </div>
             </Link>
             <Link href="/intro" className="drawer-link">
               연돌현상이란
@@ -252,17 +261,17 @@ export function HeaderMenu() {
                 <p>{userName}님 환영합니다</p>
                 <button 
                   onClick={handleLogout}
-                  className="drawer-btn"
+                  className="btn-primary w-full mt-3"
                 >
                   로그아웃
                 </button>
               </div>
             ) : (
               <div className="drawer-login-btns">
-                <Link href="/login" className="drawer-btn-primary">
+                <Link href="/login" className="btn-primary btn-50 flex-row-center">
                   로그인
                 </Link>
-                <Link href="/login" className="drawer-btn-secondary">
+                <Link href="/login" className="btn-secondary btn-50 flex-row-center">
                   회원가입
                 </Link>
               </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import "@/css/projects.css";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -260,7 +261,7 @@ export default function AdminPage() {
                   <div className="flex flex-col items-center gap-4 lg:flex-row lg:gap-16 mb-6">
                     <h3 className="font-bold flex-1">최근 한달 온라인 평가 프로젝트 수</h3>
                     <div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
-                      <div className="border bg-white rounded-md px-4 py-2">
+                      <div className="flex items-center">
                         <input type="text" className="w-16 outline-none text-right" placeholder="건수" value="26" readOnly />
                         <span className="text-gray-500 ml-4">건</span>
                       </div>
@@ -276,7 +277,7 @@ export default function AdminPage() {
                   <div className="flex flex-col items-center gap-4 lg:flex-row lg:gap-16 mb-0">
                     <h3 className="font-bold flex-1">전체 온라인 평가 프로젝트 수</h3>
                     <div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
-                      <div className="border bg-white rounded-md px-4 py-2">
+                      <div className="flex items-center">
                         <input type="text" className="w-16 outline-none text-right" placeholder="건수" value="102" readOnly />
                         <span className="text-gray-500 ml-4">건</span>
                       </div>
@@ -290,36 +291,42 @@ export default function AdminPage() {
                 </div>
 
                 {/* 회원검색 */}
-                <div className="flex items-center space-x-2 mt-10">
-                  <label className='font-medium text-gray-700 mr-4'>회원번호</label>
-                  <input
-                    type="text"
-                    placeholder="회원번호"
-                    className="px-3 py-2 border rounded-md"
-                    value={searchMemberId}
-                    onChange={e => setSearchMemberId(e.target.value.replace(/[^0-9]/g, ''))}
-                  />
-                  <button
-                    className="btn-secondary"
-                    onClick={() => {
-                      if (searchMemberId) {
-                        setFilteredProjects(projectRows.filter(row => String(row.memberId) === searchMemberId));
-                      } else {
-                        setFilteredProjects(null);
-                      }
-                    }}
-                  >
-                    검색
-                  </button>
-                  <button
-                    className="btn-secondary"
-                    onClick={() => { setSearchMemberId(''); setFilteredProjects(null); }}
-                  >
-                    초기화
-                  </button>
-                  <button className="px-3 py-2 btn-primary rounded-md" onClick={() => setMemberModalOpen(true)}>
-                    회원 번호 조회
-                  </button>
+                <div className="filter-wrap">
+                  <form className="flex flex-col gap-5 md:flex-row">
+                    <div className="form-group mt-6">
+                      <label className='font-medium text-gray-700 mr-4 whitespace-nowrap'>회원번호</label>
+                      <input
+                        type="text"
+                        placeholder="회원번호"
+                        value={searchMemberId}
+                        onChange={e => setSearchMemberId(e.target.value.replace(/[^0-9]/g, ''))}
+                      />
+                    </div>
+                    
+                    <div className="flex items-end sm:w-auto gap-2">
+                      <button
+                        className="btn-secondary"
+                        onClick={() => {
+                          if (searchMemberId) {
+                            setFilteredProjects(projectRows.filter(row => String(row.memberId) === searchMemberId));
+                          } else {
+                            setFilteredProjects(null);
+                          }
+                        }}
+                      >
+                        검색
+                      </button>
+                      <button
+                        className="btn-secondary"
+                        onClick={() => { setSearchMemberId(''); setFilteredProjects(null); }}
+                      >
+                        초기화
+                      </button>
+                      <button className="px-3 py-2 btn-primary rounded-md" onClick={() => setMemberModalOpen(true)}>
+                        회원 번호 조회
+                      </button>
+                    </div>
+                  </form>
                 </div>
 
                 {/* 체크박스 테이블 */}
@@ -338,20 +345,20 @@ export default function AdminPage() {
                       <span className="text-sm">전체선택</span>
                     </label> */}
                     <button
-                      className="btn-secondary px-3 py-1.5 text-sm"
+                      className="btn-secondary btn-32"
                       onClick={handleDeleteSelected}
                       disabled={selectedProjectIds.length === 0}
                     >
                       선택삭제
                     </button>
                     <button
-                      className="btn-secondary px-3 py-1.5 text-sm"
+                      className="btn-secondary btn-32"
                       onClick={handleDownloadCSV}
                     >
                       목록 다운로드(Excel)
                     </button>
                     <button
-                      className="btn-secondary px-3 py-1.5 text-sm ml-auto"
+                      className="btn-secondary btn-32 ml-auto"
                       onClick={() => setCreateModalOpen(true)}
                     >
                       프로젝트 생성
