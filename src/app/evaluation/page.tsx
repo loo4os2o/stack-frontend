@@ -138,7 +138,8 @@ export default function EvaluationPage() {
         onClose={() => setModalOpen(false)}
         title={"연돌현상 예측평가"}
         footer={" "}
-        width={'80%'}
+        // width={'80%'}
+        width={'1400px'}
       >
         <div className='evaluation-page'>
 
@@ -874,7 +875,7 @@ export default function EvaluationPage() {
             controls
             autoPlay
             muted
-            style={{ borderRadius: '12px', background: '#000', objectFit: 'cover' }}
+            style={{ borderRadius: '12px', background: '#000', objectFit: 'cover', maxHeight: '420px' }}
           >
             <source src="/promo.mp4" type="video/mp4" />
             브라우저가 video 태그를 지원하지 않습니다.

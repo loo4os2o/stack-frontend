@@ -84,8 +84,8 @@ export default function Home() {
       {/* Section - 타이틀 */}
       <section className="bg-wrap">
         <div className="text-logo">
-          <p>건물 연돌현상 분석 솔루션</p>
-          <h1>S <span className="font-orange">T</span> A C K</h1>
+          <p>빠르고 정확한 연돌현상평가</p>
+          <h1>S <span>T</span> A C K</h1>
         </div>
         
         <div className="main-menu">

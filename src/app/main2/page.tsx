@@ -2,7 +2,7 @@
 
 import Background from "@/assets/images/man-architect-working-project-with-vr-glasses-new-technologies-3d.jpg";
 import MainHeader2 from "@/components/MainHeader2";
-import "@/css/main.css";
+import "@/css/main2.css";
 import { useUserStore } from '@/utils/store';
 import Image from "next/image";
 import Link from "next/link";
