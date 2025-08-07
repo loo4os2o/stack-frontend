@@ -62,10 +62,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link
+        {/* <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap"
           rel="stylesheet"
-        />
+        /> */}
       </head>
       <body>
         {isMainPage ? (
@@ -82,7 +82,7 @@ export default function RootLayout({
         <main 
           style={{ 
             backgroundColor: isWhiteBackgroundPage 
-            ? 'white' : 'var(--background-color)'
+            ? 'white' : 'var(--background-color)',
           }}
         >
           {children}

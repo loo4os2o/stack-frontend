@@ -1,7 +1,7 @@
 'use client';
 
 import slideImg3 from '@/assets/images/acro.jpg';
-import Background from "@/assets/images/architecture-1867194_1920.jpg";
+import Background from "@/assets/images/architecture-1867194_1920.png";
 import slideImg2 from '@/assets/images/haeundae.jpg';
 import slideImg1 from '@/assets/images/lotte-tower.jpg';
 import slideImg4 from '@/assets/images/lusail.png';
@@ -10,6 +10,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ArrowRight from "@/assets/icons/icon-btn-more.png";
+import ArrowRightOpacity from "@/assets/icons/icon-btn-more-bg-opacity.png";
+import IconService from "@/assets/icons/icon-service.png";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export default function Home() {
   const router = useRouter();
@@ -23,9 +31,6 @@ export default function Home() {
     { src: slideImg3, alt: '슬라이드3' },
     { src: slideImg4, alt: '슬라이드4' },
   ];
-  const [slideIdx, setSlideIdx] = useState(0);
-  const prevSlide = () => setSlideIdx((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  const nextSlide = () => setSlideIdx((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
 
   const user = useUserStore((state) => state.user);
 
@@ -68,13 +73,12 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto pb-8 home-page-wrapper">
+    <div className="container mx-auto home-page-wrapper">
       {/* 배경 이미지 섹션 */}
       <section className="stack-bg">
         <Image 
           src={Background} 
           alt="background-image"
-          style={{objectFit: 'cover', objectPosition: 'center bottom'}}
           fill 
           priority
         />
@@ -150,20 +154,16 @@ export default function Home() {
       </section>
 
       {/* Section - STACK 시스템 특징 */}
-      <section className="py-8 mb-12 mt-64 md:mt-64 main-features relative z-10">
-        <h2 className="text-3xl font-bold mb-8 text-center font-white">
-          STACK 시스템 특징
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="sys-features">
+        <h2><strong>S<span>T</span>ACK</strong> 시스템 특징</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="card-features">
-            <h3 className="text-xl font-bold mb-2 text-center">
-              빠르고 정확한 연돌현상평가
-            </h3>
-            <p className="text-center">
+            <h3>빠르고 정확한 연돌현상평가</h3>
+            <p>
               온라인 도구를 사용하여 연돌현상 영향을 평가하고, 
               해결방안을 확인하여 대응전략 수립 방향을 마련하세요.
             </p>
-            <div className="btn-primary mt-6">
+            <div className="btn-primary mt-10">
               <a 
                 href="#" 
                 className="inline-block"
@@ -171,17 +171,16 @@ export default function Home() {
               >
                 연돌현상 평가하기
               </a>
+              <Image src={ArrowRight} alt="arrow-right" width={34} height={34} />
             </div>
           </div>
           <div className="card-features">
-            <h3 className="text-xl font-bold mb-2 text-center">
-              즉시 활용가능한 결과
-            </h3>
-            <p className="text-center">
-              연돌예측검토 보고서부터 개선전략에 관한 설계도면,
-              시뮬레이션 결과까지 다양하게 제공됩니다.
+            <h3>즉시 활용가능한 결과</h3>
+            <p>
+              온라인 도구를 사용하여 연돌현상 영향을 평가하고, 
+              해결방안을 확인하여 대응전략 수립 방향을 마련하세요.
             </p>
-            <div className="btn-primary mt-6">
+            <div className="btn-primary mt-10">
               <a 
                 href="#" 
                 className="inline-block"
@@ -189,17 +188,16 @@ export default function Home() {
               >
                 엔지니어링 결과물 살펴보기
               </a>
+              <Image src={ArrowRight} alt="arrow-right" width={34} height={34} />
             </div>
           </div>
           <div className="card-features">
-            <h3 className="text-xl font-bold mb-2 text-center">
-              최고의 엔지니어링 전문가
-            </h3>
-            <p className="text-center">
+            <h3>최고의 엔지니어링 전문가</h3>
+            <p>
               국내 최고 연돌현상 전문가와 함께 솔루션을 제공받고,
               효과적인 개선 전략을 실행할 수 있습니다.
             </p>
-            <div className="btn-primary mt-6">
+            <div className="btn-primary mt-10">
               <a 
                 href="#" 
                 className="inline-block"
@@ -207,98 +205,113 @@ export default function Home() {
               >
                 지난 프로젝트 살펴보기
               </a>
+              <Image src={ArrowRight} alt="arrow-right" width={34} height={34} />
             </div>
           </div>
         </div>
       </section>
 
       {/* 메인 소개 섹션 */}
-      <section className="py-12 mb-12 main-intro">
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-2/5 intro-text">
-            <div className="title-wrap mb-8">
-              <h5 className="title-line">ENGINEERING</h5>
-              <h2 className="title-line">SERVICES</h2>
-            </div>
+      <section className="main-intro">
+        <h2>Engineering Services</h2>
+
+
+        <div className="flex flex-col md:flex-row gap-5 inner">
+          <div className="w-full md:w-1/2">
             
             <div className="service-list">
-              <div className="service-item mb-6">
-                <p className="text-sm mb-1">온라인 평가 / 전문가 검토</p>
-                <h3 className="text-xl font-bold">연돌현상 예측평가</h3>
+              <div className="service-item">
+                <Image src={IconService} alt="service-item" width={64} height={64} />
+                <div className='flex flex-col'>
+                  <p className="text-sm mb-1">온라인 평가 / 전문가 검토</p>
+                  <h3 className="text-xl font-bold">연돌현상 예측평가</h3>
+                </div>
               </div>
-              
-              <div className="service-item mb-6">
-                <p className="text-sm mb-1">개선안 반영 도면</p>
-                <h3 className="text-xl font-bold">연돌현상 설계검토</h3>
+
+              <div className="service-item">
+                <Image src={IconService} alt="service-item" width={64} height={64} />
+                <div className='flex flex-col'>
+                  <p className="text-sm mb-1">개선안 반영 도면</p>
+                  <h3 className="text-xl font-bold">연돌현상 설계검토</h3>
+                </div>
               </div>
-              
-              <div className="service-item mb-8">
-                <p className="text-sm mb-1">공기유동 시뮬레이션 분석</p>
-                <h3 className="text-xl font-bold">연돌현상 시뮬레이션</h3>
+
+              <div className="service-item">
+                <Image src={IconService} alt="service-item" width={64} height={64} />
+                <div className='flex flex-col'>
+                  <p className="text-sm mb-1">공기유동 시뮬레이션 분석</p>
+                  <h3 className="text-xl font-bold">연돌현상 시뮬레이션</h3>
+                </div>
               </div>
-            </div>
-            
-            <div className="intro-buttons">
-              <a 
-                href="#" 
-                className="btn-primary btn-large mb-6 w-4/5 rounded-3xl text-center"
-                onClick={(e) => handleNavigation(e, '/evaluation')}
-              >
-                연돌현상 평가하기
-              </a>
-              <a 
-                href="#" 
-                className="underline-link"
-                onClick={(e) => handleNavigation(e, '/engineering')}
-              >
-                엔지니어링 서비스 더 알아보기
-              </a>
             </div>
           </div>
           
-          <div className="w-full md:w-3/5 intro-image flex items-center justify-center">
-            <div className="relative w-full bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden"
-              style={{height: '508px'}}
-            >
-              {/* 슬라이드 이미지 */}
-              <Image
-                src={slides[slideIdx].src}
-                alt={slides[slideIdx].alt}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover rounded-lg transition-all duration-300"
-                style={{ zIndex: 1 }}
-              />
-              {/* 좌우 화살표 */}
-              <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 bg-white hover:bg-gray-200 text-gray-700 rounded-full w-10 h-10 flex items-center justify-center shadow"
-                onClick={prevSlide}
-                style={{ zIndex: 2 }}
-                aria-label="이전 슬라이드"
+          {/* <div className="w-full md:w-1/2 intro-image"> */}
+          <div className="w-full md:w-1/2 intro-image">
+            <div className="swiper-container" style={{height: '445px'}}>
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={{
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                }}
+                pagination={{
+                  clickable: true,
+                  el: '.swiper-pagination',
+                }}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                loop={true}
+                className="h-full"
               >
-                <span style={{transform: 'rotate(180deg)', marginTop: '4px'}}> ➜ </span>
-              </button>
-              <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 bg-white hover:bg-gray-200 text-gray-700 rounded-full w-10 h-10 flex items-center justify-center shadow"
-                onClick={nextSlide}
-                style={{ zIndex: 2 }}
-                aria-label="다음 슬라이드"
-              >
-                <span style={{marginTop: '-2px'}}> ➜ </span>
-              </button>
-              {/* 인디케이터 */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`w-3 h-3 rounded-full ${i === slideIdx ? 'bg-blue-500' : 'bg-white/70 border border-gray-400'}`}
-                    onClick={() => setSlideIdx(i)}
-                    aria-label={`슬라이드 ${i + 1}`}
-                  />
+                {slides.map((slide, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={slide.src}
+                        alt={slide.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
+                  </SwiperSlide>
                 ))}
-              </div>
+                
+                {/* Navigation 버튼 */}
+                <div className="swiper-button-prev custom-swiper-button-prev"></div>
+                <div className="swiper-button-next custom-swiper-button-next"></div>
+                
+                {/* Pagination */}
+                <div className="swiper-pagination custom-swiper-pagination"></div>
+              </Swiper>
             </div>
           </div>
+        </div>
+
+        <div className="intro-buttons mt-10">
+          <a href="#" 
+            className="btn-secondary btn-50 rounded-xl
+              flex items-center justify-between gap-2"
+            style={{ width: '280px' }}
+            onClick={(e) => handleNavigation(e, '/engineering')}
+          >
+            엔지니어링 서비스 더 알아보기
+            <Image src={ArrowRightOpacity} alt="arrow-right" width={24} height={24} />
+          </a>
+          <a href="#" 
+            className="btn-primary btn-50 rounded-xl
+              flex items-center justify-between gap-2"
+            style={{ width: '280px' }}
+            onClick={(e) => handleNavigation(e, '/evaluation')}
+          >
+            연돌현상 평가하기
+            <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+          </a>
         </div>
       </section>
     </div>
