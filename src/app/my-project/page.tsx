@@ -299,7 +299,7 @@ export default function MyProjectPage() {
                       건물 높이
                     </td>
                     <td className="bg-blue-0 px-6 py-4 text-left align-middle shadow-sm">
-                      {selectedProject.buildingHeight}
+                      {`${selectedProject.buildingHeight}m`}
                     </td>
                   </tr>
                   <tr className="transition hover:bg-blue-50 group">
