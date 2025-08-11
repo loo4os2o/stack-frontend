@@ -806,10 +806,10 @@
       padding: 0 1.25rem !important;
   }
 }
-@media (min-width: 900px) and (max-width: 1063px) {
+@media (min-width: 960px) and (max-width: 1063px) {
   .header-wrapper .top-bar .container,
   .header-wrapper .main-nav-bar .container {
-      max-width: 900px !important;
+      max-width: 960px !important;
       padding: 0 1.25rem !important;
   }
 }

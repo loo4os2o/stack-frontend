@@ -110,9 +110,9 @@ export default function MyProjectPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-16" style={{ minHeight: '60vh' }}>
-      <div className="flex items-center justify-between gap-4 mb-8">
-        <h1 className="text-2xl font-bold">마이 프로젝트</h1>
+    <div className="container mx-auto py-10" style={{ minHeight: '60vh' }}>
+      <div className="flex items-center justify-between gap-4 mb-5">
+        <h1 className="text-3xl font-bold">마이 프로젝트</h1>
         {!selectedProject && (
           <button
             className="text-gray-600 hover:text-gray-800 hover:underline"

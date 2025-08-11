@@ -222,12 +222,125 @@
 }
 .intro{
   /* border-top: 1px dashed #eee; */
-  padding: 1.5rem 2rem 1rem 2rem;
+  padding: 0.5rem 2.5rem 2.5rem 2.5rem;
 }
-.intro-text{
-  font-size: 1.1rem;
-  line-height: 2.2;
-  color: #1f2937;
+.intro-text,
+.intro-text p{
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: -0.025rem;
+  color: #333333;
+}
+.intro-text h4{
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 140%;
+  color: #12121B;
+  position: relative;
+  padding-left: 0.75rem;
+  margin-bottom: 1rem;
+}
+.intro-text h4::before{
+  content: '';
+  width: 0.25rem;
+  height: 1.125rem;
+  border-radius: 0.25rem;
+  background: #FF4500;
+  position: absolute;
+  top: 0.313rem;
+  left: 0;
+}
+.intro-text h4.no-marker{
+  padding-left: 0;
+}
+.intro-text h4.no-marker::before{
+  display: none;
+}
+.intro-text h5{
+  font-weight: 700;
+  font-size: 1rem;
+  color: #12121B;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+.intro-text h5 span{
+  font-size: 0.625rem;
+  font-weight: 900;
+  line-height: 0;
+  border: 2px solid #12121B;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  min-width: 1rem;
+  min-height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.375rem;
+  padding-right: 0.063rem;
+  margin-top: 0.313rem;
+}
+.intro-text ul{
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 160%;
+  color: #333333;
+  padding-left: 1.5rem;
+}
+.intro-text ul li{
+  font-weight: 500;
+  font-size: 0.938rem;
+  line-height: 160%;
+  color: #666666;
+  position: relative; 
+  padding-left: 1.125rem;
+}
+.intro-text ul li:first-child{
+  margin-top: 0.25rem;
+}
+.intro-text ul li::before{
+  content: '•';
+  color: #666666;
+  font-size: 0.875rem;
+  position: absolute;
+  top: -0.063rem;
+  left: 0.25rem;
+}
+.intro-text ul li.no-marker{
+  padding-left: 0;
+}
+.intro-text ul li.no-marker::before{
+  display: none;
+}
+.marker{
+  position: relative;
+  padding-left: 1.5rem;
+}
+.marker::before{
+  content: 'ㆍ';
+  color: #333333;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.intro hr{
+  margin: 2rem 0;
+  border-color: #EAEAEA;
+}
+.intro-row{
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+@media (max-width: 800px) {
+  .intro-row{
+    flex-direction: column;
+    gap: 2rem;
+  }
 }
 
 
@@ -250,7 +363,7 @@
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.625rem;
   background: #fff;
   border: 0;
@@ -268,4 +381,18 @@
   text-overflow: ellipsis;
   word-break: break-word;
   line-height: 1.4;
+}
+
+
+
+/* ========================================================== */
+/* 관리자 페이지 */
+/* ========================================================== */
+.admin-page{
+
+}
+
+.admin-page .admin-tab-active{
+  background: #FF4500;
+  color: #fff;
 }

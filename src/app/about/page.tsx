@@ -1,122 +1,144 @@
+'use client';
 import React from 'react';
 
-// import StackVennDiagram from './StackVennDiagram';
 import '@/css/about.css';
 import Image from 'next/image';
 import ExImgDiagram0 from "@/assets/images/ex/sample-diagram-0.png";
-import ExImgDiagram1 from "@/assets/images/ex/sample-diagram-1.png";
+// import ExImgDiagram1 from "@/assets/images/ex/sample-diagram-1.png";
 import ExImgDiagram2 from "@/assets/images/ex/sample-diagram-2.png";
+import TargetBlank from "@/assets/icons/icon-target-blank.png";
+import logoAbout from '@/assets/images/logo-STACK-about.png';
 
 export default function AboutPage() {
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', paddingTop: '4rem' }}>
-      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2.5rem' }}>
-        About 
-        <span style={{letterSpacing: '10px', marginLeft: '24px'}}>
-          S
-          <span className="font-orange">T</span>
-          ACK
-        </span>
-      </h1>
+    <div className='container mx-auto pt-10'>
 
-      {/* <StackVennDiagram /> */}
-      <div className='mb-12'
-        style={{border: "1px solid #ddd",borderRadius: '1rem', padding: '2rem',
-          background: "#fff"
-        }}
-      >
-        <div className='image-wrap'>
-          <Image src={ExImgDiagram0} alt="샘플이미지0" />
+      <section className='bg-color'>
+        <div className='inner'>
+
+          {/* 타이틀 */}
+          <h1 className='mb-4 flex items-center gap-4'>
+            <span className='mb-1'>About</span>
+            <Image src={logoAbout} alt="logo" width={184} />
+          </h1>
+
+          <div className='mb-5 about-wrap'>
+            <div className='image-wrap'>
+              <Image src={ExImgDiagram0} alt="샘플이미지0" />
+            </div>
+          </div>
+
+          <div className='about-wrap mt-5'>
+            <h4>샤프트 중성대 추정 기반 압력분포 예측</h4>
+            <p>
+              STACK은 Mass Balance 기반의 압력 예측 알고리즘을 활용하여, 건물 내부의
+              중성대(NPL: Neutral Pressure Level) 위치를 산정하고, 이에 따른 수직 압력 구배 및
+              연돌 유도 기류 흐름을 예측합니다.
+            </p>
+
+            <p className='mt-3'>
+              STACK은 일반적인 기류 해석 도구(예: Airflow Network Model, CONTAM)와 달리,
+              복잡한 모델링 과정이나 상세 입력값 없이도 사용 가능합니다. 건축 계획 정보만을
+              바탕으로 간단한 입력만으로도 개략적인 성능 예측과 평가가 가능하며, 별도의
+              모델링이나 존(Zonal) 구성 없이 결과를 도출할 수 있습니다.
+            </p>
+
+            <p className='mt-3'>
+              또한, 결과 해석 과정도 자동화되어 사용자 친화적인 출력 데이터를 제공하므로,
+              설계 초기 단계나 대안 비교 분석에 효과적으로 활용될 수 있습니다.
+            </p>
+
+            {/* 차트영역 */}
+            <div className='flex gap-4 mt-5 w-full'>
+              <div className='chart-wrap w-3/5 gap-4' 
+                style={{height: '416px', flexDirection: 'row', padding: "1rem"}}>
+                <div className='chart-wrap border-2 w-1/5 h-full'>차트1 - <br/> 중성대 위치</div>
+                <div className='chart-wrap border-2 w-4/5 h-full'>차트1 - <br/> 압력분포 프로파일</div>
+              </div>
+              <div className='flex flex-col gap-4 w-2/5'>
+                <div className='chart-wrap w-full' style={{height: '200px'}}>
+                  차트2 <br/> 문제발생 예상층
+                </div>
+                <div className='chart-wrap w-full' style={{height: '200px'}}>
+                  차트3 <br/> 최대연돌 압력차(∆P)
+                </div>  
+              </div>
+            </div>
+          </div>
+
+          {/* <div className='flex gap-8 mt-8'>
+            <section className='flex-1'
+              style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '1rem' }}>
+              <h2 className='text-center mb-6'
+                style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                샤프트 중성대 추정 기반 압력분포 예측
+              </h2>
+              <p style={{lineHeight: '2'}}>
+                STACK은 Mass Balance 기반의 압력 예측 알고리즘을 활용하여, 건물 내부의
+                중성대(NPL: Neutral Pressure Level) 위치를 산정하고, 이에 따른 수직 압력 구배 및
+                연돌 유도 기류 흐름을 예측합니다.<br/>
+
+                <span className='mt-4 block'></span>
+                STACK은 일반적인 기류 해석 도구(예: Airflow Network Model, CONTAM)와 달리,
+                복잡한 모델링 과정이나 상세 입력값 없이도 사용 가능합니다. 건축 계획 정보만을
+                바탕으로 간단한 입력만으로도 개략적인 성능 예측과 평가가 가능하며, 별도의
+                모델링이나 존(Zonal) 구성 없이 결과를 도출할 수 있습니다.<br/>
+
+                <span className='mt-4 block'></span>
+                또한, 결과 해석 과정도 자동화되어 사용자 친화적인 출력 데이터를 제공하므로,
+                설계 초기 단계나 대안 비교 분석에 효과적으로 활용될 수 있습니다.
+              </p>
+            </section>
+            <section className='flex-1'
+              style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '1rem' }}>
+              <h2 className='text-center mb-6'
+                style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                (문제/해결방안)
+              </h2>
+              <p style={{lineHeight: '2'}}>
+                STACK은 Mass Balance 기반의 압력 예측 알고리즘을 활용하여, 건물 내부의
+                중성대(NPL: Neutral Pressure Level) 위치를 산정하고, 이에 따른 수직 압력 구배 및
+                연돌 유도 기류 흐름을 예측합니다.<br/>
+
+                <span className='mt-4 block'></span>
+                STACK은 일반적인 기류 해석 도구(예: Airflow Network Model, CONTAM)와 달리,
+                복잡한 모델링 과정이나 상세 입력값 없이도 사용 가능합니다. 건축 계획 정보만을
+                바탕으로 간단한 입력만으로도 개략적인 성능 예측과 평가가 가능하며, 별도의
+                모델링이나 존(Zonal) 구성 없이 결과를 도출할 수 있습니다. 또한, 결과 해석 과정도
+                자동화되어 사용자 친화적인 출력 데이터를 제공하므로, 설계 초기 단계나 대안 비교
+                분석에 효과적으로 활용될 수 있습니다.
+              </p>
+            </section>
+          </div> */}
+
+          <section className='about-wrap transparent'>
+            <ul>
+              <li>Jo, J. H., Lim, J. H., Song, S. Y., Yeo, M. S., & Kim, K. W. (2007). Characteristics of pressure distribution and solution to the problems caused by stack effect in high-rise residential buildings.Building and Environment,42(1), 263-277.</li>
+              <li>Park, S. Y., Lee, D. S., Ji, K. H., & Jo, J. H. (2023). Simplified model for estimating the neutral pressure level in the elevator shaft of a building. Journal of Building Engineering,79, 107850.</li>
+              <li>Park, S. Y., Choi, S. J., Lee, D. S., & Jo, J. H. (2025, May). Assessing stack-induced infiltration loads by predicting neutral pressure levels in high-rise buildings. InBuilding Simulation(Vol. 18, No. 5, pp. 999-1017). Tsinghua University Press</li>
+            </ul>
+          </section>
+
+          <div className='flex justify-center pb-20'>
+            <a className="btn-primary btn-50 w-1/3 flex-row-center rounded-xl"
+              href="/evaluation">연돌현상 평가하기</a>
+          </div>
+          
         </div>
-      </div>
-
-
-      <div className="flex gap-8">
-        <section className='flex items-center justify-center flex-1' 
-          style={{border: '1px solid #ddd', borderRadius: '1rem', padding: '2rem',
-          background: 'linear-gradient(to left, #fff, #f0f0f0)', height: '100%'
-        }}>
-          <div className='image-wrap'>
-            <Image src={ExImgDiagram1} alt="샘플이미지1" />
-          </div>
-        </section>
-        <section className='flex items-center justify-center flex-1'
-          style={{border: '1px solid #ddd', borderRadius: '1rem', padding: '2rem',
-          background: 'linear-gradient(to right, #fff, #f0f0f0)', height: '100%'
-        }}>
-          <div className='image-wrap'>
-            <Image src={ExImgDiagram1} alt="샘플이미지1" />
-          </div>
-        </section>
-      </div>
-
-      <div className='flex gap-8 mt-8'>
-        <section className='flex-1'
-          style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '1rem' }}>
-          <h2 className='text-center mb-6'
-            style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-            샤프트 중성대 추정 기반 압력분포 예측
-          </h2>
-          <p style={{lineHeight: '2'}}>
-            STACK은 Mass Balance 기반의 압력 예측 알고리즘을 활용하여, 건물 내부의
-            중성대(NPL: Neutral Pressure Level) 위치를 산정하고, 이에 따른 수직 압력 구배 및
-            연돌 유도 기류 흐름을 예측합니다.<br/>
-
-            <span className='mt-4 block'></span>
-            STACK은 일반적인 기류 해석 도구(예: Airflow Network Model, CONTAM)와 달리,
-            복잡한 모델링 과정이나 상세 입력값 없이도 사용 가능합니다. 건축 계획 정보만을
-            바탕으로 간단한 입력만으로도 개략적인 성능 예측과 평가가 가능하며, 별도의
-            모델링이나 존(Zonal) 구성 없이 결과를 도출할 수 있습니다.<br/>
-
-            <span className='mt-4 block'></span>
-            또한, 결과 해석 과정도 자동화되어 사용자 친화적인 출력 데이터를 제공하므로,
-            설계 초기 단계나 대안 비교 분석에 효과적으로 활용될 수 있습니다.
-          </p>
-        </section>
-        <section className='flex-1'
-          style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '1rem' }}>
-          <h2 className='text-center mb-6'
-            style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-            (문제/해결방안)
-          </h2>
-          <p style={{lineHeight: '2'}}>
-            STACK은 Mass Balance 기반의 압력 예측 알고리즘을 활용하여, 건물 내부의
-            중성대(NPL: Neutral Pressure Level) 위치를 산정하고, 이에 따른 수직 압력 구배 및
-            연돌 유도 기류 흐름을 예측합니다.<br/>
-
-            <span className='mt-4 block'></span>
-            STACK은 일반적인 기류 해석 도구(예: Airflow Network Model, CONTAM)와 달리,
-            복잡한 모델링 과정이나 상세 입력값 없이도 사용 가능합니다. 건축 계획 정보만을
-            바탕으로 간단한 입력만으로도 개략적인 성능 예측과 평가가 가능하며, 별도의
-            모델링이나 존(Zonal) 구성 없이 결과를 도출할 수 있습니다. 또한, 결과 해석 과정도
-            자동화되어 사용자 친화적인 출력 데이터를 제공하므로, 설계 초기 단계나 대안 비교
-            분석에 효과적으로 활용될 수 있습니다.
-          </p>
-        </section>
-      </div>
-
-      <div className='flex justify-center' 
-        style={{maxWidth: '400px', margin: '3rem auto'}}>
-        <a className="btn-primary btn-large w-full text-center"
-          href="/evaluation">연돌현상 평가하기</a>
-      </div>
-
-      <section className='mb-16'
-        style={{borderRadius: '1rem', padding: '2rem', background: '#fff'}}>
-        <p className='text-xs font-light'>
-          Jo, J. H., Lim, J. H., Song, S. Y., Yeo, M. S., & Kim, K. W. (2007). Characteristics of pressure distribution and solution to the problems caused by stack effect in high-rise residential buildings.Building and Environment,42(1), 263-277.<br/>
-          Park, S. Y., Lee, D. S., Ji, K. H., & Jo, J. H. (2023). Simplified model for estimating the neutral pressure level in the elevator shaft of a building. Journal of Building Engineering,79, 107850.<br/>
-          Park, S. Y., Choi, S. J., Lee, D. S., & Jo, J. H. (2025, May). Assessing stack-induced infiltration loads by predicting neutral pressure levels in high-rise buildings. InBuilding Simulation(Vol. 18, No. 5, pp. 999-1017). Tsinghua University Press
-        </p>
       </section>
+
+
 
       {/* Section - SERVICES */}
       <section className="section-wide">
         <div className="services-container">
-          <div className="text-center mb-10">
-            <h2 className="services-title">Building Stack Engineering Process</h2>
+          <h2>Building Stack Engineering Process</h2>
+
+          <div className='image-wrap'>
+            <Image src={ExImgDiagram2} alt="샘플이미지2" />
           </div>
-          <p style={{lineHeight: '2'}}>
+
+          <p className='my-10'>
             연돌현상(Stack effect, Chimney effect)은 실내외 공기 밀도 차로 
             인해 발생하는 자연적인 공기 흐름 현상입니다. 건물 내부와 외부의 온도 차로 
             인해 공기 기둥 사이에 압력 차가 형성되며, 특히 수직 경로를 따라 공기가 
@@ -132,39 +154,18 @@ export default function AboutPage() {
             Integrated Engineering)’이며, 설계–시공–운영의 각 단계에서 연돌 리스크를 
             평가, 제어, 진단하는 일관된 기술 전략을 제공합니다.
           </p>
-          <ul style={{ listStyle: 'disc', paddingLeft: '1.5rem', lineHeight: '2.8', margin: '1rem 0' }}>
-            <li className='font-bold'>연돌효과 영향평가</li>
-            <li className='font-bold'>연돌효과 시공 품질 관리</li>
-            <li className='font-bold'>연도효과 츨정 및 진당</li>
-          </ul>
-          <p style={{lineHeight: '2'}}>
-            건물 연돌효과 엔지니어링의 전과정 / 본 프로그램의 Scope / 
-            엔지니어링 서비스의 범위 등 연돌효과(Stack Effect, Chimney Effect)는 
-            건물 내부와 외부의 온도 차이로 인해 발생하는 공기의 수직 방향 흐름을 의미한다. 
-            이는 내부의 따뜻한 공기가 상부로 상승하고, 하부에는 외부의 차가운 공기가 
-            유입되는 현상으로, 굴뚝에서 뜨거운 차이로 인해 발생하는 공기의 
-            수직 방향 흐름을 의미한다. 
-          </p>
-          <div className='image-wrap my-12 rounded-2xl overflow-hidden'>
-            <Image src={ExImgDiagram2} alt="샘플이미지2" />
+
+          <div className='flex-row-center gap-4'>
+            <a className="btn-primary btn-50 w-1/4 flex-row-center"
+              href="/service-request">STACK 엔지니어링 서비스 요청</a>
+            <a className="btn-secondary btn-50 w-1/4 flex-row-center"
+              href="/engineering">
+                연돌효과 통합 엔지니어링
+              <Image src={TargetBlank} alt="연돌효과 통합 엔지니어링 바로가기기" 
+                width={20} height={20} className='ml-1 mt-0.5' />
+            </a>
           </div>
-          <p style={{lineHeight: '2'}}>
-            이중에서도 설계 단계에서의 사전 예측(Pre-simulation)은 연돌효과 대응 전략의 
-            핵심입니다.<br/>
-
-            STACK은 설계 초기 단계에서 제공된 건축 계획 정보를 기반으로, 건물 내 압력 
-            구배와 중성대 위치를 도출하고, 연돌효과에 의한 문제 가능성을 
-            정량적으로 평가합니다.<br/>
-
-            이러한 사전 진단 결과는 도면 검토, 설계안 보완, 시뮬레이션 기반 개선 조치로 
-            이어질 수 있으며, 이후 연돌효과 통합 엔지니어링 체계와 연계하여 시공 및 
-            운영 단계 대응까지 확장 적용될 수 있습니다.
-          </p>
-          <h2 className='my-12'
-            style={{ fontSize: '1.5rem', fontWeight: 'bold'}}>
-            STACK은 설계단계에 특화된 압력예측 및 개선아이템 제안 도구이며,
-            생애주기 전반을 아우르는 연돌 대응 전략의 출발점입니다.
-          </h2>
+          
         </div>
       </section>
 

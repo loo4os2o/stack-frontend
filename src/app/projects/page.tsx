@@ -237,7 +237,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="container mx-auto py-10 projects-page">
+    <div className="container mx-auto pt-10 pb-20 projects-page">
       <h1 className="text-3xl font-bold mb-5">엔지니어링 프로젝트 실적</h1>
       
       {/* 대표 이미지 3개 */}
@@ -285,7 +285,7 @@ export default function ProjectsPage() {
       </div>
       
       {/* 아코디언 프로젝트 목록 */}
-      <div className="py-4 px-8 mb-8 eng-projects">
+      <div className="py-4 px-8 eng-projects">
         {/* {isAdmin && (
           <div className="flex justify-end">
           <button className="btn-primary login-active px-4 py-2 text-sm" onClick={handleAdd}>
@@ -394,34 +394,34 @@ export default function ProjectsPage() {
             </div>
           </div>
         )}
-      </div>
-      
-      {/* 페이지네이션 */}
-      {pagedProjects.length > 0 && (
-        <div className="mt-8 pagenation">
-          <button
-            onClick={() => setPage(page > 1 ? page - 1 : 1)}
-            disabled={page === 1}
-          >
-            <Image src={pagenationPrev} alt="이전 페이지" width={16} height={16} />
-          </button>
-          {Array.from({ length: totalPages }).map((_, i) => (
+
+        {/* 페이지네이션 */}
+        {pagedProjects.length > 0 && (
+          <div className="mt-8 pagenation">
             <button
-              key={i}
-              className={`${page === i + 1 ? 'active' : ''}`}
-              onClick={() => setPage(i + 1)}
+              onClick={() => setPage(page > 1 ? page - 1 : 1)}
+              disabled={page === 1}
             >
-              {i + 1}
+              <Image src={pagenationPrev} alt="이전 페이지" width={16} height={16} />
             </button>
-          ))}
-          <button
-            onClick={() => setPage(page < totalPages ? page + 1 : totalPages)}
-            disabled={page === totalPages}
-          >
-            <Image src={pagenationNext} alt="다음 페이지" width={16} height={16} />
-          </button>
-        </div>
-      )}
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                className={`${page === i + 1 ? 'active' : ''}`}
+                onClick={() => setPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setPage(page < totalPages ? page + 1 : totalPages)}
+              disabled={page === totalPages}
+            >
+              <Image src={pagenationNext} alt="다음 페이지" width={16} height={16} />
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* 모달 - 추가/수정 */}
       {modalOpen && (

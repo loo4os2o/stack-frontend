@@ -218,22 +218,22 @@ export default function AdminPage() {
   const [totalEndDate, setTotalEndDate] = useState('2025-03-18');
 
   return (
-    <div className="container mx-auto pt-16 pb-24">
+    <div className="container mx-auto py-10 admin-page">
       {isLoggedIn ? (
         <>
-          <h1 className="text-3xl font-bold mb-10">관리자 페이지</h1>
+          <h1 className="text-3xl font-bold mb-5">관리자 페이지</h1>
 
           {/* 탭 메뉴 */}
           <div className="mb-4 border-b">
             <div className="flex space-x-4">
               <button
-                className={`py-2 px-4 font-medium ${activeTab === 'projects' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'projects' ? 'admin-tab-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('projects')}
               >
                 프로젝트 관리
               </button>
               {/* <button
-                className={`py-2 px-4 font-medium ${activeTab === 'members' ? 'login-active rounded-t-md' : 'text-gray-500'}`}
+                className={`py-2 px-4 font-medium ${activeTab === 'members' ? 'admin-tab-active rounded-t-md' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('members')}
               >
                 회원 관리
@@ -395,10 +395,10 @@ export default function AdminPage() {
                 </div>
 
                 {/* 회원검색 */}
-                <div className="filter-wrap">
-                  <form className="flex flex-col gap-5 md:flex-row">
-                    <div className="form-group mt-6">
-                      <label className="font-medium text-gray-700 mr-4 whitespace-nowrap">
+                <form>
+                  <div className="filter-wrap flex flex-col gap-2 md:flex-row mt-6">
+                    <div className="form-group" style={{maxWidth: '400px'}}>
+                      <label className="whitespace-nowrap">
                         회원번호
                       </label>
                       <input
@@ -409,7 +409,7 @@ export default function AdminPage() {
                       />
                     </div>
 
-                    <div className="flex items-end sm:w-auto gap-2">
+                    <div className="flex items-end sm:w-auto gap-2 flex-wrap">
                       <button
                         className="btn-secondary"
                         onClick={() => {
@@ -440,13 +440,13 @@ export default function AdminPage() {
                         회원 번호 조회
                       </button>
                     </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
 
                 {/* 체크박스 테이블 */}
                 <div className="mt-6">
                   {/* 프로젝트 관리 버튼 영역 */}
-                  <div className="flex flex-wrap items-center gap-4 mb-2">
+                  <div className="flex flex-wrap items-center gap-4 gap-y-2 mb-2">
                     {/* <label className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -469,14 +469,17 @@ export default function AdminPage() {
                       목록 다운로드(Excel)
                     </button>
                     <button
-                      className="btn-secondary btn-32 ml-auto"
+                      className="btn-secondary btn-32 ml-0 sm:ml-auto"
                       onClick={() => setCreateModalOpen(true)}
                     >
                       프로젝트 생성
                     </button>
                   </div>
                   <div className="overflow-x-auto" style={{ minHeight: '120px' }}>
-                    <table className="min-w-full border divide-y divide-gray-200 text-sm rounded-lg shadow">
+                    <table 
+                      className="border divide-y divide-gray-200 text-sm rounded-lg shadow"
+                      style={{minWidth: '1000px', width: '100%'}}
+                    >
                       <thead className="bg-gray-50">
                         <tr>
                           <th className="px-4 py-2 text-center">
@@ -737,12 +740,12 @@ export default function AdminPage() {
               <div className="flex justify-end gap-2 mt-6">
                 <button
                   type="button"
-                  className="btn-basic px-4 py-2 hover:bg-gray-100 hover:text-gray-500 hover:border-gray-300"
+                  className="btn-basic hover:bg-gray-100 hover:text-gray-500 hover:border-gray-300"
                   onClick={() => setCreateModalOpen(false)}
                 >
                   취소
                 </button>
-                <button type="submit" className="btn-primary px-4 py-2 login-active">
+                <button type="submit" className="btn-primary">
                   저장
                 </button>
               </div>
@@ -868,12 +871,12 @@ export default function AdminPage() {
               <div className="flex justify-end gap-2 mt-6">
                 <button
                   type="button"
-                  className="btn-basic px-4 py-2 hover:bg-gray-100 hover:text-gray-500 hover:border-gray-300"
+                  className="btn-basic hover:bg-gray-100 hover:text-gray-500 hover:border-gray-300"
                   onClick={() => setEditModalOpen(false)}
                 >
                   취소
                 </button>
-                <button type="submit" className="btn-primary px-4 py-2 login-active">
+                <button type="submit" className="btn-primary">
                   저장
                 </button>
               </div>

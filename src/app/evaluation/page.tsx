@@ -1335,13 +1335,14 @@ export default function EvaluationPage() {
           <div className="flex justify-end gap-4">
             {/* Removed isProcessing state, so this block will always show the buttons */}
             <>
-              <button
+                        {/* TO DO : 저장하기 버튼 삭제 요청!!!!! */}
+              {/* <button
                 onClick={() => handleFormSubmit(false)}
                 className="btn-secondary btn-50 rounded-xl"
                 style={{ width: '120px' }}
               >
                 저장하기
-              </button>
+              </button> */}
               <button
                 onClick={() => handleFormSubmit(true)}
                 className="btn-primary btn-50 rounded-xl"

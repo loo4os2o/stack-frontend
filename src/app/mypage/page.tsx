@@ -182,7 +182,7 @@ export default function MyPage() {
                 </button>
               </div>
               {showPasswordChange && (
-                <div className="space-y-4 p-4 bg-gray-50 rounded-md">
+                <div className="space-y-4 p-4 bg-gray-40 rounded-md">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">현재 비밀번호</label>
                     <input
