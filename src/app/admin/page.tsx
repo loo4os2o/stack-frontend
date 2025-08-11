@@ -158,10 +158,8 @@ export default function AdminPage() {
   useEffect(() => {
     const checkLogin = async () => {
       const { data, error } = await supabase.auth.getUser();
-      console.log('data.user: ', data.user);
-      console.log('data.user: ', data.user?.role);
       if (!data.user || data.user.user_metadata?.role !== 'admin' || error) {
-        router.push('/login');
+        router.push('/');
       } else {
         setIsLoggedIn(true);
       }
