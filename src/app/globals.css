@@ -186,6 +186,19 @@ body {
     color: #ffffff;
   }
 
+  .btn-normal{
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    color: #333333;
+  }
+  .btn-normal:hover,
+  .btn-normal:active,
+  .btn-normal:focus{
+    background: #ffffff;
+    border: 1px solid #666666;
+    color: #333333;
+  }
+
   /* 버튼 사이즈 */
   .btn-50{
     height: 3.125rem;

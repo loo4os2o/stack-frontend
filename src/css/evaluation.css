@@ -483,3 +483,74 @@ h1{
   margin-right: 0.5rem;
 }
 
+
+
+
+
+/* ================================================ */
+/* 마이 프로젝트 */
+/* ================================================ */
+/* 프로젝트 없을떄 */
+.no-data-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: Pretendard;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 160%;
+  color: #969696;
+}
+.no-data-wrap::before{
+  content: '';
+  background-image: url('../assets/icons/icon-no-data.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.25rem;
+}
+
+.my-project{
+  background: #fff;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 1.25rem;
+  padding: 2rem;
+}
+.my-project-nodata{
+  background: #fff;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 1.25rem;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42vh;
+}
+
+
+/* 프로젝트 상세 테이블 */
+.my-project-table{
+  border-collapse: collapse;
+  width: 100%;
+}
+.my-project-table th{
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 160%;
+  color: #969696;
+  text-align: left;
+  vertical-align: top;
+  padding: 0 0.75rem 0.75rem 0;
+}
+.my-project-table td{
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 160%;
+  color: #333333;
+  padding: 0 0 0.75rem 0;
+}

@@ -21,7 +21,8 @@ export default function RootLayout({
   const [showTopButton, setShowTopButton] = useState(false);
   
   // 로그인과 서비스 요청 페이지는 흰색 배경
-  const isWhiteBackgroundPage = pathname === '/login' || pathname === '/service-request';
+  const isWhiteBackgroundPage = 
+    pathname === '/login' || pathname === '/service-request' || pathname === '/engineering';
 
   const handleOutsideClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;

@@ -6,7 +6,8 @@
   padding: 5rem 0;
 }
 
-.login-bg-l{
+.login-bg-l,
+.login-bg-l-g{
   position: absolute;
   width: 37.5rem;
   height: 37.5rem;
@@ -21,7 +22,8 @@
   z-index: 0;
 }
 
-.login-bg-r{
+.login-bg-r,
+.login-bg-r-g{
   position: absolute;
   width: 46.75rem;
   height: 46.75rem;
@@ -34,6 +36,14 @@
   
   border-radius: 50%;
   z-index: 0;
+}
+
+.login-bg-l-g{
+  background: #33ff00 !important;
+}
+.login-bg-r-g{
+  background: #009ad1 !important;
+  opacity: 0.18 !important;
 }
 
 .login-wrap{

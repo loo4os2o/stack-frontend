@@ -1,100 +1,323 @@
 /* 엔지니어링 서비스 요금제 */
 .plan-tiers-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  width: 100%;
-  margin: 3rem 0 4rem 0;
-  position: relative;
+
 }
 .plan-card {
-  flex: 1 1 0%;
-  border-radius: 1rem;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-  padding: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-width: 0;
-  z-index: 10;
-  position: relative;
-  transition: clip-path 0.2s;
+  align-items: flex-start;
+  flex: 1;
+  padding: 2rem;
+  border-radius: 1.25rem;
 }
-.plan-card-basic {
-  background: #dbeafe; /* 진한 연파랑 */
-  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
-  padding: 2rem 6rem 2rem 3rem;
+.plan-card-basic,
+.plan-card-plus {
+  background: rgba(237, 192, 108, 0.1);
+  border: 1px solid rgba(237, 192, 108, 0.4);
 }
-.plan-card-pro {
-  background: #d1fae5; /* 진한 연녹색 */
-  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
-  padding: 2rem 5rem 2rem 7rem;
+.plan-card-advanced {
+  background: rgba(255, 69, 0, 0.07);
+  border: 1px solid rgba(255, 69, 0, 0.15);
 }
-.plan-card-plus,
-.plan-card-last {
-  background: #fee2e2; /* 진한 연살구 */
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  padding: 2rem 3rem 2rem 7rem;
+.plan-card-professional{
+  background: rgba(204, 0, 180, 0.07);
+  border: 1px solid rgba(204, 0, 180, 0.12);
 }
+
 .plan-level {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
+  background: linear-gradient(90deg, rgba(255, 69, 0, 0.25) 0%, rgba(237, 192, 108, 0.25) 100%);
+  font-weight: 700;
+  font-size: 0.938rem;
+  line-height: 150%;
+  color: #FF4500;
   text-transform: uppercase;
-  line-height: 1.2;
-  color: #777;
+  width: fit-content;
+  height: 1.938rem;
+  padding: 0.25rem 1rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
 }
-/* .plan-level-basic { color: #2563eb; } */
-/* .plan-level-pro { color: #059669; } */
-/* .plan-level-plus { color: #dc2626; } */
-
+.plan-subtitle{
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  color: #FF4500;
+  margin-bottom: 0.25rem;
+}
+.plan-title{
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 130%;
+  color: #12121B;
+  margin-bottom: 0.75rem;
+}
 .plan-desc {
-  width: 100%;
-  border-bottom: 1px solid #fff;
-  margin: 1rem 0 1.5rem 0;
-  padding-bottom: 1.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  letter-spacing: -0.01rem;
+  color: #666666;
+  margin-bottom: 1.25rem;
 }
 
+.plan-checklist{
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem 0.75rem;
+  margin-top: 0.75rem;
+  min-height: 412px; 
+  display: flex;
+  flex-direction: column;
+}
 .plan-checklist > li {
   position: relative;
-  padding-left: 0.5rem;
-  padding-bottom: 0.3rem;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  letter-spacing: -0.01rem;
+  color: #333333;
+}
+.plan-checklist > li:last-child{
+  margin-bottom: 0;
 }
 .plan-checklist > li.check::before {
-  content: '✔️';
+  content: '';
+  background-image: url('../assets/icons/icon-check-eng.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 1.25rem;
+  height: 1.25rem;
   position: absolute;
-  left: -1rem;
-  margin-bottom: 1rem;
-}
-.plan-checklist > li.plus::before {
-  content: '➕';
-  position: absolute;
-  left: -1rem;
-  margin-bottom: 1rem;
+  left: 0;
+  margin-top: 0.125rem;
 }
 
-
-/* 모든 서비스 비교표 */
-.service-comparison-table th, 
-.service-comparison-table td {
-  border: 1px solid #e5e7eb;
-  padding: 0.7rem 1.5rem;
+.plan-duration{
+  font-weight: 700;
   font-size: 1rem;
-  text-align: left;
-}
-.service-comparison-table th.bg-blue-50,
-.service-comparison-table th.bg-green-50,
-.service-comparison-table th.bg-red-50 {
+  line-height: 130%;
   text-align: center;
+  color: #333333;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255, 69, 0, 0.15);
 }
-.service-comparison-table td.text-center,
-.service-comparison-table th.text-center {
-  text-align: center;
+
+.plan-sample{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  letter-spacing: -0.01rem;
+  color: #333333;
+}
+.plan-sample.false{
+  color: #B0ABAB;
+}
+
+/* ================================================ */
+/* 무료서비스 버튼 */
+/* ================================================ */
+.btn-free {
+  background: #2CA93B;
+  color: #ffffff;
+  border: 1px solid #2CA93B;
+  position: relative;
+}
+.btn-free::after{
+  content: '무료서비스';
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: #2CA93B;
+  background: #ffffff;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+  width: 4.813rem;
+  height: 1.563rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  transition: transform 0.2s ease-in-out;
+}
+.btn-free:hover,
+.btn-free:focus,
+.btn-free:active{
+  background: #228C2F;
+  border: 1px solid #228C2F;
+}
+.btn-free:hover::after {
+  animation: bounceUpDown 0.8s infinite alternate;
+}
+@keyframes bounceUpDown {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-0.188rem); /* 위로 살짝 이동 */
+  }
+}
+
+/* ================================================ */
+/* 모든 서비스 비교표 */
+/* ================================================ */
+.service-comparison-wrap{
+  margin-top: 4rem;
+  border-top: 1px solid #cccccc;
+  padding-top: 4rem;
 }
 
 .service-comparison-table th {
-  background: #f3f4f6;
+  background: #ffffff;
 }
+.service-comparison-table th:first-child,
+.service-comparison-table th:last-child{
+  border-right: 0;
+}
+.service-comparison-table .title{
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 140%;
+  color: #12121B;
+  padding: 1.25rem 1rem;
+  border: 0;
+  border-right: 1px solid #EAEAEA;
+  border-bottom: 1px solid #DDDDDD;
+  text-align: left;
+}
+.service-comparison-table .title strong{
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 150%;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.service-comparison-table .title2{
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 160%;
+  padding: 0.625rem 1rem;
+  border: 0;
+  border-right: 1px solid #EAEAEA;
+  border-bottom: 1px solid #DDDDDD;
+  text-align: left;
+}
+.service-comparison-table .title2 a{
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 0.5rem;
+  font-size: 0.938rem;
+  margin-top: 0.75rem;
+}
+.service-comparison-table .title2 a:hover{
+  border: 1px solid #666666;
+}
+
+.service-comparison-table .basic,
+.service-comparison-table .plus{
+  background: rgba(237, 192, 108, 0.1);
+}
+.service-comparison-table .basic strong,
+.service-comparison-table .plus strong{
+  color: #EDC06C;
+}
+.service-comparison-table .advanced{
+  background: rgba(255, 69, 0, 0.09);
+}
+.service-comparison-table .advanced strong{
+  color: #FF4500;
+}
+.service-comparison-table .professional{
+  background: rgba(204, 0, 180, 0.11);
+}
+.service-comparison-table .professional strong{
+  color: #CC00B4;
+}
+
+.service-comparison-table .title3{
+  background: rgba(244, 244, 244, 0.8);
+  font-weight: 600;
+  font-size: 0.938rem;
+  line-height: 160%;
+  color: #12121B;
+  padding: 0.75rem;
+}
+
+
+.service-comparison-table td {
+  background: #ffffff;
+  border: 1px solid #EAEAEA;
+  border-left: 0;
+  padding: 0.625rem 1rem 0.625rem 3rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  letter-spacing: -0.01rem;
+  color: #333333;
+  text-align: left;
+}
+.service-comparison-table td:first-child,
+.service-comparison-table td:last-child{
+  border-right: 0;
+}
+
+.service-comparison-table td.td-label{
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 160%;
+  color: #333333;
+  padding-left: 2.25rem;
+}
+
+.service-comparison-table .ok,
+.service-comparison-table .no{
+  position: relative;
+}
+.service-comparison-table .ok::before,
+.service-comparison-table .no::before{
+  content: '';
+  background-image: url('../assets/icons/icon-ok.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 1.25rem;
+  height: 1.25rem;
+  position: absolute;
+  left: -1.75rem;
+  margin-top: 0.125rem;
+}
+.service-comparison-table .no::before{
+  background-image: url('../assets/icons/icon-no.png');
+  top: -0.75rem;
+}
+
+.service-comparison-table .normal{
+  padding: 0.625rem 1rem;
+}
+.sample-download{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.sample-download ul{
+  min-height: 94px;
+}
+
 
 .service-comparison-table .btn-xs {
   font-size: 0.95rem;

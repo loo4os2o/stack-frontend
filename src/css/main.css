@@ -516,6 +516,8 @@
 .footer-link-bar{
   background-color: #E8E6E4;
   height: 4.5rem;
+  position: relative;
+  z-index: 10;
 }
 .footer-link-bar .inner{
   max-width: 1200px;
@@ -614,6 +616,8 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
 .main-nav-bar .container {

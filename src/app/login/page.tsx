@@ -14,7 +14,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Supabase 클라이언트 초기화
 
-function LoginForm() {
+interface LoginFormProps {
+  onModeChange: (isLogin: boolean) => void;
+}
+
+function LoginForm({ onModeChange }: LoginFormProps) {
   const setAccessToken = useUserStore((state) => state.setAccessToken);
   const setRefreshToken = useUserStore((state) => state.setRefreshToken);
   const updateUser = useUserStore((state) => state.updateUser);
@@ -46,6 +50,10 @@ function LoginForm() {
       if (storedPassword) setPassword(atob(storedPassword));
     }
   }, [rememberMe]);
+
+  useEffect(() => {
+    onModeChange(isLogin);
+  }, [isLogin, onModeChange]);
 
   useEffect(() => {
     if (rememberMe) {
@@ -165,7 +173,6 @@ function LoginForm() {
   };
 
   return (
-    // <div className={`login-wrap p-8 ${isLogin ? 'bg-white' : 'bg-orange'}`}>
     <div className="login-wrap">
       <h1>{isLogin ? '로그인' : '사용자 등록'}</h1>
       
@@ -368,13 +375,15 @@ function LoginFormFallback() {
 }
 
 export default function LoginPage() {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
     <div className="container login">
       {/* 배경 디자인 요소들 */}
-      <div className="login-bg-l"></div>
-      <div className="login-bg-r"></div>
+      <div className={isLogin ? "login-bg-l" : "login-bg-l-g"}></div>
+      <div className={isLogin ? "login-bg-r" : "login-bg-r-g"}></div>
       <Suspense fallback={<LoginFormFallback />}>
-        <LoginForm />
+        <LoginForm onModeChange={setIsLogin} />
       </Suspense>
     </div>
   );
