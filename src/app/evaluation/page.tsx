@@ -193,7 +193,7 @@ export default function EvaluationPage() {
       { key: 'shaftBelowFloors', message: '샤프트별 최고운행층 지하 층수를 입력해주세요.' },
       { key: 'shaftAboveFloors', message: '샤프트별 최고운행층 지상 층수를 입력해주세요.' },
       { key: 'shaftAdditionalAboveFloors', message: '샤프트별 추가 층수를 입력해주세요.' },
-      { key: 'lobbyHeight', message: '로비 층고고를 입력해주세요.' },
+      { key: 'lobbyHeight', message: '로비 층고를 입력해주세요.' },
     ];
 
     for (const field of requiredFields) {
@@ -262,7 +262,7 @@ export default function EvaluationPage() {
       }
 
       if (!upsertFormData['perimeterRatio']) {
-        alert('외피 둘레비율율을 입력해주세요.');
+        alert('외피 둘레비율을 입력해주세요.');
         document.querySelector(`[name="perimeterRatio"]`)?.scrollIntoView({ behavior: 'smooth' });
         return false;
       }
@@ -322,10 +322,10 @@ export default function EvaluationPage() {
 
       if (error) {
         console.error('Error inserting project:', error);
-        alert('프로젝트 삽입에 실패했습니다.');
+        alert('프로젝트 생성에 실패했습니다.');
       } else {
         console.log('Project inserted successfully');
-        alert('프로젝트가 성공적으로 삽입되었습니다.');
+        alert('프로젝트가 성공적으로 생성성되었습니다.');
         setFormData({
           projectName: '',
           location: '',
@@ -1335,7 +1335,7 @@ export default function EvaluationPage() {
           <div className="flex justify-end gap-4">
             {/* Removed isProcessing state, so this block will always show the buttons */}
             <>
-                        {/* TO DO : 저장하기 버튼 삭제 요청!!!!! */}
+              {/* TO DO : 저장하기 버튼 삭제 요청!!!!! */}
               {/* <button
                 onClick={() => handleFormSubmit(false)}
                 className="btn-secondary btn-50 rounded-xl"
