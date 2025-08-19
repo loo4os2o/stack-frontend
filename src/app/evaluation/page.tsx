@@ -9,6 +9,7 @@ import TooltipButton from '@/components/common/TooltipButton';
 import ImagePreview from '@/components/ImagePreview';
 import ImageUploadButton from '@/components/ImageUploadButton';
 import '@/css/evaluation.css';
+import { useUserStore } from '@/utils/store';
 import { createClient } from '@supabase/supabase-js';
 import humps from 'humps';
 import Image from 'next/image';
@@ -22,10 +23,7 @@ export default function EvaluationPage() {
   const [promoModalOpen, setPromoModalOpen] = useState(false);
   const promoVideoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    console.log('preview: ', preview);
-  }, [preview]);
-
+  const user = useUserStore((state) => state.user);
   const [formData, setFormData] = useState({
     projectName: '',
     location: '',
@@ -400,7 +398,13 @@ export default function EvaluationPage() {
             <button
               className="btn-primary w-full btn-50 rounded-xl
               flex items-center justify-between gap-2"
-              onClick={() => setModalOpen(true)}
+              onClick={() => {
+                if (!user || !user?.email) {
+                  alert('로그인 후 이용해주세요.');
+                  return;
+                }
+                setModalOpen(true);
+              }}
             >
               시작하기
               <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
