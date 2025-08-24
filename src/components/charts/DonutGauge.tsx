@@ -1,5 +1,5 @@
-import ReactECharts from "echarts-for-react";
-import React from "react";
+import ReactECharts from 'echarts-for-react';
+import React from 'react';
 // 문제발생 예상층
 interface DonutGaugeProps {
   percentage: number; // 0 ~ 100
@@ -8,11 +8,16 @@ interface DonutGaugeProps {
   className?: string;
 }
 
-const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage, width = '100%', height = 300, className = '' }) => {
+const DonutGauge: React.FC<DonutGaugeProps> = ({
+  percentage,
+  width = '100%',
+  height = 300,
+  className = '',
+}) => {
   const option = {
     series: [
       {
-        type: "gauge",
+        type: 'gauge',
         startAngle: 90,
         endAngle: -270,
         progress: {
@@ -21,13 +26,13 @@ const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage, width = '100%', hei
           roundCap: true, // ✅ 양 끝 둥글게
           clip: false,
           itemStyle: {
-            color: "#ff4d4f",
+            color: '#ff4d4f',
           },
         },
         axisLine: {
           lineStyle: {
             width: 20,
-            color: [[1, "#eee"]],
+            color: [[1, '#eee']],
           },
         },
         pointer: {
@@ -51,7 +56,7 @@ const DonutGauge: React.FC<DonutGaugeProps> = ({ percentage, width = '100%', hei
           valueAnimation: true,
           fontSize: 24,
           offsetCenter: [0, 0],
-          color: "#ff4d4f",
+          color: '#ff4d4f',
           formatter: `{value}%`,
         },
       },

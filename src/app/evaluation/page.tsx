@@ -401,6 +401,7 @@ export default function EvaluationPage() {
               onClick={() => {
                 if (!user || !user?.email) {
                   alert('로그인 후 이용해주세요.');
+                  router.push('/login');
                   return;
                 }
                 setModalOpen(true);

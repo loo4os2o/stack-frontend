@@ -64,7 +64,14 @@ export default function Home() {
 
   // 로그인 검사 후 리다이렉트 핸들러
   const handleNavigation = (e: React.MouseEvent, path: string) => {
-    if (!isLoggedIn && path !== '/intro' && path !== '/evaluation') {
+    if (
+      !isLoggedIn &&
+      path !== '/intro' &&
+      path !== '/evaluation' &&
+      path !== '/about' &&
+      path !== '/engineering' &&
+      path !== '/projects'
+    ) {
       e.preventDefault();
       router.push('/login');
     } else {

@@ -51,7 +51,14 @@ export function HeaderMenu() {
 
   // 로그인 검사 후 리다이렉트 핸들러
   const handleNavigation = (e: React.MouseEvent, path: string) => {
-    if (!isLoggedIn) {
+    if (
+      !isLoggedIn &&
+      path !== '/intro' &&
+      path !== '/evaluation' &&
+      path !== '/about' &&
+      path !== '/engineering' &&
+      path !== '/projects'
+    ) {
       e.preventDefault();
       router.push('/login');
     } else {
@@ -247,6 +254,13 @@ export function HeaderMenu() {
             {/* <Link href="/service-request" className="drawer-link">
               서비스 요청하기
             </Link> */}
+
+            {isLoggedIn && (
+              <Link href="/my-project" className="drawer-link">
+                마이 프로젝트
+              </Link>
+            )}
+
             {isAdmin && (
               <Link href="/admin" className="drawer-link">
                 프로젝트관리

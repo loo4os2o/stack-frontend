@@ -1,9 +1,9 @@
 'use client';
 
 import { useUserStore } from '@/utils/store';
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const MainHeader2 = () => {
   const router = useRouter();
@@ -11,7 +11,7 @@ const MainHeader2 = () => {
   const [userName, setUserName] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   const user = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.updateUser);
   const clearAccessToken = useUserStore((state) => state.setAccessToken);
@@ -50,7 +50,7 @@ const MainHeader2 = () => {
       setActiveDropdown(dropdownId);
     }
   };
-  
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -65,9 +65,14 @@ const MainHeader2 = () => {
       if (!target.closest('.dropdown')) {
         handleCloseDropdowns();
       }
-      
+
       // 모바일 메뉴 외부 클릭 시 닫기
-      if (isMobileMenuOpen && !target.closest('.header-container') && !target.closest('.mobile-menu-button') && window.innerWidth <= 1130) {
+      if (
+        isMobileMenuOpen &&
+        !target.closest('.header-container') &&
+        !target.closest('.mobile-menu-button') &&
+        window.innerWidth <= 1130
+      ) {
         setIsMobileMenuOpen(false);
       }
     });
@@ -94,59 +99,49 @@ const MainHeader2 = () => {
   return (
     <header className="main-header2">
       {/* 모바일 메뉴 버튼 - 1130px 이하에서만 표시 */}
-      <button 
+      <button
         className="mobile-menu-button"
         onClick={toggleMobileMenu}
-        aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+        aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
       >
-        {isMobileMenuOpen ? "✕" : "☰"}
+        {isMobileMenuOpen ? '✕' : '☰'}
       </button>
-      
+
       <div className={`header-container ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="logo">
           <Link href="/main2">
-            <h1>S <span className="logo-accent">T</span> A C K</h1>
+            <h1>
+              S <span className="logo-accent">T</span> A C K
+            </h1>
           </Link>
         </div>
-        
+
         <nav className="main-nav">
           <ul className="nav-menu">
             <li>
-              <a 
-                href="#" 
-                className="nav-link"
-                onClick={(e) => handleNavigation(e, '/evaluation')}
-              >
+              <a href="#" className="nav-link" onClick={(e) => handleNavigation(e, '/evaluation')}>
                 연돌현상 평가
               </a>
             </li>
-            
+
             <li>
-              <a 
-                href="#" 
-                className="nav-link"
-                onClick={(e) => handleNavigation(e, '/engineering')}
-              >
+              <a href="#" className="nav-link" onClick={(e) => handleNavigation(e, '/engineering')}>
                 엔지니어링 서비스
               </a>
             </li>
-            
+
             <li>
-              <a 
-                href="#" 
-                className="nav-link"
-                onClick={(e) => handleNavigation(e, '/projects')}
-              >
+              <a href="#" className="nav-link" onClick={(e) => handleNavigation(e, '/projects')}>
                 엔지니어링 프로젝트 실적
               </a>
             </li>
-            
-            <li 
+
+            <li
               className={`dropdown ${activeDropdown === 'info' ? 'active' : ''}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="nav-link dropdown-toggle"
                 onClick={(e) => {
                   e.preventDefault();
@@ -157,8 +152,8 @@ const MainHeader2 = () => {
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="dropdown-item"
                     onClick={(e) => handleNavigation(e, '/about')}
                   >
@@ -174,29 +169,21 @@ const MainHeader2 = () => {
             </li>
           </ul>
         </nav>
-        
+
         <div className="header-actions">
           <Link href="/" className="main1-link">
             메인 시안1 바로가기
           </Link>
-          
+
           {isLoggedIn ? (
             <div className="user-info">
               <span className="user-name">{userName} 님</span>
-              <button 
-                onClick={handleLogin} 
-                className="login-button"
-                aria-label="로그아웃"
-              >
+              <button onClick={handleLogin} className="login-button" aria-label="로그아웃">
                 로그아웃
               </button>
             </div>
           ) : (
-            <button 
-              onClick={handleLogin} 
-              className="login-button"
-              aria-label="로그인"
-            >
+            <button onClick={handleLogin} className="login-button" aria-label="로그인">
               로그인
             </button>
           )}
@@ -206,4 +193,4 @@ const MainHeader2 = () => {
   );
 };
 
-export default MainHeader2; 
+export default MainHeader2;

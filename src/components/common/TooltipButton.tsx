@@ -12,7 +12,7 @@ interface TooltipButtonProps {
 export default function TooltipButton({
   tooltipText,
   position = 'top',
-  tooltipClassName = ''
+  tooltipClassName = '',
 }: TooltipButtonProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -45,8 +45,8 @@ export default function TooltipButton({
 
   return (
     <div className={styles.tooltipButton}>
-      <button 
-        type="button" 
+      <button
+        type="button"
         className={styles.helpButton}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
@@ -59,17 +59,17 @@ export default function TooltipButton({
       </button>
       {showTooltip && (
         <div className={`${styles.tooltip} ${getTooltipPositionClass()} ${tooltipClassName}`}>
-          <div 
-            dangerouslySetInnerHTML={{ 
+          <div
+            dangerouslySetInnerHTML={{
               __html: tooltipText
                 .replace(/\n/g, '<br/>')
                 .replace(/\r\n/g, '<br/>')
-                .replace(/\r/g, '<br/>')
-            }} 
+                .replace(/\r/g, '<br/>'),
+            }}
           />
           <div className={styles.tooltipArrow}></div>
         </div>
       )}
     </div>
   );
-} 
+}

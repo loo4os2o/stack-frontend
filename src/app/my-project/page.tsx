@@ -110,8 +110,9 @@ const chartData: {
 
 export default function MyProjectPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [tab, setTab] = useState(0);
-  const [showNoProject, setShowNoProject] = useState(false);
+  const [showEmptyView, setShowEmptyView] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showProjectList, setShowProjectList] = useState(false);
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY || '';
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -121,18 +122,26 @@ export default function MyProjectPage() {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData) {
       console.error('User not authenticated or error fetching user:', userError);
-      return;
+      return { projects: [], isAdmin: false };
     }
 
     const user = userData.user;
-    const { data, error } = await supabase.from('project').select('*').eq('created_by', user.id);
+
+    // 관리자 권한 확인 (예: 이메일로 관리자 판단)
+    const adminEmails = ['admin@example.com']; // 관리자 이메일
+    const isUserAdmin = adminEmails.includes(user.email || '');
+
+    // 관리자인 경우 모든 프로젝트 조회, 일반 유저는 자신의 프로젝트만 조회
+    const { data, error } = isUserAdmin
+      ? await supabase.from('project').select('*')
+      : await supabase.from('project').select('*').eq('created_by', user.id);
 
     if (error) {
       console.error('Error fetching projects:', error);
-      return [];
+      return { projects: [], isAdmin: isUserAdmin };
     }
 
-    return humps.camelizeKeys(
+    const projects = humps.camelizeKeys(
       data.map((item) => {
         return {
           ...item,
@@ -141,17 +150,42 @@ export default function MyProjectPage() {
         };
       })
     );
+
+    return { projects, isAdmin: isUserAdmin };
   }
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const projects: any = await get_my_projects();
-      console.log('Fetched projects:', projects);
-      setProjects([...projects, ...tmpProjects]);
+      setIsLoading(true);
+      try {
+        const result: any = await get_my_projects();
+        console.log('Fetched result:', result);
+
+        const allProjects = [...result.projects, ...tmpProjects];
+        setProjects(allProjects);
+        setIsAdmin(result.isAdmin);
+
+        // 프로젝트 로딩 완료 후 화면 결정
+        if (allProjects.length > 0) {
+          if (result.isAdmin) {
+            // 관리자: 프로젝트 리스트 테이블 표시
+            setShowProjectList(true);
+            setSelectedProject(null);
+          } else {
+            // 일반 유저: 첫 번째 프로젝트 상세보기 표시
+            setSelectedProject(allProjects[0]);
+            setShowProjectList(false);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchProjects();
-  }, []);
+  }, []); // 초기 로딩 시에만 실행
 
   // 탭부분 (※ 연돌현상 예측평가 결과와 동일하게 퍼블리싱)
   const [activeTab, setActiveTab] = useState('analysis');
@@ -161,938 +195,983 @@ export default function MyProjectPage() {
     <div className="container mx-auto pt-10 pb-20 ev-result-page" style={{ minHeight: '60vh' }}>
       <div className="flex items-center justify-between gap-4 mb-5">
         <h1 className="text-3xl font-bold">마이 프로젝트</h1>
-        {!selectedProject && (
-          <button
-            className="text-gray-600 hover:text-gray-800 hover:underline"
-            onClick={() => setShowNoProject((v) => !v)}
-          >
-            {showNoProject ? '프로젝트 리스트 뷰' : '빈 프로젝트 뷰'}
+        <div className="flex items-center gap-4">
+          {isAdmin && selectedProject && !showProjectList && (
+            <button
+              onClick={() => {
+                setSelectedProject(null);
+                setShowProjectList(true);
+              }}
+              className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+            >
+              <span>← 목록으로 돌아가기</span>
+            </button>
+          )}
+          {!isAdmin && selectedProject && projects.length > 1 && (
+            <div className="flex items-center gap-2">
+              <label>개발 확인용 : </label>
+              <select
+                value={selectedProject.id}
+                onChange={(e) => {
+                  const project = projects.find((p) => p.id === parseInt(e.target.value));
+                  if (project) setSelectedProject(project);
+                }}
+                className="border border-gray-300 rounded-lg px-3 py-2"
+                style={{ width: '300px' }}
+              >
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.projectName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          <button className="btn-basic" onClick={() => setShowEmptyView(!showEmptyView)}>
+            {showEmptyView ? '프로젝트 보기' : '빈 페이지'}
           </button>
-        )}
-        {selectedProject && (
-          <button
-            onClick={() => setSelectedProject(null)}
-            className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
-          >
-            <span>← 목록으로 돌아가기</span>
-          </button>
-        )}
+        </div>
       </div>
 
-      {!selectedProject ? (
-        showNoProject ? (
-          <div className="my-project-nodata">
-            <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
-            <Link href="/evaluation">
-              <button className="btn-primary">새 프로젝트 평가하기</button>
-            </Link>
-          </div>
-        ) : (
-          // 프로젝트 리스트 테이블
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      프로젝트 번호
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      프로젝트 생성일자
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      프로젝트명
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      이용 서비스
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      기본 보고서 다운로드
-                    </th>
+      {isLoading ? (
+        <div className="my-project-nodata">
+          <div className="no-data-wrap">프로젝트를 불러오는 중입니다.</div>
+        </div>
+      ) : projects.length === 0 || showEmptyView ? (
+        <div className="my-project-nodata">
+          <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
+          <Link href="/evaluation">
+            <button className="btn-primary">새 프로젝트 평가하기</button>
+          </Link>
+        </div>
+      ) : isAdmin && showProjectList ? (
+        // 관리자용 프로젝트 리스트 테이블
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    프로젝트 번호
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    프로젝트 생성일자
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    프로젝트명
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    이용 서비스
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    기본 보고서 다운로드
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {projects.map((project) => (
+                  <tr key={project.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      <button
+                        className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                        onClick={() => {
+                          setSelectedProject(project);
+                          setShowProjectList(false);
+                        }}
+                      >
+                        {project.id}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      {new Date(project.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      <button
+                        className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                        onClick={() => {
+                          setSelectedProject(project);
+                          setShowProjectList(false);
+                        }}
+                      >
+                        {project.projectName}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      {/* {project.service.map((s: any, index: number) => (
+                           <span
+                             key={index + 1}
+                             className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0"
+                           >
+                             {s}
+                           </span>
+                         ))} */}
+                    </td>
+                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                      {project.reportUrl ? (
+                        <a href={project.reportUrl} download className="btn-primary btn-small">
+                          다운로드
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {projects.map((project) => (
-                    <tr key={project.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-center whitespace-nowrap">
-                        <button
-                          className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          {project.id}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-center whitespace-nowrap">
-                        {new Date(project.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 text-center whitespace-nowrap">
-                        <button
-                          className="text-blue-700 hover:text-blue-900 cursor-pointer"
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          {project.projectName}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-center whitespace-nowrap">
-                        {/* {project.service.map((s: any, index: number) => (
-                          <span
-                            key={index + 1}
-                            className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0"
-                          >
-                            {s}
-                          </span>
-                        ))} */}
-                      </td>
-                      <td className="px-6 py-4 text-center whitespace-nowrap">
-                        {project.reportUrl ? (
-                          <a href={project.reportUrl} download className="btn-primary btn-small">
-                            다운로드
-                          </a>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        selectedProject &&
+        !showProjectList && (
+          // 프로젝트 상세 정보
+          <>
+            <div className="flex flex-col lg:flex-row gap-8 mb-16 my-project">
+              {/* 왼쪽: 프로젝트 정보 */}
+              <div className="lg:w-1/3 w-full">
+                <table className="my-project-table">
+                  <colgroup>
+                    <col style={{ width: '40%' }} />
+                    <col style={{ width: '60%' }} />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <th>프로젝트명</th>
+                      <td>{selectedProject.projectName}</td>
+                    </tr>
+                    <tr>
+                      <th>프로젝트 번호</th>
+                      <td>{selectedProject.id}</td>
+                    </tr>
+                    <tr>
+                      <th>검토날짜</th>
+                      <td>{new Date(selectedProject.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                    <tr>
+                      <th>건물용도</th>
+                      <td>
+                        {selectedProject.buildingGeneralPlanResidential
+                          ? '공동주택'
+                          : selectedProject.buildingGeneralPlanOffice
+                            ? '업무시설'
+                            : selectedProject.buildingGeneralPlanNeighborhood
+                              ? '근린생활시설'
+                              : selectedProject.buildingGeneralPlanCultural
+                                ? '문화/집회시설'
+                                : selectedProject.buildingGeneralEtcInput}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )
-      ) : (
-        // 프로젝트 상세 정보
-        <>
-          <div className="flex flex-col lg:flex-row gap-8 mb-16 my-project">
-            {/* 왼쪽: 프로젝트 정보 */}
-            <div className="lg:w-1/3 w-full">
-              <table className="my-project-table">
-                <colgroup>
-                  <col style={{ width: '40%' }} />
-                  <col style={{ width: '60%' }} />
-                </colgroup>
-                <tbody>
-                  <tr>
-                    <th>프로젝트명</th>
-                    <td>{selectedProject.projectName}</td>
-                  </tr>
-                  <tr>
-                    <th>프로젝트 번호</th>
-                    <td>{selectedProject.id}</td>
-                  </tr>
-                  <tr>
-                    <th>검토날짜</th>
-                    <td>{new Date(selectedProject.createdAt).toLocaleDateString()}</td>
-                  </tr>
-                  <tr>
-                    <th>건물용도</th>
-                    <td>
-                      {selectedProject.buildingGeneralPlanResidential
-                        ? '공동주택'
-                        : selectedProject.buildingGeneralPlanOffice
-                          ? '업무시설'
-                          : selectedProject.buildingGeneralPlanNeighborhood
-                            ? '근린생활시설'
-                            : selectedProject.buildingGeneralPlanCultural
-                              ? '문화/집회시설'
-                              : selectedProject.buildingGeneralEtcInput}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>위치</th>
-                    <td>{selectedProject.location}</td>
-                  </tr>
-                  <tr>
-                    <th>건물 높이</th>
-                    <td>{`${selectedProject.buildingHeight}m`}</td>
-                  </tr>
-                  <tr>
-                    <th>샤프트 계획</th>
-                    <td>
-                      {selectedProject.zoningType === 'single'
-                        ? '싱글존 샤프트'
-                        : selectedProject.zoningType === 'multi'
-                          ? '멀티존 샤프트'
-                          : selectedProject.zoningType === 'tower'
-                            ? '투존 샤프트'
-                            : ''}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    <tr>
+                      <th>위치</th>
+                      <td>{selectedProject.location}</td>
+                    </tr>
+                    <tr>
+                      <th>건물 높이</th>
+                      <td>{`${selectedProject.buildingHeight}m`}</td>
+                    </tr>
+                    <tr>
+                      <th>샤프트 계획</th>
+                      <td>
+                        {selectedProject.zoningType === 'single'
+                          ? '싱글존 샤프트'
+                          : selectedProject.zoningType === 'multi'
+                            ? '멀티존 샤프트'
+                            : selectedProject.zoningType === 'tower'
+                              ? '투존 샤프트'
+                              : ''}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-              <Link href="/engineering">
-                <button
-                  className="btn-primary w-full btn-50 rounded-xl
+                <Link href="/engineering">
+                  <button
+                    className="btn-primary w-full btn-50 rounded-xl
                   flex items-center justify-between gap-2 mt-8"
-                >
-                  엔지니어링 서비스 문의하기
-                  <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
-                </button>
-              </Link>
-            </div>
-
-            {/* 가운데: 차트 영역 */}
-            <div className="lg:w-1/3 w-full flex items-start justify-center">
-              <div className="chart-wrap" style={{ height: '350px', width: '100%' }}>
-                {/* 차트 - 중성대 위치 */}
-                <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
-              </div>
-            </div>
-
-            {/* 오른쪽: 대표 이미지 */}
-            <div className="lg:w-1/3 w-full flex items-start justify-center">
-              {selectedProject.imageUrl ? (
-                <div className="image-wrap" style={{ height: '350px' }}>
-                  <Image
-                    src={
-                      typeof selectedProject.imageUrl === 'string'
-                        ? selectedProject.imageUrl.trimEnd()
-                        : selectedProject.imageUrl
-                    }
-                    alt="대표 이미지"
-                    className="object-cover w-full h-full"
-                    width={378}
-                    height={480}
-                    // layout="responsive"
-                    quality={100}
-                  />
-                </div>
-              ) : (
-                <div className="image-wrap" style={{ height: '350px', background: '#f7f7f7' }}>
-                  <div className="text-gray-400">대표 이미지 없음</div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 탭 영역 */}
-          <div className="tab-ev">
-            <button
-              className={`${activeTab === 'analysis' ? 'active-tab' : ''}`}
-              onClick={() => setActiveTab('analysis')}
-            >
-              연돌현상 분석결과
-            </button>
-            <button
-              className={`${activeTab === 'solution' ? 'active-tab' : ''}`}
-              onClick={() => setActiveTab('solution')}
-            >
-              연돌현상 해결방안
-            </button>
-          </div>
-
-          {/* 분석 결과 */}
-          {activeTab === 'analysis' && (
-            <div className="cppe-explain" style={{ marginBottom: '0px' }}>
-              <h2>
-                <span className="num">1</span> 분석 결과 요약
-              </h2>
-              {/* 1. 분석 결과 요약 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div className="comm-border">
-                        <h3>연돌현상 영향도</h3>
-                        <div className="chart-wrap" style={{ height: '160px' }}>
-                          {/* 차트 - 연돌현상 영향도 */}
-                          <GradientGaugeBar
-                            leftLabel="최상층"
-                            leftPosition={40}
-                            rightLabel="최하층"
-                            rightPosition={70}
-                          />
-                        </div>
-                        <div className="flex flex-row gap-4 mt-6 justify-between">
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon1" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon2" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon3" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon4" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon5" width={60} height={60} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="comm-border">
-                        <h3>프로젝트 이름</h3>
-                        <div className="border-0">
-                          <p>
-                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          </p>
-                          <p>
-                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="comm-border">
-                        <h3>문제발생 예상층</h3>
-                        <div className="flex flex-row">
-                          <div className="flex flex-col gap-3 justify-center w-1/2">
-                            <p>기준압력차를 초과하는 층의 비율</p>
-                            <h2 className="data-box">
-                              29개층
-                              <span className="ml-2.5">/&nbsp; 60개층</span>
-                            </h2>
-                          </div>
-                          <div
-                            className="chart-wrap w-1/2"
-                            style={{ height: '200px', background: '#fff', padding: 0 }}
-                          >
-                            {/* 차트 - 문제발생 예상층 */}
-                            <DonutGauge percentage={40} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="comm-border">
-                        <h3>최대 연돌 압력차(PA)</h3>
-                        <div className="flex flex-row items-center">
-                          <div className="flex flex-col gap-2 w-1/2">
-                            <h2 className="data-box">
-                              <span className="mr-4">최저층</span>
-                              145 - 150 Pa
-                            </h2>
-                            <h2 className="data-box">
-                              <span className="mr-4">최고층</span>
-                              230 - 240 Pa
-                            </h2>
-                          </div>
-                          <div
-                            className="chart-wrap w-1/2"
-                            style={{ height: '180px', background: '#fff', padding: 0 }}
-                          >
-                            {/* 차트 - 최대 연돌 압력차 */}
-                            <HorizontalBarWithBullet />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <h2 className="mt-8">
-                <span className="num">2</span> 연돌현상 예측결과
-              </h2>
-              {/* 2. 연돌현상 예측결과 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    <div className="flex flex-row gap-8" style={{ height: '400px' }}>
-                      <div className="chart-wrap w-1/6">
-                        {/* 차트 - 문제 발생 예상층 */}
-                        <VerticalRangeBar blocks={chartData.blocks} />
-                      </div>
-                      <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
-                        {/* 차트 - 중성대 위치 */}
-                        <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
-                      </div>
-                      <div className="chart-wrap w-3/6" style={{ paddingBottom: 0 }}>
-                        {/* 차트 - 압력분포 프로파일 */}
-                        <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <h2 className="mt-8">
-                <span className="num">3</span> 문제/하자 예상 결과
-              </h2>
-              {/* 3. 문제/하자 예상 결과 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    {/* 주요 문제 및 하자 */}
-                    <div className="mb-8">
-                      <h3 className="icon">주요 문제 및 하자</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* 리스트 */}
-                        <div className="flex flex-col gap-4 col-span-2">
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">화재 및 피난 안전</div>
-                              <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
-                              <div className="sub">개선안 설계도서 반영 필요</div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list disabled">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">건축 요소/자재 하자</div>
-                              <div className="desc">건축 요소/자재 하자건축요소 자재하자 건축</div>
-                              <div className="sub">시뮬레이션 검토 필요</div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">엘리베이터 도어 오작동 및 고장</div>
-                              <div className="desc">
-                                화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난
-                                화재 및 피난
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">도어 소음 (휘슬링)</div>
-                              <div className="desc">도어 소음 (휘슬링)</div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
-                              <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
-                              <div className="sub">시뮬레이션 검토 필요</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 차트 */}
-                        <div className="image-wrap" style={{ height: '600px' }}>
-                          <Image src={resultChartEx1} alt="주요 문제 및 하자 차트1" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 문제 발생 예상층 */}
-                    <div className="">
-                      <h3 className="icon">문제 발생 예상층</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div
-                          className="comm-border flex flex-row gap-4"
-                          style={{ height: '400px' }}
-                        >
-                          <div className="chart-wrap w-1/3">
-                            {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
-                          </div>
-                          <div className="chart-wrap w-2/3">
-                            {/* 차트 - 문제 발생 예상층 */}
-                            <NestedHalfDonutGauge dangerPercent={0.49} warningPercent={0.68} />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-5">
-                          <div className="flex flex-row gap-5">
-                            <div className="box-wrap w-1/2">
-                              <div className="box-title">문제 발생층</div>
-                              <div className="data-box">
-                                29개층<span className="ml-2.5">/&nbsp; 60개층</span>
-                              </div>
-                            </div>
-                            <div className="box-wrap w-1/2">
-                              <div className="box-title">문제 주의층</div>
-                              <div className="data-box">
-                                42개층<span className="ml-2.5">/&nbsp; 60개층</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="box-wrap-bg">
-                            200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                            넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대 압력차인
-                            000Pa에 대해 149% 수준의 압력차가 발생할 것입니다.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <h2 className="mt-8">
-                <span className="num">4</span> 압력차 검토 데이터
-              </h2>
-              {/* 4. 압력차 검토 데이터 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    {/* 중성대 위치 및 압력분포 프로파일 */}
-                    <div className="mb-8">
-                      <h3 className="icon">중성대 위치 및 압력분포 프로파일</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div
-                          className="comm-border flex flex-row gap-4 col-span-2"
-                          style={{ height: '560px' }}
-                        >
-                          <div className="chart-wrap w-1/3">
-                            {/* 차트 - 중성대 위치 */}
-                            <RangeBarWithBullet
-                              ranges={chartData.ranges}
-                              bullets={chartData.bullets}
-                            />
-                          </div>
-                          <div className="chart-wrap w-2/3">
-                            {/* 차트 - 압력분포 프로파일 */}
-                            <RangeBarWithBullet
-                              ranges={chartData.ranges}
-                              bullets={chartData.bullets}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-5 col-span-1">
-                          <div className="box-wrap">
-                            <div className="box-title">저층존 샤프트 중성대</div>
-                            <div className="data-box">
-                              13F (42m)<span className="ml-2.5">/&nbsp; 60개층</span>
-                            </div>
-                          </div>
-                          <div className="box-wrap">
-                            <div className="box-title">중층존 샤프트 중성대</div>
-                            <div className="data-box">
-                              25F (78m)<span className="ml-2.5">/&nbsp; 60개층</span>
-                            </div>
-                          </div>
-                          <div className="box-wrap">
-                            <div className="box-title">고층존 샤프트 중성대</div>
-                            <div className="data-box">
-                              43F (135m)<span className="ml-2.5">/&nbsp; 60개층</span>
-                            </div>
-                          </div>
-                          <div className="box-wrap-bg">
-                            200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                            넘어가면 문제 발생 가능성이 증가합니다.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 주요층 압력차 */}
-                    <div className="mb-8">
-                      <h3 className="icon">주요층 압력차</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div className="comm-border flex flex-row gap-4 col-span-2">
-                          <div className="chart-wrap w-1/4">
-                            {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
-                          </div>
-                          <div className="chart-wrap w-3/4">
-                            {/* 차트 - 주요층 압력차 */}
-                            <HorizontalGaugeBar value={149} />
-                            <HorizontalGaugeBar value={160} />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-5 col-span-1">
-                          <div className="box-wrap">
-                            <div className="box-title">최상층 최대 압력차</div>
-                            <div className="data-box">145 - 150 Pa</div>
-                            <div className="detail-info">
-                              <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
-                            </div>
-                          </div>
-                          <div className="box-wrap">
-                            <div className="box-title">로비층 최대 압력차</div>
-                            <div className="data-box">230 - 240 Pa</div>
-                            <div className="detail-info">
-                              <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
-                            </div>
-                            <div className="detail-info">
-                              <span>외부 출입문 압력차</span> 62 - 72 Pa
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 난방시즌 압력차 변화 */}
-                    <div className="">
-                      <h3 className="icon">난방시즌 압력차 변화</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* 차트 */}
-                        <div className="comm-border flex flex-col items-center justify-center gap-4 col-span-2">
-                          <div className="text-xl font-medium">차트</div>
-                          <div className="dev-note">
-                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-5 col-span-1">
-                          <div className="box-wrap">
-                            <div className="box-title">기준 압력 초과일수 - 최상층</div>
-                            <div className="data-box">
-                              34-41일<span className="ml-2.5">/&nbsp; 120일</span>
-                            </div>
-                          </div>
-                          <div className="box-wrap">
-                            <div className="box-title">기준 압력 초과일수 - 로비층</div>
-                            <div className="data-box">
-                              42일-48일<span className="ml-2.5">/&nbsp; 120일</span>
-                            </div>
-                          </div>
-                          <div className="box-wrap-bg">
-                            200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                            넘어가면 문제 발생 가능성이 증가합니다.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 해결방안 확인하기 버튼 */}
-              <div className="flex justify-end mt-7 mb-10">
-                <button
-                  className="btn-primary w-full btn-50 rounded-xl
-                  flex items-center justify-between gap-2"
-                  style={{ maxWidth: '240px' }}
-                  onClick={() => {
-                    setActiveTab('solution');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  해결방안 확인하기
-                  <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* 해결 방안 */}
-          {activeTab === 'solution' && (
-            <div className="cppe-explain" style={{ marginBottom: '0px' }}>
-              <h2>
-                <span className="num">1</span> 해결방안 개요
-              </h2>
-
-              {/* 1. 해결방안 개요 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div className="comm-border">
-                        <h3>연돌현상 영향도</h3>
-                        <div className="chart-wrap" style={{ height: '160px' }}>
-                          {/* 차트 - 연돌현상 영향도 */}
-                          <GradientGaugeBar
-                            leftLabel="최상층"
-                            leftPosition={40}
-                            rightLabel="최하층"
-                            rightPosition={70}
-                          />
-                        </div>
-                        <div className="flex flex-row gap-4 mt-6 justify-between">
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon1" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon2" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon3" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon4" width={60} height={60} />
-                          </div>
-                          <div className="flex-row-center border-2 rounded-full">
-                            <Image src={IconEx} alt="icon5" width={60} height={60} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="comm-border">
-                        <h3>프로젝트 이름</h3>
-                        <div className="border-0">
-                          <p>
-                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          </p>
-                          <p>
-                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-5">
-                      <div className="comm-border">
-                        <h3>연돌현상 해결방안</h3>
-                        <div className="flex flex-row gap-4 mb-4">
-                          <div className="icon-box-col">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col disabled">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘6" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col disabled">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘7" />
-                            </div>
-                            아이콘
-                          </div>
-                          <div className="icon-box-col disabled">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘8" />
-                            </div>
-                            아이콘
-                          </div>
-                        </div>
-
-                        <ul className="mt-3">
-                          <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                          <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                          <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                          <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                          <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <div className="flex items-center gap-5 mt-8">
-                <h2>
-                  <span className="num">2</span> 개선안 리스트
-                </h2>
-                <div className="title-sub mb-3">
-                  <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
-                  <strong>32%</strong> 절감
-                </div>
-              </div>
-              {/* 2. 개선안 리스트 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    {/* 리스트 */}
-                    <div className="flex flex-col gap-4 col-span-2">
-                      <div className="icon-list">
-                        <div className="icon-box">
-                          <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
-                        </div>
-                        <div className="text-wrap">
-                          <div className="title">화재 및 피난 안전</div>
-                          <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
-                          <div className="sub"># 개선안이 반영된 설계도면 필요 </div>
-                          <div className="sub"># 공기유동 상세 시뮬레이션 검토 후 설치층 체크 </div>
-                        </div>
-                      </div>
-
-                      <div className="icon-list disabled">
-                        <div className="icon-box">
-                          <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
-                        </div>
-                        <div className="text-wrap">
-                          <div className="title">건축 요소/자재 하자</div>
-                          <div className="desc">건축 요소/자재 하자건축요소 자재하자 건축</div>
-                          <div className="sub">시뮬레이션 검토 필요</div>
-                        </div>
-                      </div>
-
-                      <div className="icon-list">
-                        <div className="icon-box">
-                          <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
-                        </div>
-                        <div className="text-wrap">
-                          <div className="title">엘리베이터 도어 오작동 및 고장</div>
-                          <div className="desc">
-                            화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및
-                            피난
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="icon-list">
-                        <div className="icon-box">
-                          <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
-                        </div>
-                        <div className="text-wrap">
-                          <div className="title">도어 소음 (휘슬링)</div>
-                          <div className="desc">도어 소음 (휘슬링)</div>
-                        </div>
-                      </div>
-
-                      <div className="icon-list">
-                        <div className="icon-box">
-                          <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
-                        </div>
-                        <div className="text-wrap">
-                          <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
-                          <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
-                          <div className="sub">시뮬레이션 검토 필요</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="box-wrap-bg mt-8">
-                      <div className="box-title" style={{ marginBottom: '0.5rem' }}>
-                        특수방안
-                      </div>
-                      200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                      넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대 압력차인 000Pa에
-                      대해 149% 수준의 압력차가 발생할 것입니다.
-                      <div className="bg-white py-3 px-4 mt-2 rounded-xl">
-                        <ul>
-                          <li>엘리베이터 스크린도어 설치</li>
-                          <li>엘리베이터 홀 회전문 설치</li>
-                          <li>Core인접 벽체 추가구획</li>
-                          <li>설비를 통한 가감압 조절</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <div className="flex items-center gap-5 mt-8">
-                <h2>
-                  <span className="num">3</span> 연돌현상 설계검토 및 시뮬레이션
-                </h2>
-                <div className="title-sub mb-3">
-                  <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
-                  <strong>53%</strong> 절감
-                </div>
-              </div>
-              {/* 3. 연돌현상 설계검토 및 시뮬레이션 */}
-              <section>
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="w-full md:w-2/2 left">
-                    {/* 연돌현상 설계검토 */}
-                    <div className="mb-8">
-                      <h3 className="icon">연돌현상 설계검토</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="comm-border border-0">
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          <div className="text-box">
-                            <ul>
-                              <li>건축/설비 도면 검토를 통한 맞춤형 개선전략</li>
-                              <li>개선전략 별 상세 데이터 제시</li>
-                              <li>층별 수정사항이 반영된 설계도면</li>
-                              <li>기밀화라인이 표현된 기밀화구획도</li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="comm-border">
-                          <div className="image-wrap">
-                            <Image src={resultChartEx2} alt="연돌현상 설계검토" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 연돌현상 시뮬레이션 */}
-                    <div className="">
-                      <h3 className="icon">연돌현상 시뮬레이션</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="comm-border border-0">
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          <div className="text-box">
-                            <ul>
-                              <li>층별/존별 공기유동 및 압력차 분석</li>
-                              <li>세부 건축요소의 문제발생 여부 검토</li>
-                              <li>개선전략 케이스 별 저감효과 비교 분석</li>
-                              <li>개선전략 우선순위 분석을 통한 최적화</li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="comm-border">
-                          <div className="image-wrap">
-                            <Image src={resultChartEx3} alt="연돌현상 시뮬레이션" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <div className="flex justify-between space-x-4 mt-8">
-                <button
-                  onClick={() => {
-                    setActiveTab('analysis');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="btn-secondary w-full btn-50 rounded-xl
-                    flex items-center justify-start gap-3"
-                  style={{ maxWidth: '240px', backgroundColor: 'transparent' }}
-                >
-                  <Image src={ArrowLeft} alt="arrow-left" width={24} height={24} />
-                  분석결과 다시보기
-                </button>
-                <Link
-                  href="/engineering"
-                  className="btn-primary w-full btn-50 rounded-xl
-                    flex items-center justify-between gap-2"
-                  style={{ maxWidth: '280px' }}
-                >
-                  연돌현상 검토보고서 요청하기
-                  <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+                  >
+                    엔지니어링 서비스 문의하기
+                    <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+                  </button>
                 </Link>
               </div>
+
+              {/* 가운데: 차트 영역 */}
+              <div className="lg:w-1/3 w-full flex items-start justify-center">
+                <div className="chart-wrap" style={{ height: '350px', width: '100%' }}>
+                  {/* 차트 - 중성대 위치 */}
+                  <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
+                </div>
+              </div>
+
+              {/* 오른쪽: 대표 이미지 */}
+              <div className="lg:w-1/3 w-full flex items-start justify-center">
+                {selectedProject.imageUrl ? (
+                  <div className="image-wrap" style={{ height: '350px' }}>
+                    <Image
+                      src={
+                        typeof selectedProject.imageUrl === 'string'
+                          ? selectedProject.imageUrl.trimEnd()
+                          : selectedProject.imageUrl
+                      }
+                      alt="대표 이미지"
+                      className="object-cover w-full h-full"
+                      width={378}
+                      height={480}
+                      // layout="responsive"
+                      quality={100}
+                    />
+                  </div>
+                ) : (
+                  <div className="image-wrap" style={{ height: '350px', background: '#f7f7f7' }}>
+                    <div className="text-gray-400">대표 이미지 없음</div>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </>
+
+            {/* 탭 영역 */}
+            <div className="tab-ev">
+              <button
+                className={`${activeTab === 'analysis' ? 'active-tab' : ''}`}
+                onClick={() => setActiveTab('analysis')}
+              >
+                연돌현상 분석결과
+              </button>
+              <button
+                className={`${activeTab === 'solution' ? 'active-tab' : ''}`}
+                onClick={() => setActiveTab('solution')}
+              >
+                연돌현상 해결방안
+              </button>
+            </div>
+
+            {/* 분석 결과 */}
+            {activeTab === 'analysis' && (
+              <div className="cppe-explain" style={{ marginBottom: '0px' }}>
+                <h2>
+                  <span className="num">1</span> 분석 결과 요약
+                </h2>
+                {/* 1. 분석 결과 요약 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="comm-border">
+                          <h3>연돌현상 영향도</h3>
+                          <div className="chart-wrap" style={{ height: '160px' }}>
+                            {/* 차트 - 연돌현상 영향도 */}
+                            <GradientGaugeBar
+                              leftLabel="최상층"
+                              leftPosition={40}
+                              rightLabel="최하층"
+                              rightPosition={70}
+                            />
+                          </div>
+                          <div className="flex flex-row gap-4 mt-6 justify-between">
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon1" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon2" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon3" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon4" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon5" width={60} height={60} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="comm-border">
+                          <h3>프로젝트 이름</h3>
+                          <div className="border-0">
+                            <p>
+                              건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이
+                              확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로
+                              평가되었습니다.
+                            </p>
+                            <p>
+                              건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이
+                              확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로
+                              평가되었습니다.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="comm-border">
+                          <h3>문제발생 예상층</h3>
+                          <div className="flex flex-row">
+                            <div className="flex flex-col gap-3 justify-center w-1/2">
+                              <p>기준압력차를 초과하는 층의 비율</p>
+                              <h2 className="data-box">
+                                29개층
+                                <span className="ml-2.5">/&nbsp; 60개층</span>
+                              </h2>
+                            </div>
+                            <div
+                              className="chart-wrap w-1/2"
+                              style={{ height: '200px', background: '#fff', padding: 0 }}
+                            >
+                              {/* 차트 - 문제발생 예상층 */}
+                              <DonutGauge percentage={40} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="comm-border">
+                          <h3>최대 연돌 압력차(PA)</h3>
+                          <div className="flex flex-row items-center">
+                            <div className="flex flex-col gap-2 w-1/2">
+                              <h2 className="data-box">
+                                <span className="mr-4">최저층</span>
+                                145 - 150 Pa
+                              </h2>
+                              <h2 className="data-box">
+                                <span className="mr-4">최고층</span>
+                                230 - 240 Pa
+                              </h2>
+                            </div>
+                            <div
+                              className="chart-wrap w-1/2"
+                              style={{ height: '180px', background: '#fff', padding: 0 }}
+                            >
+                              {/* 차트 - 최대 연돌 압력차 */}
+                              <HorizontalBarWithBullet />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <h2 className="mt-8">
+                  <span className="num">2</span> 연돌현상 예측결과
+                </h2>
+                {/* 2. 연돌현상 예측결과 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      <div className="flex flex-row gap-8" style={{ height: '400px' }}>
+                        <div className="chart-wrap w-1/6">
+                          {/* 차트 - 문제 발생 예상층 */}
+                          <VerticalRangeBar blocks={chartData.blocks} />
+                        </div>
+                        <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
+                          {/* 차트 - 중성대 위치 */}
+                          <RangeBarWithBullet
+                            ranges={chartData.ranges}
+                            bullets={chartData.bullets}
+                          />
+                        </div>
+                        <div className="chart-wrap w-3/6" style={{ paddingBottom: 0 }}>
+                          {/* 차트 - 압력분포 프로파일 */}
+                          <RangeBarWithBullet
+                            ranges={chartData.ranges}
+                            bullets={chartData.bullets}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <h2 className="mt-8">
+                  <span className="num">3</span> 문제/하자 예상 결과
+                </h2>
+                {/* 3. 문제/하자 예상 결과 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      {/* 주요 문제 및 하자 */}
+                      <div className="mb-8">
+                        <h3 className="icon">주요 문제 및 하자</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                          {/* 리스트 */}
+                          <div className="flex flex-col gap-4 col-span-2">
+                            <div className="icon-list">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">화재 및 피난 안전</div>
+                                <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
+                                <div className="sub">개선안 설계도서 반영 필요</div>
+                              </div>
+                            </div>
+
+                            <div className="icon-list disabled">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">건축 요소/자재 하자</div>
+                                <div className="desc">
+                                  건축 요소/자재 하자건축요소 자재하자 건축
+                                </div>
+                                <div className="sub">시뮬레이션 검토 필요</div>
+                              </div>
+                            </div>
+
+                            <div className="icon-list">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">엘리베이터 도어 오작동 및 고장</div>
+                                <div className="desc">
+                                  화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난
+                                  화재 및 피난
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="icon-list">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">도어 소음 (휘슬링)</div>
+                                <div className="desc">도어 소음 (휘슬링)</div>
+                              </div>
+                            </div>
+
+                            <div className="icon-list">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
+                                <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
+                                <div className="sub">시뮬레이션 검토 필요</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 차트 */}
+                          <div className="image-wrap" style={{ height: '600px' }}>
+                            <Image src={resultChartEx1} alt="주요 문제 및 하자 차트1" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 문제 발생 예상층 */}
+                      <div className="">
+                        <h3 className="icon">문제 발생 예상층</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          <div
+                            className="comm-border flex flex-row gap-4"
+                            style={{ height: '400px' }}
+                          >
+                            <div className="chart-wrap w-1/3">
+                              {/* 차트 - 문제 발생 예상층 */}
+                              <VerticalRangeBar blocks={chartData.blocks} />
+                            </div>
+                            <div className="chart-wrap w-2/3">
+                              {/* 차트 - 문제 발생 예상층 */}
+                              <NestedHalfDonutGauge dangerPercent={0.49} warningPercent={0.68} />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-5">
+                            <div className="flex flex-row gap-5">
+                              <div className="box-wrap w-1/2">
+                                <div className="box-title">문제 발생층</div>
+                                <div className="data-box">
+                                  29개층<span className="ml-2.5">/&nbsp; 60개층</span>
+                                </div>
+                              </div>
+                              <div className="box-wrap w-1/2">
+                                <div className="box-title">문제 주의층</div>
+                                <div className="data-box">
+                                  42개층<span className="ml-2.5">/&nbsp; 60개층</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="box-wrap-bg">
+                              200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가
+                              000Pa을 넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대
+                              압력차인 000Pa에 대해 149% 수준의 압력차가 발생할 것입니다.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <h2 className="mt-8">
+                  <span className="num">4</span> 압력차 검토 데이터
+                </h2>
+                {/* 4. 압력차 검토 데이터 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      {/* 중성대 위치 및 압력분포 프로파일 */}
+                      <div className="mb-8">
+                        <h3 className="icon">중성대 위치 및 압력분포 프로파일</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                          <div
+                            className="comm-border flex flex-row gap-4 col-span-2"
+                            style={{ height: '560px' }}
+                          >
+                            <div className="chart-wrap w-1/3">
+                              {/* 차트 - 중성대 위치 */}
+                              <RangeBarWithBullet
+                                ranges={chartData.ranges}
+                                bullets={chartData.bullets}
+                              />
+                            </div>
+                            <div className="chart-wrap w-2/3">
+                              {/* 차트 - 압력분포 프로파일 */}
+                              <RangeBarWithBullet
+                                ranges={chartData.ranges}
+                                bullets={chartData.bullets}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-5 col-span-1">
+                            <div className="box-wrap">
+                              <div className="box-title">저층존 샤프트 중성대</div>
+                              <div className="data-box">
+                                13F (42m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              </div>
+                            </div>
+                            <div className="box-wrap">
+                              <div className="box-title">중층존 샤프트 중성대</div>
+                              <div className="data-box">
+                                25F (78m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              </div>
+                            </div>
+                            <div className="box-wrap">
+                              <div className="box-title">고층존 샤프트 중성대</div>
+                              <div className="data-box">
+                                43F (135m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              </div>
+                            </div>
+                            <div className="box-wrap-bg">
+                              200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가
+                              000Pa을 넘어가면 문제 발생 가능성이 증가합니다.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 주요층 압력차 */}
+                      <div className="mb-8">
+                        <h3 className="icon">주요층 압력차</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                          <div className="comm-border flex flex-row gap-4 col-span-2">
+                            <div className="chart-wrap w-1/4">
+                              {/* 차트 - 문제 발생 예상층 */}
+                              <VerticalRangeBar blocks={chartData.blocks} />
+                            </div>
+                            <div className="chart-wrap w-3/4">
+                              {/* 차트 - 주요층 압력차 */}
+                              <HorizontalGaugeBar value={149} />
+                              <HorizontalGaugeBar value={160} />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-5 col-span-1">
+                            <div className="box-wrap">
+                              <div className="box-title">최상층 최대 압력차</div>
+                              <div className="data-box">145 - 150 Pa</div>
+                              <div className="detail-info">
+                                <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
+                              </div>
+                            </div>
+                            <div className="box-wrap">
+                              <div className="box-title">로비층 최대 압력차</div>
+                              <div className="data-box">230 - 240 Pa</div>
+                              <div className="detail-info">
+                                <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
+                              </div>
+                              <div className="detail-info">
+                                <span>외부 출입문 압력차</span> 62 - 72 Pa
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 난방시즌 압력차 변화 */}
+                      <div className="">
+                        <h3 className="icon">난방시즌 압력차 변화</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                          {/* 차트 */}
+                          <div className="comm-border flex flex-col items-center justify-center gap-4 col-span-2">
+                            <div className="text-xl font-medium">차트</div>
+                            <div className="dev-note">
+                              개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-5 col-span-1">
+                            <div className="box-wrap">
+                              <div className="box-title">기준 압력 초과일수 - 최상층</div>
+                              <div className="data-box">
+                                34-41일<span className="ml-2.5">/&nbsp; 120일</span>
+                              </div>
+                            </div>
+                            <div className="box-wrap">
+                              <div className="box-title">기준 압력 초과일수 - 로비층</div>
+                              <div className="data-box">
+                                42일-48일<span className="ml-2.5">/&nbsp; 120일</span>
+                              </div>
+                            </div>
+                            <div className="box-wrap-bg">
+                              200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가
+                              000Pa을 넘어가면 문제 발생 가능성이 증가합니다.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* 해결방안 확인하기 버튼 */}
+                <div className="flex justify-end mt-7 mb-10">
+                  <button
+                    className="btn-primary w-full btn-50 rounded-xl
+                  flex items-center justify-between gap-2"
+                    style={{ maxWidth: '240px' }}
+                    onClick={() => {
+                      setActiveTab('solution');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    해결방안 확인하기
+                    <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 해결 방안 */}
+            {activeTab === 'solution' && (
+              <div className="cppe-explain" style={{ marginBottom: '0px' }}>
+                <h2>
+                  <span className="num">1</span> 해결방안 개요
+                </h2>
+
+                {/* 1. 해결방안 개요 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="comm-border">
+                          <h3>연돌현상 영향도</h3>
+                          <div className="chart-wrap" style={{ height: '160px' }}>
+                            {/* 차트 - 연돌현상 영향도 */}
+                            <GradientGaugeBar
+                              leftLabel="최상층"
+                              leftPosition={40}
+                              rightLabel="최하층"
+                              rightPosition={70}
+                            />
+                          </div>
+                          <div className="flex flex-row gap-4 mt-6 justify-between">
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon1" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon2" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon3" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon4" width={60} height={60} />
+                            </div>
+                            <div className="flex-row-center border-2 rounded-full">
+                              <Image src={IconEx} alt="icon5" width={60} height={60} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="comm-border">
+                          <h3>프로젝트 이름</h3>
+                          <div className="border-0">
+                            <p>
+                              건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이
+                              확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로
+                              평가되었습니다.
+                            </p>
+                            <p>
+                              건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이
+                              확인되었으며, 에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로
+                              평가되었습니다.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-5">
+                        <div className="comm-border">
+                          <h3>연돌현상 해결방안</h3>
+                          <div className="flex flex-row gap-4 mb-4">
+                            <div className="icon-box-col">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col disabled">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘6" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col disabled">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘7" />
+                              </div>
+                              아이콘
+                            </div>
+                            <div className="icon-box-col disabled">
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘8" />
+                              </div>
+                              아이콘
+                            </div>
+                          </div>
+
+                          <ul className="mt-3">
+                            <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
+                            <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
+                            <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
+                            <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
+                            <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <div className="flex items-center gap-5 mt-8">
+                  <h2>
+                    <span className="num">2</span> 개선안 리스트
+                  </h2>
+                  <div className="title-sub mb-3">
+                    <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
+                    <strong>32%</strong> 절감
+                  </div>
+                </div>
+                {/* 2. 개선안 리스트 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      {/* 리스트 */}
+                      <div className="flex flex-col gap-4 col-span-2">
+                        <div className="icon-list">
+                          <div className="icon-box">
+                            <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
+                          </div>
+                          <div className="text-wrap">
+                            <div className="title">화재 및 피난 안전</div>
+                            <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
+                            <div className="sub"># 개선안이 반영된 설계도면 필요 </div>
+                            <div className="sub">
+                              # 공기유동 상세 시뮬레이션 검토 후 설치층 체크 
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="icon-list disabled">
+                          <div className="icon-box">
+                            <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
+                          </div>
+                          <div className="text-wrap">
+                            <div className="title">건축 요소/자재 하자</div>
+                            <div className="desc">건축 요소/자재 하자건축요소 자재하자 건축</div>
+                            <div className="sub">시뮬레이션 검토 필요</div>
+                          </div>
+                        </div>
+
+                        <div className="icon-list">
+                          <div className="icon-box">
+                            <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
+                          </div>
+                          <div className="text-wrap">
+                            <div className="title">엘리베이터 도어 오작동 및 고장</div>
+                            <div className="desc">
+                              화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재
+                              및 피난
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="icon-list">
+                          <div className="icon-box">
+                            <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
+                          </div>
+                          <div className="text-wrap">
+                            <div className="title">도어 소음 (휘슬링)</div>
+                            <div className="desc">도어 소음 (휘슬링)</div>
+                          </div>
+                        </div>
+
+                        <div className="icon-list">
+                          <div className="icon-box">
+                            <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
+                          </div>
+                          <div className="text-wrap">
+                            <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
+                            <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
+                            <div className="sub">시뮬레이션 검토 필요</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="box-wrap-bg mt-8">
+                        <div className="box-title" style={{ marginBottom: '0.5rem' }}>
+                          특수방안
+                        </div>
+                        200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
+                        넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대 압력차인
+                        000Pa에 대해 149% 수준의 압력차가 발생할 것입니다.
+                        <div className="bg-white py-3 px-4 mt-2 rounded-xl">
+                          <ul>
+                            <li>엘리베이터 스크린도어 설치</li>
+                            <li>엘리베이터 홀 회전문 설치</li>
+                            <li>Core인접 벽체 추가구획</li>
+                            <li>설비를 통한 가감압 조절</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <div className="flex items-center gap-5 mt-8">
+                  <h2>
+                    <span className="num">3</span> 연돌현상 설계검토 및 시뮬레이션
+                  </h2>
+                  <div className="title-sub mb-3">
+                    <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
+                    <strong>53%</strong> 절감
+                  </div>
+                </div>
+                {/* 3. 연돌현상 설계검토 및 시뮬레이션 */}
+                <section>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-2/2 left">
+                      {/* 연돌현상 설계검토 */}
+                      <div className="mb-8">
+                        <h3 className="icon">연돌현상 설계검토</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          <div className="comm-border border-0">
+                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
+                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
+                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
+                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
+                            <div className="text-box">
+                              <ul>
+                                <li>건축/설비 도면 검토를 통한 맞춤형 개선전략</li>
+                                <li>개선전략 별 상세 데이터 제시</li>
+                                <li>층별 수정사항이 반영된 설계도면</li>
+                                <li>기밀화라인이 표현된 기밀화구획도</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div className="comm-border">
+                            <div className="image-wrap">
+                              <Image src={resultChartEx2} alt="연돌현상 설계검토" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 연돌현상 시뮬레이션 */}
+                      <div className="">
+                        <h3 className="icon">연돌현상 시뮬레이션</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          <div className="comm-border border-0">
+                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
+                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
+                            건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
+                            에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
+                            <div className="text-box">
+                              <ul>
+                                <li>층별/존별 공기유동 및 압력차 분석</li>
+                                <li>세부 건축요소의 문제발생 여부 검토</li>
+                                <li>개선전략 케이스 별 저감효과 비교 분석</li>
+                                <li>개선전략 우선순위 분석을 통한 최적화</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div className="comm-border">
+                            <div className="image-wrap">
+                              <Image src={resultChartEx3} alt="연돌현상 시뮬레이션" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <div className="flex justify-between space-x-4 mt-8">
+                  <button
+                    onClick={() => {
+                      setActiveTab('analysis');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="btn-secondary w-full btn-50 rounded-xl
+                    flex items-center justify-start gap-3"
+                    style={{ maxWidth: '240px', backgroundColor: 'transparent' }}
+                  >
+                    <Image src={ArrowLeft} alt="arrow-left" width={24} height={24} />
+                    분석결과 다시보기
+                  </button>
+                  <Link
+                    href="/engineering"
+                    className="btn-primary w-full btn-50 rounded-xl
+                    flex items-center justify-between gap-2"
+                    style={{ maxWidth: '280px' }}
+                  >
+                    연돌현상 검토보고서 요청하기
+                    <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </>
+        )
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 // components/HorizontalBarWithBullet.tsx
-import ReactECharts from "echarts-for-react";
+import ReactECharts from 'echarts-for-react';
 // 최대 연돌 압력차
 
 interface HorizontalBarWithBulletProps {
@@ -8,37 +8,37 @@ interface HorizontalBarWithBulletProps {
   className?: string;
 }
 
-const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({ 
-  width = '100%', 
-  height = 200, 
-  className = '' 
+const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
+  width = '100%',
+  height = 200,
+  className = '',
 }) => {
   const data = [
-    { name: "최상층", value: 25 },
-    { name: "로비층", value: 35 },
+    { name: '최상층', value: 25 },
+    { name: '로비층', value: 35 },
   ];
 
   const option = {
     xAxis: {
-      type: "value",
+      type: 'value',
       min: 0,
       max: 40,
       splitLine: { show: false },
     },
     yAxis: {
-      type: "category",
+      type: 'category',
       data: data.map((item) => item.name),
       axisTick: { show: false },
       axisLine: { show: false },
     },
     series: [
       {
-        name: "층별",
-        type: "bar",
+        name: '층별',
+        type: 'bar',
         data: data.map((item) => item.value),
         barWidth: 6,
         itemStyle: {
-          color: "#ff4d4f",
+          color: '#ff4d4f',
         },
         label: {
           show: false,
@@ -46,25 +46,25 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
         z: 1,
       },
       {
-        name: "bullet",
-        type: "scatter",
-        symbol: "circle",
+        name: 'bullet',
+        type: 'scatter',
+        symbol: 'circle',
         symbolSize: 12,
         data: data.map((item) => [item.value, item.name]),
         itemStyle: {
-          color: "#ff4d4f",
+          color: '#ff4d4f',
         },
         z: 2,
       },
       {
-        name: "threshold",
-        type: "line",
+        name: 'threshold',
+        type: 'line',
         data: [20, 20],
         xAxisIndex: 0,
         yAxisIndex: 0,
         lineStyle: {
-          type: "dashed",
-          color: "#999",
+          type: 'dashed',
+          color: '#999',
           width: 1.5,
         },
         // label: {
@@ -75,7 +75,7 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
         // },
         markLine: {
           silent: true,
-          symbol: "none",
+          symbol: 'none',
           label: {
             show: false,
           },
@@ -85,8 +85,8 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
             },
           ],
           lineStyle: {
-            type: "dashed",
-            color: "#999",
+            type: 'dashed',
+            color: '#999',
             width: 1.5,
           },
         },

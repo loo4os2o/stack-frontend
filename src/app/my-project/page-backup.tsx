@@ -1,7 +1,18 @@
 'use client';
 
+import lotteTowerImg from '@/assets/images/lotte-tower.jpg';
+import type { Project } from '@/utils/commonInterface';
+import { createClient } from '@supabase/supabase-js';
+// import "@/css/myproject.css";
+import ArrowRight from '@/assets/icons/icon-btn-more.png';
+import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
+import humps from 'humps';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
 import ArrowLeft from '@/assets/icons/icon-btn-more-bg.png';
-import { default as ArrowRight, default as IconEx } from '@/assets/icons/icon-btn-more.png';
+import IconEx from '@/assets/icons/icon-btn-more.png';
 import iconDecrease from '@/assets/icons/icon-decrease.png';
 import iconLightOn from '@/assets/icons/icon-result-light.png';
 import resultChartEx1 from '@/assets/images/evaluation/img-result-chart-ex1.png';
@@ -12,75 +23,349 @@ import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
 import HorizontalBarWithBullet from '@/components/charts/HorizontalBarWithBullet';
 import HorizontalGaugeBar from '@/components/charts/HorizontalGaugeBar';
 import NestedHalfDonutGauge from '@/components/charts/NestedHalfDonutGauge';
-import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
-import StackedRangeBar from '@/components/charts/StackedRangeBar';
 import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
 import '@/css/evaluation.css';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
-export default function EvaluationResultPage() {
-  const [activeTab, setActiveTab] = useState('analysis'); // 'analysis' | 'solution'
-  const [isLoading, setIsLoading] = useState(true);
+// 프로젝트 타입
+// 예시 데이터
+const tmpProjects: Project[] = [
+  {
+    id: 1001,
+    createdAt: '2025-05-10',
+    projectName: 'A 오피스타워',
 
-  // 차트 데이터
-  const chartData: {
-    ranges: { x: number; start: number; end: number }[];
-    bullets: { x: number; y: number }[];
-    blocks: { start: number; end: number; type: 'danger' | 'warning' }[];
-  } = {
-    ranges: [
-      { x: 1, start: 0, end: 50 },
-      { x: 2, start: 20, end: 80 },
-      { x: 3, start: 40, end: 120 },
-      { x: 4, start: 60, end: 140 },
-    ],
-    bullets: [
-      { x: 1, y: 25 },
-      { x: 2, y: 50 },
-      { x: 3, y: 80 },
-      { x: 4, y: 100 },
-    ],
-    blocks: [
-      { start: 0, end: 30, type: 'danger' },
-      { start: 30, end: 60, type: 'warning' },
-      { start: 60, end: 90, type: 'danger' },
-      { start: 90, end: 100, type: 'warning' },
-    ],
-  };
+    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanOffice: false,
+    buildingGeneralPlanNeighborhood: true,
+    buildingGeneralPlanCultural: false,
+    buildingGeneralEtcChecked: false,
+    buildingGeneralEtcInput: '',
+    location: '서울 강서구',
+    buildingHeight: 120,
+    zoningType: '싱글존 샤프트',
+    imageUrl: lotteTowerImg,
+    reportUrl: '/dummy-report-1.pdf',
+  },
+  {
+    id: 1002,
+    createdAt: '2025-06-05',
+    projectName: 'B 주상복합',
+
+    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanOffice: true,
+    buildingGeneralPlanNeighborhood: false,
+    buildingGeneralPlanCultural: false,
+    buildingGeneralEtcChecked: false,
+    buildingGeneralEtcInput: '',
+    location: '대전 서구',
+    buildingHeight: 200,
+    zoningType: '투존 샤프트',
+    imageUrl: null,
+    reportUrl: null,
+  },
+  {
+    id: 1003,
+    createdAt: '2025-02-15',
+    projectName: 'C 호텔',
+
+    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanOffice: false,
+    buildingGeneralPlanNeighborhood: false,
+    buildingGeneralPlanCultural: false,
+    buildingGeneralEtcChecked: true,
+    buildingGeneralEtcInput: '기타 용도도',
+    location: '서울 강남구',
+    buildingHeight: 300,
+    zoningType: '멀티존 샤프트',
+    imageUrl: lotteTowerImg,
+    reportUrl: '/dummy-report-3.pdf',
+  },
+];
+
+// 차트 데이터
+const chartData: {
+  ranges: { x: number; start: number; end: number }[];
+  bullets: { x: number; y: number }[];
+  blocks: { start: number; end: number; type: 'danger' | 'warning' }[];
+} = {
+  ranges: [
+    { x: 1, start: 0, end: 50 },
+    { x: 2, start: 20, end: 80 },
+    { x: 3, start: 40, end: 120 },
+    { x: 4, start: 60, end: 140 },
+  ],
+  bullets: [
+    { x: 1, y: 25 },
+    { x: 2, y: 50 },
+    { x: 3, y: 80 },
+    { x: 4, y: 100 },
+  ],
+  blocks: [
+    { start: 0, end: 30, type: 'danger' },
+    { start: 30, end: 60, type: 'warning' },
+    { start: 60, end: 90, type: 'danger' },
+    { start: 90, end: 100, type: 'warning' },
+  ],
+};
+
+export default function MyProjectPage() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [tab, setTab] = useState(0);
+  const [showNoProject, setShowNoProject] = useState(false);
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY || '';
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const [projects, setProjects] = useState<any[]>([]);
+
+  async function get_my_projects() {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData) {
+      console.error('User not authenticated or error fetching user:', userError);
+      return;
+    }
+
+    const user = userData.user;
+    const { data, error } = await supabase.from('project').select('*').eq('created_by', user.id);
+
+    if (error) {
+      console.error('Error fetching projects:', error);
+      return [];
+    }
+
+    return humps.camelizeKeys(
+      data.map((item) => {
+        return {
+          ...item,
+          imageUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/project-image/${item.image_path}
+`,
+        };
+      })
+    );
+  }
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 4000);
-    return () => clearTimeout(timer);
+    const fetchProjects = async () => {
+      const projects: any = await get_my_projects();
+      console.log('Fetched projects:', projects);
+      setProjects([...projects, ...tmpProjects]);
+    };
+
+    fetchProjects();
   }, []);
 
-  return (
-    <div className="container mx-auto py-10 ev-result-page">
-      <h1 className="text-3xl font-bold mb-5">연돌현상 예측평가 결과</h1>
+  // 탭부분 (※ 연돌현상 예측평가 결과와 동일하게 퍼블리싱)
+  const [activeTab, setActiveTab] = useState('analysis');
+  const [isLoading, setIsLoading] = useState(true);
 
-      {isLoading ? (
-        <div className="animate-pulse">
-          {/* 탭 메뉴 스켈레톤 */}
-          <div className="flex gap-6 mb-8">
-            <div className="h-10 w-1/2 bg-gray-200 rounded" />
-            <div className="h-10 w-1/2 bg-gray-200 rounded" />
+  return (
+    <div className="container mx-auto pt-10 pb-20 ev-result-page" style={{ minHeight: '60vh' }}>
+      <div className="flex items-center justify-between gap-4 mb-5">
+        <h1 className="text-3xl font-bold">마이 프로젝트</h1>
+        {!selectedProject && (
+          <button
+            className="text-gray-600 hover:text-gray-800 hover:underline"
+            onClick={() => setShowNoProject((v) => !v)}
+          >
+            {showNoProject ? '프로젝트 리스트 뷰' : '빈 프로젝트 뷰'}
+          </button>
+        )}
+        {selectedProject && (
+          <button
+            onClick={() => setSelectedProject(null)}
+            className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+          >
+            <span>← 목록으로 돌아가기</span>
+          </button>
+        )}
+      </div>
+
+      {!selectedProject ? (
+        showNoProject ? (
+          <div className="my-project-nodata">
+            <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
+            <Link href="/evaluation">
+              <button className="btn-primary">새 프로젝트 평가하기</button>
+            </Link>
           </div>
-          {/* 결과 스켈레톤 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="h-64 bg-gray-200 rounded" />
-            <div className="h-64 bg-gray-200 rounded" />
-            <div className="h-64 bg-gray-200 rounded" />
-            <div className="h-64 bg-gray-200 rounded" />
+        ) : (
+          // 프로젝트 리스트 테이블
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트 번호
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트 생성일자
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트명
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      이용 서비스
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      기본 보고서 다운로드
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {projects.map((project) => (
+                    <tr key={project.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button
+                          className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.id}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {new Date(project.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button
+                          className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.projectName}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {/* {project.service.map((s: any, index: number) => (
+                          <span
+                            key={index + 1}
+                            className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0"
+                          >
+                            {s}
+                          </span>
+                        ))} */}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {project.reportUrl ? (
+                          <a href={project.reportUrl} download className="btn-primary btn-small">
+                            다운로드
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div className="h-10 w-1/3 bg-gray-200 rounded mb-4" />
-          <div className="h-48 bg-gray-200 rounded mb-8" />
-          <div className="h-10 w-1/3 bg-gray-200 rounded mb-4" />
-          <div className="h-48 bg-gray-200 rounded mb-8" />
-        </div>
+        )
       ) : (
+        // 프로젝트 상세 정보
         <>
-          {/* 탭 메뉴 */}
+          <div className="flex flex-col lg:flex-row gap-8 mb-16 my-project">
+            {/* 왼쪽: 프로젝트 정보 */}
+            <div className="lg:w-1/3 w-full">
+              <table className="my-project-table">
+                <colgroup>
+                  <col style={{ width: '40%' }} />
+                  <col style={{ width: '60%' }} />
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <th>프로젝트명</th>
+                    <td>{selectedProject.projectName}</td>
+                  </tr>
+                  <tr>
+                    <th>프로젝트 번호</th>
+                    <td>{selectedProject.id}</td>
+                  </tr>
+                  <tr>
+                    <th>검토날짜</th>
+                    <td>{new Date(selectedProject.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                  <tr>
+                    <th>건물용도</th>
+                    <td>
+                      {selectedProject.buildingGeneralPlanResidential
+                        ? '공동주택'
+                        : selectedProject.buildingGeneralPlanOffice
+                          ? '업무시설'
+                          : selectedProject.buildingGeneralPlanNeighborhood
+                            ? '근린생활시설'
+                            : selectedProject.buildingGeneralPlanCultural
+                              ? '문화/집회시설'
+                              : selectedProject.buildingGeneralEtcInput}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>위치</th>
+                    <td>{selectedProject.location}</td>
+                  </tr>
+                  <tr>
+                    <th>건물 높이</th>
+                    <td>{`${selectedProject.buildingHeight}m`}</td>
+                  </tr>
+                  <tr>
+                    <th>샤프트 계획</th>
+                    <td>
+                      {selectedProject.zoningType === 'single'
+                        ? '싱글존 샤프트'
+                        : selectedProject.zoningType === 'multi'
+                          ? '멀티존 샤프트'
+                          : selectedProject.zoningType === 'tower'
+                            ? '투존 샤프트'
+                            : ''}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <Link href="/engineering">
+                <button
+                  className="btn-primary w-full btn-50 rounded-xl
+                  flex items-center justify-between gap-2 mt-8"
+                >
+                  엔지니어링 서비스 문의하기
+                  <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+                </button>
+              </Link>
+            </div>
+
+            {/* 가운데: 차트 영역 */}
+            <div className="lg:w-1/3 w-full flex items-start justify-center">
+              <div className="chart-wrap" style={{ height: '350px', width: '100%' }}>
+                {/* 차트 - 중성대 위치 */}
+                <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
+              </div>
+            </div>
+
+            {/* 오른쪽: 대표 이미지 */}
+            <div className="lg:w-1/3 w-full flex items-start justify-center">
+              {selectedProject.imageUrl ? (
+                <div className="image-wrap" style={{ height: '350px' }}>
+                  <Image
+                    src={
+                      typeof selectedProject.imageUrl === 'string'
+                        ? selectedProject.imageUrl.trimEnd()
+                        : selectedProject.imageUrl
+                    }
+                    alt="대표 이미지"
+                    className="object-cover w-full h-full"
+                    width={378}
+                    height={480}
+                    // layout="responsive"
+                    quality={100}
+                  />
+                </div>
+              ) : (
+                <div className="image-wrap" style={{ height: '350px', background: '#f7f7f7' }}>
+                  <div className="text-gray-400">대표 이미지 없음</div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 탭 영역 */}
           <div className="tab-ev">
             <button
               className={`${activeTab === 'analysis' ? 'active-tab' : ''}`}
@@ -137,7 +422,7 @@ export default function EvaluationResultPage() {
                         </div>
                       </div>
 
-                      <div className="comm-border border-0">
+                      <div className="comm-border">
                         <h3>프로젝트 이름</h3>
                         <div className="border-0">
                           <p>
@@ -206,16 +491,15 @@ export default function EvaluationResultPage() {
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="w-full md:w-2/2 left">
                     <div className="flex flex-row gap-8" style={{ height: '400px' }}>
-                      <div className="chart-wrap w-2/6">
+                      <div className="chart-wrap w-1/6">
                         {/* 차트 - 문제 발생 예상층 */}
-                        {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
-                        <StackedRangeBar />
+                        <VerticalRangeBar blocks={chartData.blocks} />
                       </div>
                       <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
                         {/* 차트 - 중성대 위치 */}
                         <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
                       </div>
-                      <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
+                      <div className="chart-wrap w-3/6" style={{ paddingBottom: 0 }}>
                         {/* 차트 - 압력분포 프로파일 */}
                         <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
                       </div>
@@ -538,7 +822,7 @@ export default function EvaluationResultPage() {
                         </div>
                       </div>
 
-                      <div className="comm-border border-0">
+                      <div className="comm-border">
                         <h3>프로젝트 이름</h3>
                         <div className="border-0">
                           <p>

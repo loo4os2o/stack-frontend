@@ -1,8 +1,8 @@
 'use client';
 
-import "@/app/globals.css";
+import '@/app/globals.css';
 import TooltipButton from '@/components/common/TooltipButton';
-import "@/css/login.css";
+import '@/css/login.css';
 import { useUserStore } from '@/utils/store';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -26,12 +26,14 @@ function LoginForm({ onModeChange }: LoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
-  
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState(localStorage.getItem('userEmail') || '');
   // 암호화된 비밀번호를 복호화하여 설정
   const encryptedPassword = localStorage.getItem('userPassword');
-  const [rememberPassword, setRememberPassword] = useState(encryptedPassword ? atob(encryptedPassword) : '');
+  const [rememberPassword, setRememberPassword] = useState(
+    encryptedPassword ? atob(encryptedPassword) : ''
+  );
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
@@ -77,8 +79,8 @@ function LoginForm({ onModeChange }: LoginFormProps) {
         name: '(주)브릿지',
         address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
         business_type: '소프트웨어 개발',
-        phone: '070-7777-7777'
-      }
+        phone: '070-7777-7777',
+      },
     },
     {
       email: 'test@example.com',
@@ -90,8 +92,8 @@ function LoginForm({ onModeChange }: LoginFormProps) {
         name: '(주)브릿지',
         address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
         business_type: '소프트웨어 개발',
-        phone: '070-7777-7777'
-      }
+        phone: '070-7777-7777',
+      },
     },
     {
       email: 'joohee@example.com',
@@ -103,9 +105,9 @@ function LoginForm({ onModeChange }: LoginFormProps) {
         name: '(주)브릿지',
         address: '서울특별시 강남구 테헤란로 14길 6 남도빌딩 2층',
         business_type: '소프트웨어 개발',
-        phone: '070-7777-7777'
-      }
-    }
+        phone: '070-7777-7777',
+      },
+    },
   ];
 
   const handleSignup = async () => {
@@ -128,7 +130,7 @@ function LoginForm({ onModeChange }: LoginFormProps) {
         setIsLogin(true);
         setError('회원가입이 완료되었습니다. 이메일을 확인해 주세요.');
       }
-    } catch  {
+    } catch {
       setError('회원가입 중 오류가 발생했습니다.');
     }
   };
@@ -149,7 +151,10 @@ function LoginForm({ onModeChange }: LoginFormProps) {
         }
         setAccessToken(data.session.access_token);
         setRefreshToken(data.session.refresh_token);
-        updateUser({...data.user.user_metadata, email: data.user?.user_metadata?.email ?? data.user.email});
+        updateUser({
+          ...data.user.user_metadata,
+          email: data.user?.user_metadata?.email ?? data.user.email,
+        });
         router.push(redirectTo || '/');
       }
     } catch {
@@ -175,16 +180,18 @@ function LoginForm({ onModeChange }: LoginFormProps) {
   return (
     <div className="login-wrap">
       <h1>{isLogin ? '로그인' : '사용자 등록'}</h1>
-      
+
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">아이디(이메일)<span className="text-red-500 ml-1">*</span></label>
+          <label htmlFor="email">
+            아이디(이메일)<span className="text-red-500 ml-1">*</span>
+          </label>
           <input
             type="email"
             id="email"
@@ -199,16 +206,20 @@ function LoginForm({ onModeChange }: LoginFormProps) {
                 type="text"
                 maxLength={6}
                 value={emailCode}
-                onChange={e => setEmailCode(e.target.value.replace(/[^0-9]/g, ''))}
+                onChange={(e) => setEmailCode(e.target.value.replace(/[^0-9]/g, ''))}
                 placeholder="인증번호 6자리"
               />
-              <button type="button" className="btn-basic whitespace-nowrap">인증하기</button>
+              <button type="button" className="btn-basic whitespace-nowrap">
+                인증하기
+              </button>
             </div>
           )}
         </div>
-        
+
         <div className="form-group">
-          <label htmlFor="password">비밀번호<span className="text-red-500 ml-1">*</span></label>
+          <label htmlFor="password">
+            비밀번호<span className="text-red-500 ml-1">*</span>
+          </label>
           <input
             type="password"
             id="password"
@@ -221,7 +232,9 @@ function LoginForm({ onModeChange }: LoginFormProps) {
                 setPasswordMatchError('');
               }
             }}
-            placeholder={isLogin ? "비밀번호를 입력하세요" : "영문, 숫자, 특수문자를 포함한 6-20자리"}
+            placeholder={
+              isLogin ? '비밀번호를 입력하세요' : '영문, 숫자, 특수문자를 포함한 6-20자리'
+            }
             required
           />
           {!isLogin && (
@@ -230,7 +243,7 @@ function LoginForm({ onModeChange }: LoginFormProps) {
                 type="password"
                 id="passwordCheck"
                 value={passwordCheck}
-                onChange={e => {
+                onChange={(e) => {
                   setPasswordCheck(e.target.value);
                   if (password !== e.target.value) {
                     setPasswordMatchError('비밀번호가 일치하지 않습니다.');
@@ -248,11 +261,13 @@ function LoginForm({ onModeChange }: LoginFormProps) {
             </>
           )}
         </div>
-        
+
         {!isLogin && (
           <>
             <div className="form-group">
-              <label htmlFor="name">이름<span className="text-red-500 ml-1">*</span></label>
+              <label htmlFor="name">
+                이름<span className="text-red-500 ml-1">*</span>
+              </label>
               <input
                 type="text"
                 id="name"
@@ -262,9 +277,11 @@ function LoginForm({ onModeChange }: LoginFormProps) {
                 required
               />
             </div>
-            
+
             <div className="form-group">
-              <label htmlFor="organization">소속<span className="text-red-500 ml-1">*</span></label>
+              <label htmlFor="organization">
+                소속<span className="text-red-500 ml-1">*</span>
+              </label>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
@@ -274,14 +291,14 @@ function LoginForm({ onModeChange }: LoginFormProps) {
                   placeholder="소속을 입력하세요"
                   required
                 />
-                <TooltipButton 
-                  tooltipText="소속하신 회사나 조직명을 입력해주세요"
-                />
+                <TooltipButton tooltipText="소속하신 회사나 조직명을 입력해주세요" />
               </div>
             </div>
-            
+
             <div className="form-group" style={{ marginBottom: '0' }}>
-              <label htmlFor="phone">연락처<span className="text-red-500 ml-1">*</span></label>
+              <label htmlFor="phone">
+                연락처<span className="text-red-500 ml-1">*</span>
+              </label>
               <input
                 type="tel"
                 id="phone"
@@ -293,7 +310,7 @@ function LoginForm({ onModeChange }: LoginFormProps) {
             </div>
           </>
         )}
-        
+
         {isLogin && (
           <div className="flex justify-between checkbox-group">
             <label>
@@ -309,17 +326,15 @@ function LoginForm({ onModeChange }: LoginFormProps) {
             </Link>
           </div>
         )}
-        
-        <button
-          type="submit"
-          className="w-full btn-50 rounded-xl btn-primary mt-8 mb-8"
-        >
+
+        <button type="submit" className="w-full btn-50 rounded-xl btn-primary mt-8 mb-8">
           {isLogin ? '로그인' : '등록하기'}
         </button>
-        
+
         {isLogin && (
           <div className="text-center">
-            <p className="font-15 font-gray-9">아직 계정이 없으신가요?
+            <p className="font-15 font-gray-9">
+              아직 계정이 없으신가요?
               <button
                 type="button"
                 onClick={() => {
@@ -336,7 +351,8 @@ function LoginForm({ onModeChange }: LoginFormProps) {
 
         {!isLogin && (
           <div className="text-center">
-            <p className="font-15 font-gray-9">이미 계정이 있으신가요?
+            <p className="font-15 font-gray-9">
+              이미 계정이 있으신가요?
               <button
                 type="button"
                 onClick={() => {
@@ -351,7 +367,6 @@ function LoginForm({ onModeChange }: LoginFormProps) {
           </div>
         )}
       </form>
-      
     </div>
   );
 }
@@ -380,11 +395,11 @@ export default function LoginPage() {
   return (
     <div className="container login">
       {/* 배경 디자인 요소들 */}
-      <div className={isLogin ? "login-bg-l" : "login-bg-l-g"}></div>
-      <div className={isLogin ? "login-bg-r" : "login-bg-r-g"}></div>
+      <div className={isLogin ? 'login-bg-l' : 'login-bg-l-g'}></div>
+      <div className={isLogin ? 'login-bg-r' : 'login-bg-r-g'}></div>
       <Suspense fallback={<LoginFormFallback />}>
         <LoginForm onModeChange={setIsLogin} />
       </Suspense>
     </div>
   );
-} 
+}

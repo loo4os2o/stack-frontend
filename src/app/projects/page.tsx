@@ -118,7 +118,9 @@ export default function ProjectsPage() {
   ];
 
   // 50개 프로젝트 생성 (랜덤 섞기)
-  function getRandomInt(max: number) { return Math.floor(Math.random() * max); }
+  function getRandomInt(max: number) {
+    return Math.floor(Math.random() * max);
+  }
   const projects = Array.from({ length: 50 }).map((_, i) => {
     const base = baseProjects[getRandomInt(baseProjects.length)];
     // title, desc, detail.building 등에 인덱스 붙여 구분
@@ -139,7 +141,7 @@ export default function ProjectsPage() {
   // }, []);
 
   // 프로젝트 상태 관리 (삭제/추가/수정 반영)
-  const [projectList, setProjectList] = useState<(Project | typeof projects[number])[]>(projects);
+  const [projectList, setProjectList] = useState<(Project | (typeof projects)[number])[]>(projects);
   // 모달 상태
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
@@ -149,7 +151,13 @@ export default function ProjectsPage() {
     desc: '',
     image: '',
     detail: {
-      building: '', scale: '', height: '', usage: '', client: '', content: '', photo: ''
+      building: '',
+      scale: '',
+      height: '',
+      usage: '',
+      client: '',
+      content: '',
+      photo: '',
     },
     repProject: false,
   });
@@ -158,7 +166,8 @@ export default function ProjectsPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // 필터링 함수
-  const isAllFilterEmpty = !appliedFilter.buildingType && !appliedFilter.height && !appliedFilter.client;
+  const isAllFilterEmpty =
+    !appliedFilter.buildingType && !appliedFilter.height && !appliedFilter.client;
   const filteredProjects = projectList.filter((p) => {
     // 모든 필터가 비어있으면 전체 데이터 반환(detail이 없어도 포함)
     if (isAllFilterEmpty) return true;
@@ -174,7 +183,11 @@ export default function ProjectsPage() {
       if (appliedFilter.height === 'over200' && (!h || h <= 200)) return false;
     }
     // 발주처
-    if (appliedFilter.client && (!p.detail.client || !p.detail.client.includes(appliedFilter.client))) return false;
+    if (
+      appliedFilter.client &&
+      (!p.detail.client || !p.detail.client.includes(appliedFilter.client))
+    )
+      return false;
     return true;
   });
 
@@ -227,9 +240,9 @@ export default function ProjectsPage() {
   // 저장(수정/추가)
   const handleSave = () => {
     if (modalType === 'edit' && editIdx !== null) {
-      setProjectList(prev => prev.map((p, i) => i === editIdx ? form : p));
+      setProjectList((prev) => prev.map((p, i) => (i === editIdx ? form : p)));
     } else if (modalType === 'add') {
-      setProjectList(prev => [form, ...prev]);
+      setProjectList((prev) => [form, ...prev]);
     }
     setModalOpen(false);
     setEditIdx(null);
@@ -239,26 +252,39 @@ export default function ProjectsPage() {
   return (
     <div className="container mx-auto pt-10 pb-20 projects-page">
       <h1 className="text-3xl font-bold mb-5">엔지니어링 프로젝트 실적</h1>
-      
+
       {/* 대표 이미지 3개 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-        {baseProjects.filter(p => p.repProject).map((p, i) => (
-          <div key={i} className="main-img-wrap">
-            <div className="img-wrap">
-              <Image src={p.image} alt={p.title} width={400} height={200} className="object-cover w-full h-full" />
+        {baseProjects
+          .filter((p) => p.repProject)
+          .map((p, i) => (
+            <div key={i} className="main-img-wrap">
+              <div className="img-wrap">
+                <Image
+                  src={p.image}
+                  alt={p.title}
+                  width={400}
+                  height={200}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <div className="title">{p.title}</div>
+              <div className="desc">{p.desc}</div>
             </div>
-            <div className="title">{p.title}</div>
-            <div className="desc">{p.desc}</div>
-          </div>
-        ))}
+          ))}
       </div>
-      
+
       {/* 필터 */}
       <div className="filter-wrap">
         <form className="flex flex-col gap-5 md:flex-row">
           <div className="form-group">
             <label htmlFor="buildingType">건물 용도</label>
-            <select id="buildingType" className="px-2 py-1.5 border rounded-md w-full flex-1" value={filter.buildingType} onChange={handleFilterChange}>
+            <select
+              id="buildingType"
+              className="px-2 py-1.5 border rounded-md w-full flex-1"
+              value={filter.buildingType}
+              onChange={handleFilterChange}
+            >
               <option value="">전체</option>
               <option value="업무시설">업무시설</option>
               <option value="주거시설">주거시설</option>
@@ -268,14 +294,19 @@ export default function ProjectsPage() {
           </div>
           <div className="form-group">
             <label htmlFor="height">최고 높이</label>
-            <select id="height" className="px-2 py-1.5 border rounded-md w-full flex-1" value={filter.height} onChange={handleFilterChange}>
+            <select
+              id="height"
+              className="px-2 py-1.5 border rounded-md w-full flex-1"
+              value={filter.height}
+              onChange={handleFilterChange}
+            >
               <option value="">전체</option>
               <option value="under100">100m 미만</option>
               <option value="100to200">100m ~ 200m</option>
               <option value="over200">200m 이상</option>
             </select>
           </div>
-          
+
           <div className="flex items-end w-full sm:w-auto">
             <button type="button" className="btn-primary w-full" onClick={handleApplyFilter}>
               필터 적용
@@ -283,7 +314,7 @@ export default function ProjectsPage() {
           </div>
         </form>
       </div>
-      
+
       {/* 아코디언 프로젝트 목록 */}
       <div className="py-4 px-8 eng-projects">
         {/* {isAdmin && (
@@ -296,7 +327,7 @@ export default function ProjectsPage() {
         {pagedProjects.length > 0 ? (
           pagedProjects.map((project) => {
             // projectList에서의 실제 인덱스 찾기
-            const realIdx = projectList.findIndex(p => p === project);
+            const realIdx = projectList.findIndex((p) => p === project);
             return (
               <div key={realIdx} className="project-item">
                 <div className="">
@@ -305,9 +336,16 @@ export default function ProjectsPage() {
                     onClick={() => setOpenIndex(openIndex === realIdx ? null : realIdx)}
                   >
                     <span className="">
-                      {openIndex === realIdx ? 
-                        <Image src={accMinus} alt="펼쳐진 상태 마이너스 아이콘" width={24} height={24} /> 
-                        : <Image src={accPlus} alt="접힌 상태 플러스 아이콘" width={24} height={24} /> }
+                      {openIndex === realIdx ? (
+                        <Image
+                          src={accMinus}
+                          alt="펼쳐진 상태 마이너스 아이콘"
+                          width={24}
+                          height={24}
+                        />
+                      ) : (
+                        <Image src={accPlus} alt="접힌 상태 플러스 아이콘" width={24} height={24} />
+                      )}
                     </span>
                     <span className="font-semibold text-lg text-left">{project.title}</span>
                   </button>
@@ -335,7 +373,11 @@ export default function ProjectsPage() {
                     {project.detail && project.detail.photo ? (
                       <div className="img-wrap">
                         <Image
-                          src={typeof project.detail.photo === 'string' ? project.detail.photo : project.detail.photo}
+                          src={
+                            typeof project.detail.photo === 'string'
+                              ? project.detail.photo
+                              : project.detail.photo
+                          }
                           alt={project.title + ' 사진'}
                           className="object-cover"
                           fill
@@ -346,7 +388,7 @@ export default function ProjectsPage() {
                         <span className="text-gray-400">프로젝트 사진</span>
                       </div>
                     )}
-                    
+
                     {/* 오른쪽: 정보 */}
                     <div className="flex-1">
                       {project.detail ? (
@@ -377,10 +419,11 @@ export default function ProjectsPage() {
                           </div>
                         </div>
                       ) : (
-                        <div className="acc-info flex-row-center"><div>상세 정보 준비중</div></div>
+                        <div className="acc-info flex-row-center">
+                          <div>상세 정보 준비중</div>
+                        </div>
                       )}
                     </div>
-                    
                   </div>
                 )}
               </div>
@@ -398,10 +441,7 @@ export default function ProjectsPage() {
         {/* 페이지네이션 */}
         {pagedProjects.length > 0 && (
           <div className="mt-8 pagenation">
-            <button
-              onClick={() => setPage(page > 1 ? page - 1 : 1)}
-              disabled={page === 1}
-            >
+            <button onClick={() => setPage(page > 1 ? page - 1 : 1)} disabled={page === 1}>
               <Image src={pagenationPrev} alt="이전 페이지" width={16} height={16} />
             </button>
             {Array.from({ length: totalPages }).map((_, i) => (
@@ -427,66 +467,207 @@ export default function ProjectsPage() {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-colors duration-200">
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-5xl relative">
-            <button className="absolute top-4 right-6 text-gray-400 hover:text-black" onClick={() => setModalOpen(false)}>&times;</button>
-            <h2 className="text-xl font-bold mb-8">{modalType === 'add' ? '프로젝트 추가' : '프로젝트 수정'}</h2>
-            <div className="flex flex-col md:flex-row gap-8"
-              style={{maxHeight: '30rem', overflow: 'auto'}}
+            <button
+              className="absolute top-4 right-6 text-gray-400 hover:text-black"
+              onClick={() => setModalOpen(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold mb-8">
+              {modalType === 'add' ? '프로젝트 추가' : '프로젝트 수정'}
+            </h2>
+            <div
+              className="flex flex-col md:flex-row gap-8"
+              style={{ maxHeight: '30rem', overflow: 'auto' }}
             >
               {/* 왼쪽 입력폼 */}
               <div className="flex-1 space-y-2 md:w-3/5">
                 <div className="flex items-center">
                   <label className="font-semibold w-28">프로젝트명</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="프로젝트명" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="프로젝트명"
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  />
                 </div>
                 <div className="flex items-center">
                   <label className="font-semibold w-28">대상건물</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="대상건물" value={form.detail?.building ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), building: e.target.value } })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="대상건물"
+                    value={form.detail?.building ?? ''}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        detail: {
+                          ...(form.detail ?? {
+                            building: '',
+                            scale: '',
+                            height: '',
+                            usage: '',
+                            client: '',
+                            content: '',
+                            photo: '',
+                          }),
+                          building: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 </div>
                 <div className="flex items-center">
                   <label className="font-semibold w-28">규모</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="규모" value={form.detail?.scale ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), scale: e.target.value } })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="규모"
+                    value={form.detail?.scale ?? ''}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        detail: {
+                          ...(form.detail ?? {
+                            building: '',
+                            scale: '',
+                            height: '',
+                            usage: '',
+                            client: '',
+                            content: '',
+                            photo: '',
+                          }),
+                          scale: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 </div>
                 <div className="flex items-center">
                   <label className="font-semibold w-28">최고 높이 (m)</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="최고 높이" value={form.detail?.height ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), height: e.target.value } })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="최고 높이"
+                    value={form.detail?.height ?? ''}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        detail: {
+                          ...(form.detail ?? {
+                            building: '',
+                            scale: '',
+                            height: '',
+                            usage: '',
+                            client: '',
+                            content: '',
+                            photo: '',
+                          }),
+                          height: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 </div>
                 <div className="flex items-center">
                   <label className="font-semibold w-28">용도</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="용도" value={form.detail?.usage ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), usage: e.target.value } })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="용도"
+                    value={form.detail?.usage ?? ''}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        detail: {
+                          ...(form.detail ?? {
+                            building: '',
+                            scale: '',
+                            height: '',
+                            usage: '',
+                            client: '',
+                            content: '',
+                            photo: '',
+                          }),
+                          usage: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 </div>
                 <div className="flex items-center">
                   <label className="font-semibold w-28">발주처</label>
-                  <input className="w-full flex-1 border rounded px-3 py-2" placeholder="발주처" value={form.detail?.client ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), client: e.target.value } })} />
+                  <input
+                    className="w-full flex-1 border rounded px-3 py-2"
+                    placeholder="발주처"
+                    value={form.detail?.client ?? ''}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        detail: {
+                          ...(form.detail ?? {
+                            building: '',
+                            scale: '',
+                            height: '',
+                            usage: '',
+                            client: '',
+                            content: '',
+                            photo: '',
+                          }),
+                          client: e.target.value,
+                        },
+                      })
+                    }
+                  />
                 </div>
                 <label className="block font-semibold">컨설팅 내용</label>
-                <textarea className="w-full border rounded px-3 py-2" placeholder="컨설팅 내용" value={form.detail?.content ?? ''} onChange={e => setForm({ ...form, detail: { ...(form.detail ?? { building: '', scale: '', height: '', usage: '', client: '', content: '', photo: '' }), content: e.target.value } })} />
-                <div className='flex flex-col gap-2 pt-2 sm:flex-row sm:gap-14'>
+                <textarea
+                  className="w-full border rounded px-3 py-2"
+                  placeholder="컨설팅 내용"
+                  value={form.detail?.content ?? ''}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      detail: {
+                        ...(form.detail ?? {
+                          building: '',
+                          scale: '',
+                          height: '',
+                          usage: '',
+                          client: '',
+                          content: '',
+                          photo: '',
+                        }),
+                        content: e.target.value,
+                      },
+                    })
+                  }
+                />
+                <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:gap-14">
                   <div className="flex items-center">
                     <label className="font-semibold w-28">대표프로젝트</label>
                     <input
                       type="checkbox"
                       checked={form.repProject}
-                      onChange={e => setForm({ ...form, repProject: e.target.checked })}
-                      style={{width: '1rem', height: '1rem', marginTop: "2px"}}
+                      onChange={(e) => setForm({ ...form, repProject: e.target.checked })}
+                      style={{ width: '1rem', height: '1rem', marginTop: '2px' }}
                     />
                   </div>
                   <div className="flex items-center">
                     <label className="font-semibold w-40">프로젝트 사진 업로드</label>
-                    <ImageUploadButton onImageSelect={url => {
-                      setPreviewUrl(url);
-                      setForm(form => ({
-                        ...form,
-                        detail: {
-                          building: form.detail?.building ?? '',
-                          scale: form.detail?.scale ?? '',
-                          height: form.detail?.height ?? '',
-                          usage: form.detail?.usage ?? '',
-                          client: form.detail?.client ?? '',
-                          content: form.detail?.content ?? '',
-                          photo: url
-                        }
-                      }));
-                    }} />
+                    <ImageUploadButton
+                      onImageSelect={(url) => {
+                        setPreviewUrl(url);
+                        setForm((form) => ({
+                          ...form,
+                          detail: {
+                            building: form.detail?.building ?? '',
+                            scale: form.detail?.scale ?? '',
+                            height: form.detail?.height ?? '',
+                            usage: form.detail?.usage ?? '',
+                            client: form.detail?.client ?? '',
+                            content: form.detail?.content ?? '',
+                            photo: url,
+                          },
+                        }));
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -496,12 +677,16 @@ export default function ProjectsPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <button className="btn-basic px-4 py-2" onClick={() => setModalOpen(false)}>취소</button>
-              <button className="btn-primary px-4 py-2" onClick={handleSave}>저장</button>
+              <button className="btn-basic px-4 py-2" onClick={() => setModalOpen(false)}>
+                취소
+              </button>
+              <button className="btn-primary px-4 py-2" onClick={handleSave}>
+                저장
+              </button>
             </div>
           </div>
         </div>
       )}
     </div>
   );
-} 
+}
