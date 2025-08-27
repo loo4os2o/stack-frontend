@@ -651,7 +651,9 @@
   padding: 1.2rem 0.5rem !important;
   position: relative;
   transition: all 0.2s ease;
-  /* border: 1px solid red; */
+  font-family: Pretendard;
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 .nav-link:hover {
@@ -671,6 +673,15 @@
 
 .nav-link:hover:after {
   width: 100%;
+}
+
+.nav-link.active {
+  color: #ff4500;
+  font-weight: 600;
+}
+
+.nav-link.active:after {
+  /* width: 100%; */
 }
 
 /* 드로어 메뉴 */
@@ -741,7 +752,7 @@
 }
 
 .drawer-content {
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  padding: 1rem 1.5rem 1.5rem 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -763,6 +774,7 @@
   padding: 0;
   padding-top: 1.2rem !important;
   padding-bottom: 1.2rem !important;
+  padding-left: 0.5rem;
   /* border-bottom: 1px solid #eee; */
   transition: all 0.2s ease;
   display: block;
@@ -775,6 +787,14 @@
 .drawer-link:hover {
   color: #ff4500;
   /* padding-left: 0.5rem; */
+}
+
+.drawer-link.active {
+  color: #ff4500;
+  font-weight: 700;
+  background-color: #fff5f0;
+  padding-left: 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .drawer-footer {

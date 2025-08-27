@@ -432,7 +432,7 @@ export default function AdminPage() {
                         초기화
                       </button>
                       <button
-                        className="px-3 py-2 btn-primary rounded-md"
+                        className="btn-primary rounded-md"
                         onClick={() => setMemberModalOpen(true)}
                       >
                         회원 번호 조회

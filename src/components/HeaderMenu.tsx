@@ -51,6 +51,12 @@ export function HeaderMenu() {
 
   // 로그인 검사 후 리다이렉트 핸들러
   const handleNavigation = (e: React.MouseEvent, path: string) => {
+    // 현재 페이지와 같은 경로인 경우 페이지 이동하지 않음
+    if (pathname === path) {
+      e.preventDefault();
+      return;
+    }
+
     if (
       !isLoggedIn &&
       path !== '/intro' &&
@@ -64,6 +70,11 @@ export function HeaderMenu() {
     } else {
       router.push(path);
     }
+  };
+
+  // 현재 활성화된 메뉴인지 확인하는 함수
+  const isActiveMenu = (path: string) => {
+    return pathname === path;
   };
 
   // 드로어 외부 클릭 시 닫기
@@ -156,7 +167,7 @@ export function HeaderMenu() {
                 <li>
                   <a
                     href="#"
-                    className="nav-link"
+                    className={`nav-link ${isActiveMenu('/evaluation') ? 'active' : ''}`}
                     onClick={(e) => handleNavigation(e, '/evaluation')}
                   >
                     연돌현상 평가
@@ -165,7 +176,7 @@ export function HeaderMenu() {
                 <li>
                   <a
                     href="#"
-                    className="nav-link"
+                    className={`nav-link ${isActiveMenu('/engineering') ? 'active' : ''}`}
                     onClick={(e) => handleNavigation(e, '/engineering')}
                   >
                     엔지니어링 서비스
@@ -174,14 +185,17 @@ export function HeaderMenu() {
                 <li>
                   <a
                     href="#"
-                    className="nav-link"
+                    className={`nav-link ${isActiveMenu('/projects') ? 'active' : ''}`}
                     onClick={(e) => handleNavigation(e, '/projects')}
                   >
                     엔지니어링 프로젝트 실적
                   </a>
                 </li>
                 <li>
-                  <Link href="/intro" className="nav-link">
+                  <Link 
+                    href="/intro" 
+                    className={`nav-link ${isActiveMenu('/intro') ? 'active' : ''}`}
+                  >
                     연돌현상 소개
                   </Link>
                 </li>
@@ -227,28 +241,42 @@ export function HeaderMenu() {
 
         <div className="drawer-content">
           <nav className="drawer-nav">
-            <Link href="/about" className="drawer-link">
+            <Link 
+              href="/about" 
+              className={`drawer-link ${isActiveMenu('/about') ? 'active' : ''}`}
+            >
               {/* About &nbsp;S&nbsp;<span className="font-orange">T</span>&nbsp;A C K */}
               <div className="flex items-center gap-3">
                 <span>About</span>
                 <Image src={logoDrawer} alt="logo" width={92} />
               </div>
             </Link>
-            <Link href="/intro" className="drawer-link">
+            <Link 
+              href="/intro" 
+              className={`drawer-link ${isActiveMenu('/intro') ? 'active' : ''}`}
+            >
               연돌현상이란
             </Link>
             {/* <div className="line"></div> */}
             <a
               href="#"
-              className="drawer-link"
+              className={`drawer-link ${isActiveMenu('/engineering') ? 'active' : ''}`}
               onClick={(e) => handleNavigation(e, '/engineering')}
             >
               엔지니어링 서비스 살펴보기
             </a>
-            <a href="#" className="drawer-link" onClick={(e) => handleNavigation(e, '/projects')}>
+            <a 
+              href="#" 
+              className={`drawer-link ${isActiveMenu('/projects') ? 'active' : ''}`} 
+              onClick={(e) => handleNavigation(e, '/projects')}
+            >
               엔지니어링 프로젝트 실적
             </a>
-            <a href="#" className="drawer-link" onClick={(e) => handleNavigation(e, '/evaluation')}>
+            <a 
+              href="#" 
+              className={`drawer-link ${isActiveMenu('/evaluation') ? 'active' : ''}`} 
+              onClick={(e) => handleNavigation(e, '/evaluation')}
+            >
               연돌현상 평가
             </a>
             {/* <Link href="/service-request" className="drawer-link">
@@ -256,18 +284,27 @@ export function HeaderMenu() {
             </Link> */}
 
             {isLoggedIn && (
-              <Link href="/my-project" className="drawer-link">
+              <Link 
+                href="/my-project" 
+                className={`drawer-link ${isActiveMenu('/my-project') ? 'active' : ''}`}
+              >
                 마이 프로젝트
               </Link>
             )}
 
             {isAdmin && (
-              <Link href="/admin" className="drawer-link">
+              <Link 
+                href="/admin" 
+                className={`drawer-link ${isActiveMenu('/admin') ? 'active' : ''}`}
+              >
                 프로젝트관리
               </Link>
             )}
             {isLoggedIn && (
-              <Link href="/mypage" className="drawer-link">
+              <Link 
+                href="/mypage" 
+                className={`drawer-link ${isActiveMenu('/mypage') ? 'active' : ''}`}
+              >
                 개인정보관리
               </Link>
             )}
