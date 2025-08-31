@@ -17,12 +17,7 @@ export default function ImageUploader() {
   return (
     <div className="image-uploader">
       <label className="upload-box">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
+        <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
         {preview ? (
           <img src={preview} alt="preview" className="preview-image" />
         ) : (

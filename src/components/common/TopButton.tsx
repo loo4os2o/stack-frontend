@@ -21,7 +21,7 @@ export default function TopButton() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -34,4 +34,4 @@ export default function TopButton() {
       ↑
     </button>
   ) : null;
-} 
+}

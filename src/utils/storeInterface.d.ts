@@ -1,4 +1,3 @@
-
 export interface UserType {
   email?: string;
   email_verified?: boolean;

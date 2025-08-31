@@ -1,28 +1,28 @@
-.bg-color h1{
+.bg-color h1 {
   font-weight: 700;
   font-size: 2rem;
   line-height: 140%;
-  color: #0B0B0B;
+  color: #0b0b0b;
 }
 
-.bg-color{
+.bg-color {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  background: linear-gradient(180deg, #F4F4F4 0%, #FFEBE3 100%);
+  background: linear-gradient(180deg, #f4f4f4 0%, #ffebe3 100%);
 }
-.bg-color > .inner{
+.bg-color > .inner {
   max-width: 1240px;
   padding: 0 1.25rem;
   margin: 0 auto;
 }
 
-.about-wrap{
+.about-wrap {
   border-radius: 1rem;
   padding: 2rem;
   background: #fff;
   padding: 2rem;
 }
-.about-wrap.transparent{
+.about-wrap.transparent {
   background: transparent;
   border: 0;
   padding: 1.25rem;
@@ -33,7 +33,7 @@
   font-weight: 700;
   font-size: 1.5rem;
   line-height: 130%;
-  color: #12121B;
+  color: #12121b;
   position: relative;
   padding-left: 1rem;
   margin-bottom: 1rem;
@@ -43,33 +43,33 @@
   width: 0.25rem;
   height: 1.5rem;
   border-radius: 0.25rem;
-  background: #FF4500;
+  background: #ff4500;
   position: absolute;
   top: 0.313rem;
   left: 0;
 }
-.about-wrap p{
+.about-wrap p {
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 160%;
-  color: #666666
+  color: #666666;
 }
 
-.about-wrap ul{
+.about-wrap ul {
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 130%;
   color: #666666;
 }
-.about-wrap ul li{
+.about-wrap ul li {
   margin-bottom: 1.25rem;
   position: relative;
   padding-left: 1rem;
 }
-.about-wrap ul li:last-child{
+.about-wrap ul li:last-child {
   margin-bottom: 0;
 }
-.about-wrap ul li::before{
+.about-wrap ul li::before {
   content: '•';
   color: #666666;
   font-size: 0.625rem;
@@ -78,8 +78,6 @@
   left: 2px;
 }
 
-
-
 .section-wide {
   background-color: #fff;
   padding: 5rem 0;
@@ -87,26 +85,26 @@
   width: 100vw;
   margin-left: calc(-50vw + 50%);
 }
-.services-container{
+.services-container {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 1.25rem;
 }
-.services-container h2{
+.services-container h2 {
   font-weight: 700;
   font-size: 2rem;
   line-height: 140%;
   margin-bottom: 2.5rem;
 }
-.services-container p{
+.services-container p {
   font-weight: 500;
   font-size: 1rem;
   line-height: 170%;
   letter-spacing: -0.025rem;
-  color: #333333
+  color: #333333;
 }
 
-.services-container .btn-secondary:hover > img{
-  filter: brightness(0) saturate(100%) invert(22%) sepia(51%) saturate(6455%) hue-rotate(27deg) brightness(90%) contrast(107%);
+.services-container .btn-secondary:hover > img {
+  filter: brightness(0) saturate(100%) invert(22%) sepia(51%) saturate(6455%) hue-rotate(27deg)
+    brightness(90%) contrast(107%);
 }
-

@@ -1,6 +1,6 @@
 // components/RangeBarWithBullet.tsx
-import ReactECharts from "echarts-for-react";
-import React from "react";
+import ReactECharts from 'echarts-for-react';
+import React from 'react';
 // 중성대 위치
 interface Range {
   x: number; // 카테고리 위치 (예: 1, 2, 3)
@@ -22,41 +22,47 @@ interface Props {
   className?: string;
 }
 
-const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets, width = '100%', height = 500, className = '' }) => {
+const RangeBarWithBullet: React.FC<Props> = ({
+  ranges,
+  bullets,
+  width = '100%',
+  height = 500,
+  className = '',
+}) => {
   const option = {
     title: {
-      text: "중성대 위치",
-      left: "center",
+      text: '중성대 위치',
+      left: 'center',
     },
     xAxis: {
-      type: "value",
+      type: 'value',
       min: 0,
       max: 4,
-      name: "샤프트",
-      nameLocation: "end",
+      name: '샤프트',
+      nameLocation: 'end',
       nameGap: -25,
       nameTextStyle: {
         fontSize: 12,
-        fontWeight: "bold",
-        verticalAlign: "bottom",
+        fontWeight: 'bold',
+        verticalAlign: 'bottom',
         lineHeight: -70,
       },
       axisLine: { onZero: false },
       interval: 1,
     },
     yAxis: {
-      type: "value",
+      type: 'value',
       min: -40,
       max: 140,
-      name: "높이 (m)",
+      name: '높이 (m)',
       nameTextStyle: {
         fontSize: 12,
-        fontWeight: "bold",
+        fontWeight: 'bold',
       },
     },
     series: [
       {
-        type: "custom",
+        type: 'custom',
         renderItem: function (
           params: echarts.CustomSeriesRenderItemParams,
           api: echarts.CustomSeriesRenderItemAPI
@@ -67,10 +73,10 @@ const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets, width = '100%', 
           const isGap = api.value(3) === 1;
 
           const barWidth = 10;
-          const color = isGap ? "#ccc" : "#000";
+          const color = isGap ? '#ccc' : '#000';
 
           return {
-            type: "rect",
+            type: 'rect',
             shape: {
               x: yStart[0] - barWidth / 2,
               y: yEnd[1],
@@ -87,12 +93,12 @@ const RangeBarWithBullet: React.FC<Props> = ({ ranges, bullets, width = '100%', 
         z: 2,
       },
       {
-        type: "scatter",
+        type: 'scatter',
         data: bullets.map((b) => [b.x, b.y]),
-        symbol: "diamond",
+        symbol: 'diamond',
         symbolSize: 14,
         itemStyle: {
-          color: "red",
+          color: 'red',
         },
         z: 3,
       },

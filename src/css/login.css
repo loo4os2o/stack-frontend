@@ -1,20 +1,20 @@
 /* 로그인/회원가입 */
 
-.login.container{
+.login.container {
   position: relative;
   min-height: 100%;
   padding: 5rem 0;
 }
 
 .login-bg-l,
-.login-bg-l-g{
+.login-bg-l-g {
   position: absolute;
   width: 37.5rem;
   height: 37.5rem;
   top: -3.125rem;
   left: 4rem;
 
-  background: #FF4500;
+  background: #ff4500;
   opacity: 0.06;
   filter: blur(12.5rem);
 
@@ -23,30 +23,30 @@
 }
 
 .login-bg-r,
-.login-bg-r-g{
+.login-bg-r-g {
   position: absolute;
   width: 46.75rem;
   height: 46.75rem;
   top: 10.313rem;
   left: 31.25rem;
 
-  background: #D10000;
+  background: #d10000;
   opacity: 0.06;
   filter: blur(12.5rem);
-  
+
   border-radius: 50%;
   z-index: 0;
 }
 
-.login-bg-l-g{
+.login-bg-l-g {
   background: #33ff00 !important;
 }
-.login-bg-r-g{
+.login-bg-r-g {
   background: #009ad1 !important;
   opacity: 0.18 !important;
 }
 
-.login-wrap{
+.login-wrap {
   width: 100%;
   max-width: 30rem;
   margin: 0 auto;
@@ -57,7 +57,7 @@
   position: relative;
   z-index: 1;
 }
-.login-wrap > h1{
+.login-wrap > h1 {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 140%;
@@ -65,7 +65,7 @@
   margin-bottom: 2rem;
 }
 
-.login-link-btn{
+.login-link-btn {
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 140%;
@@ -74,11 +74,10 @@
   text-underline-offset: 0.188rem;
 }
 
-
 /* =============================== */
 /* 서비스 요청하기(service-request) */
 /* =============================== */
-.service-request-wrap{
+.service-request-wrap {
   width: 100%;
   max-width: 1200px;
   min-height: 100%;
@@ -86,11 +85,11 @@
   padding: 2.5rem;
   border-radius: 1.25rem;
   overflow: hidden;
-  box-shadow: 0px 4px 24px 0px #0000001F;
+  box-shadow: 0px 4px 24px 0px #0000001f;
   color: #ffffff;
 }
 
-.service-request-wrap .left-card{
+.service-request-wrap .left-card {
   position: relative;
   border-radius: 1.25rem;
   overflow: hidden;
@@ -98,16 +97,12 @@
   padding: 2.5rem;
 }
 .service-request-wrap .left-card::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: linear-gradient(
-    157.97deg,
-    rgba(255, 69, 0, 0.12) 0%,
-    rgba(181, 0, 209, 0.12) 100%
-  );
+  background: linear-gradient(157.97deg, rgba(255, 69, 0, 0.12) 0%, rgba(181, 0, 209, 0.12) 100%);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -116,7 +111,7 @@
   pointer-events: none;
 }
 .service-request-wrap .left-card::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -127,7 +122,7 @@
   z-index: 0;
 }
 
-.service-request-wrap .left-card .inner{
+.service-request-wrap .left-card .inner {
   word-break: keep-all;
   position: relative;
   z-index: 1;
@@ -137,30 +132,29 @@
   margin: 0;
 }
 
-.service-request-wrap .left-card h2{
+.service-request-wrap .left-card h2 {
   font-weight: 700;
   font-size: 2rem;
   line-height: 140%;
-  color: #12121B;
+  color: #12121b;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
   max-width: 20rem;
 }
-.service-request-wrap .left-card p{
+.service-request-wrap .left-card p {
   font-weight: 400;
   font-size: 1rem;
   line-height: 160%;
   color: #666666;
 }
 
-
-.service-request-wrap .left-card .inner .contact-box{
+.service-request-wrap .left-card .inner .contact-box {
   margin-top: auto;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 0.75rem;
   padding: 1.25rem;
 }
-.service-request-wrap .left-card .inner .contact-box a{
+.service-request-wrap .left-card .inner .contact-box a {
   font-weight: 600;
   font-size: 1rem;
   line-height: 160%;

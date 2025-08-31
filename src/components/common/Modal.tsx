@@ -46,10 +46,10 @@ export default function Modal({
       <div
         className="modal-content"
         style={{ width, minWidth: 280 }}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header" style={{ padding: headerPadding }}>
-          <div className='line' style={{ padding: titlePadding }}>
+          <div className="line" style={{ padding: titlePadding }}>
             {title && <h2 className="modal-title">{title}</h2>}
             {!hideCloseButton && (
               <button className="modal-close" onClick={onClose} aria-label="닫기">
@@ -58,14 +58,19 @@ export default function Modal({
             )}
           </div>
         </div>
-        <div className="modal-body" style={{ padding: bodyPadding }}>{children}</div>
+        <div className="modal-body" style={{ padding: bodyPadding }}>
+          {children}
+        </div>
         {footer && <div className="modal-footer">{footer}</div>}
       </div>
       <style jsx>{`
         .modal-overlay {
           position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(0,0,0,0.4);
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.4);
           z-index: 1000;
           display: flex;
           align-items: center;
@@ -74,7 +79,7 @@ export default function Modal({
         .modal-content {
           background: #fff;
           border-radius: 10px;
-          box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
           max-width: 95vw;
           max-height: 100vh;
           overflow: hidden;
@@ -85,9 +90,9 @@ export default function Modal({
           display: flex;
           align-items: center;
           justify-content: space-between;
-          }
-        .line{
-          border-bottom: 1px solid #DDDDDD;
+        }
+        .line {
+          border-bottom: 1px solid #dddddd;
           width: 100%;
           display: flex;
           align-items: center;
@@ -99,7 +104,7 @@ export default function Modal({
           flex: 1;
         }
         .modal-close {
-          background: #F4F4F4;
+          background: #f4f4f4;
           border-radius: 0.5rem;
           border: none;
           width: 2.5rem;
@@ -107,7 +112,7 @@ export default function Modal({
           font-size: 1.25rem;
           font-weight: 700;
           cursor: pointer;
-          color: #8E8E8E;
+          color: #8e8e8e;
         }
         .modal-body {
           // padding: 2rem 1.8rem 2rem 2.5rem;

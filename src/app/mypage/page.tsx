@@ -15,12 +15,12 @@ export default function MyPage() {
   const [showPasswordChange, setShowPasswordChange] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<{
-    name: string ;
-    phone: string ;
-    organization: string ;
-    companyAddress: string ;
-    companyBusinessType: string ;
-    companyPhone: string ;
+    name: string;
+    phone: string;
+    organization: string;
+    companyAddress: string;
+    companyBusinessType: string;
+    companyPhone: string;
   }>({
     name: '',
     phone: '',
@@ -55,13 +55,15 @@ export default function MyPage() {
     };
 
     checkLogin();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePasswordChange = async () => {
-    const currentPassword = (document.getElementById('current-password') as HTMLInputElement)?.value;
+    const currentPassword = (document.getElementById('current-password') as HTMLInputElement)
+      ?.value;
     const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
-    const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
+    const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)
+      ?.value;
 
     if (newPassword !== confirmPassword) {
       alert('새 비밀번호가 일치하지 않습니다.');
@@ -170,11 +172,11 @@ export default function MyPage() {
                 disabled
               />
             </div>
-            
+
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-sm font-medium text-gray-700">비밀번호</label>
-                <button 
+                <button
                   onClick={() => setShowPasswordChange(!showPasswordChange)}
                   className="text-sm text-blue-600 hover:underline"
                 >
@@ -184,7 +186,9 @@ export default function MyPage() {
               {showPasswordChange && (
                 <div className="space-y-4 p-4 bg-gray-40 rounded-md">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">현재 비밀번호</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      현재 비밀번호
+                    </label>
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
@@ -192,7 +196,9 @@ export default function MyPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">새 비밀번호</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      새 비밀번호
+                    </label>
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
@@ -200,7 +206,9 @@ export default function MyPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">새 비밀번호 확인</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      새 비밀번호 확인
+                    </label>
                     <input
                       type="password"
                       className="w-full px-4 py-2 border rounded-md"
@@ -208,16 +216,13 @@ export default function MyPage() {
                     />
                   </div>
                   <div className="flex justify-end space-x-2">
-                    <button 
+                    <button
                       onClick={() => setShowPasswordChange(false)}
                       className="btn-secondary px-4 py-1.5"
                     >
                       취소
                     </button>
-                    <button 
-                      onClick={handlePasswordChange}
-                      className="btn-primary px-4 py-1.5"
-                    >
+                    <button onClick={handlePasswordChange} className="btn-primary px-4 py-1.5">
                       변경하기
                     </button>
                   </div>
@@ -271,7 +276,9 @@ export default function MyPage() {
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="회사주소"
                 value={formData.companyAddress}
-                onChange={(e) => setFormData((prev) => ({ ...prev, companyAddress: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, companyAddress: e.target.value }))
+                }
               />
             </div>
 
@@ -282,7 +289,9 @@ export default function MyPage() {
                 className="w-full px-4 py-2 border rounded-md"
                 placeholder="업태"
                 value={formData.companyBusinessType}
-                onChange={(e) => setFormData((prev) => ({ ...prev, companyBusinessType: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, companyBusinessType: e.target.value }))
+                }
               />
             </div>
 
@@ -301,11 +310,11 @@ export default function MyPage() {
 
         {/* 저장 버튼 */}
         <div className="mt-12 flex justify-center">
-          <button className="btn-primary btn-50" style={{width: '240px'}} onClick={handleSave}>
+          <button className="btn-primary btn-50" style={{ width: '240px' }} onClick={handleSave}>
             저장하기
           </button>
         </div>
       </div>
     </div>
   );
-} 
+}

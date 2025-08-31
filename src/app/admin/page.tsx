@@ -397,10 +397,8 @@ export default function AdminPage() {
                 {/* 회원검색 */}
                 <form>
                   <div className="filter-wrap flex flex-col gap-2 md:flex-row mt-6">
-                    <div className="form-group" style={{maxWidth: '400px'}}>
-                      <label className="whitespace-nowrap">
-                        회원번호
-                      </label>
+                    <div className="form-group" style={{ maxWidth: '400px' }}>
+                      <label className="whitespace-nowrap">회원번호</label>
                       <input
                         type="text"
                         placeholder="회원번호"
@@ -434,7 +432,7 @@ export default function AdminPage() {
                         초기화
                       </button>
                       <button
-                        className="px-3 py-2 btn-primary rounded-md"
+                        className="btn-primary rounded-md"
                         onClick={() => setMemberModalOpen(true)}
                       >
                         회원 번호 조회
@@ -476,9 +474,9 @@ export default function AdminPage() {
                     </button>
                   </div>
                   <div className="overflow-x-auto" style={{ minHeight: '120px' }}>
-                    <table 
+                    <table
                       className="border divide-y divide-gray-200 text-sm rounded-lg shadow"
-                      style={{minWidth: '1000px', width: '100%'}}
+                      style={{ minWidth: '1000px', width: '100%' }}
                     >
                       <thead className="bg-gray-50">
                         <tr>

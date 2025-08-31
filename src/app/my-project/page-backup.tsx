@@ -25,7 +25,6 @@ import HorizontalGaugeBar from '@/components/charts/HorizontalGaugeBar';
 import NestedHalfDonutGauge from '@/components/charts/NestedHalfDonutGauge';
 import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
 import '@/css/evaluation.css';
-import LoadingComponent from '@/components/common/loading';
 
 // 프로젝트 타입
 // 예시 데이터
@@ -113,10 +112,6 @@ export default function MyProjectPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [tab, setTab] = useState(0);
   const [showNoProject, setShowNoProject] = useState(false);
-  const [showProjectList, setShowProjectList] = useState(false);
-  const [cameFromList, setCameFromList] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY || '';
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -126,26 +121,18 @@ export default function MyProjectPage() {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData) {
       console.error('User not authenticated or error fetching user:', userError);
-      return { projects: [], isAdmin: false };
+      return;
     }
 
     const user = userData.user;
-    
-    // 관리자 권한 확인 (예: 이메일로 관리자 판단)
-    const adminEmails = ['admin@example.com']; // 관리자 이메일
-    const isUserAdmin = adminEmails.includes(user.email || '');
-
-    // 관리자인 경우 모든 프로젝트 조회, 일반 유저는 자신의 프로젝트만 조회
-    const { data, error } = isUserAdmin
-      ? await supabase.from('project').select('*')
-      : await supabase.from('project').select('*').eq('created_by', user.id);
+    const { data, error } = await supabase.from('project').select('*').eq('created_by', user.id);
 
     if (error) {
       console.error('Error fetching projects:', error);
-      return { projects: [], isAdmin: isUserAdmin };
+      return [];
     }
 
-    const projects = humps.camelizeKeys(
+    return humps.camelizeKeys(
       data.map((item) => {
         return {
           ...item,
@@ -154,30 +141,13 @@ export default function MyProjectPage() {
         };
       })
     );
-
-    return { projects, isAdmin: isUserAdmin };
   }
 
   useEffect(() => {
     const fetchProjects = async () => {
-      setIsLoading(true);
-      try {
-        const result: any = await get_my_projects();
-        console.log('Fetched result:', result);
-        
-        const allProjects = [...result.projects, ...tmpProjects];
-        setProjects(allProjects);
-        setIsAdmin(result.isAdmin);
-        
-        // 프로젝트가 있으면 첫 번째 프로젝트를 선택하여 상세보기 페이지 표시
-        if (allProjects.length > 0) {
-          setSelectedProject(allProjects[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      } finally {
-        setIsLoading(false);
-      }
+      const projects: any = await get_my_projects();
+      console.log('Fetched projects:', projects);
+      setProjects([...projects, ...tmpProjects]);
     };
 
     fetchProjects();
@@ -185,161 +155,110 @@ export default function MyProjectPage() {
 
   // 탭부분 (※ 연돌현상 예측평가 결과와 동일하게 퍼블리싱)
   const [activeTab, setActiveTab] = useState('analysis');
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="container mx-auto pt-10 pb-20 ev-result-page" style={{ minHeight: '60vh' }}>
       <div className="flex items-center justify-between gap-4 mb-5">
         <h1 className="text-3xl font-bold">마이 프로젝트</h1>
-        <div className="flex items-center gap-4">
+        {!selectedProject && (
           <button
-            className="btn-basic"
-            onClick={() => {
-              if (showNoProject) {
-                // 빈페이지에서 프로젝트 보기로 돌아갈 때
-                setShowNoProject(false);
-                if (showProjectList) {
-                  // 리스트 테이블 페이지에서 왔다면 상세보기로 돌아가기
-                  setShowProjectList(false);
-                  setSelectedProject(projects[0]);
-                }
-              } else {
-                // 프로젝트 보기에서 빈페이지로
-                setShowNoProject(true);
-              }
-            }}
+            className="text-gray-600 hover:text-gray-800 hover:underline"
+            onClick={() => setShowNoProject((v) => !v)}
           >
-            {showNoProject ? '프로젝트 보기' : '빈페이지'}
+            {showNoProject ? '프로젝트 리스트 뷰' : '빈 프로젝트 뷰'}
           </button>
-          {isAdmin && selectedProject && !showProjectList && !cameFromList && (
-            <button
-              onClick={() => {
-                setSelectedProject(null);
-                setShowProjectList(true);
-              }}
-              className="btn-basic"
-            >
-              목록(개발용)
-            </button>
-          )}
-          {isAdmin && selectedProject && cameFromList && (
-            <button
-              onClick={() => {
-                setShowProjectList(true);
-                setSelectedProject(null);
-                setCameFromList(false);
-              }}
-              className="btn-basic"
-            >
-              목록으로 돌아가기
-            </button>
-          )}
-        </div>
+        )}
+        {selectedProject && (
+          <button
+            onClick={() => setSelectedProject(null)}
+            className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+          >
+            <span>← 목록으로 돌아가기</span>
+          </button>
+        )}
       </div>
 
-      {isLoading ? (
-        <div className="loading-wrap">
-          <LoadingComponent
-            message="프로젝트를 불러오는 중입니다."
-            variant="inline"
-          />
-        </div>
-      ) : showNoProject ? (
-        // 빈 프로젝트 화면 (확인용 뷰어)
-        <div className="my-project-nodata">
-          <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
-          <Link href="/evaluation">
-            <button className="btn-primary">새 프로젝트 평가하기</button>
-          </Link>
-        </div>
-      ) : showProjectList ? (
-        // 프로젝트 리스트 테이블 (admin만)
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    프로젝트 번호
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    프로젝트 생성일자
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    프로젝트명
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    이용 서비스
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    기본 보고서 다운로드
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {projects.map((project) => (
-                  <tr key={project.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      <button
-                        className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
-                        onClick={() => {
-                          setSelectedProject(project);
-                          setShowProjectList(false);
-                          setCameFromList(true);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      >
-                        {project.id}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      {new Date(project.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      <button
-                        className="text-blue-700 hover:text-blue-900 cursor-pointer"
-                        onClick={() => {
-                          setSelectedProject(project);
-                          setShowProjectList(false);
-                          setCameFromList(true);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      >
-                        {project.projectName}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      {/* {project.service.map((s: any, index: number) => (
-                        <span
-                          key={index + 1}
-                          className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0"
-                        >
-                          {s}
-                        </span>
-                      ))} */}
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      {project.reportUrl ? (
-                        <a href={project.reportUrl} download className="btn-primary btn-small">
-                          다운로드
-                        </a>
-                      ) : (
-                        <span className="text-gray-400">-</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {!selectedProject ? (
+        showNoProject ? (
+          <div className="my-project-nodata">
+            <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
+            <Link href="/evaluation">
+              <button className="btn-primary">새 프로젝트 평가하기</button>
+            </Link>
           </div>
-        </div>
-      ) : !selectedProject ? (
-        // 프로젝트가 없을 때만 빈 프로젝트 화면 표시
-        <div className="my-project-nodata">
-          <div className="no-data-wrap">아직 등록된 마이 프로젝트가 없어요.</div>
-          <Link href="/evaluation">
-            <button className="btn-primary">새 프로젝트 평가하기</button>
-          </Link>
-        </div>
+        ) : (
+          // 프로젝트 리스트 테이블
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트 번호
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트 생성일자
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      프로젝트명
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      이용 서비스
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      기본 보고서 다운로드
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {projects.map((project) => (
+                    <tr key={project.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button
+                          className="text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.id}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {new Date(project.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button
+                          className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          {project.projectName}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {/* {project.service.map((s: any, index: number) => (
+                          <span
+                            key={index + 1}
+                            className="btn-secondary px-2 py-0.5 text-xs font-medium mr-1 last:mr-0"
+                          >
+                            {s}
+                          </span>
+                        ))} */}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        {project.reportUrl ? (
+                          <a href={project.reportUrl} download className="btn-primary btn-small">
+                            다운로드
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
       ) : (
         // 프로젝트 상세 정보
         <>

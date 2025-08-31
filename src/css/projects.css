@@ -1,6 +1,7 @@
 /* 엔지니어링 프로젝트 실적 */
-.projects-page{}
-.projects-page .main-img-wrap{
+.projects-page {
+}
+.projects-page .main-img-wrap {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -10,21 +11,21 @@
   padding: 2rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.05);
 }
-.projects-page .main-img-wrap .img-wrap{
+.projects-page .main-img-wrap .img-wrap {
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
   overflow: hidden;
   margin-bottom: 1.25rem;
 }
-.projects-page .main-img-wrap .title{
+.projects-page .main-img-wrap .title {
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 130%;
-  color: #12121B;
+  color: #12121b;
   margin-bottom: 0.5rem;
 }
-.projects-page .main-img-wrap .desc{
+.projects-page .main-img-wrap .desc {
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 160%;
@@ -32,29 +33,27 @@
   /* letter-spacing: -0.02em; */
 }
 
-
 /* 필터 */
-.projects-page .filter-wrap{
+.projects-page .filter-wrap {
   background: #fff;
   border-radius: 1.25rem 1.25rem 0 0;
   padding: 2rem;
   padding-bottom: 0;
 }
 
-
 /* 필터 > 폼요소 */
-.filter-wrap .form-group{
+.filter-wrap .form-group {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0;
   flex: 1;
 }
-.filter-wrap .form-group.flex-col{
+.filter-wrap .form-group.flex-col {
   flex-direction: column;
   align-items: flex-start;
 }
-.filter-wrap .form-group label{
+.filter-wrap .form-group label {
   margin-bottom: 0;
 }
 @media (max-width: 1240px) {
@@ -63,30 +62,29 @@
     align-items: start;
     gap: 0;
   }
-  .filter-wrap .form-group label{
+  .filter-wrap .form-group label {
     margin-bottom: 0.5rem;
   }
-  .filter-wrap .form-group label.hidden{
+  .filter-wrap .form-group label.hidden {
     display: none;
   }
 }
 
-
 /* 엔지니어링 서비스 */
-.eng-projects{
+.eng-projects {
   background: #fff;
   border-radius: 0 0 1.25rem 1.25rem;
   padding: 2rem;
 }
 
-.eng-projects .project-item{
-  border: 1px solid #DDDDDD;
+.eng-projects .project-item {
+  border: 1px solid #dddddd;
   border-radius: 0.75rem;
   margin-bottom: 0.5rem;
   box-sizing: border-box;
 }
 
-.eng-projects .project-item button{
+.eng-projects .project-item button {
   padding: 1.188rem 1.25rem;
   display: flex;
   align-items: center;
@@ -97,7 +95,7 @@
 }
 
 /* 아코디언 빈 상태 */
-.eng-projects .empty-state{
+.eng-projects .empty-state {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,12 +105,12 @@
   border-radius: 0.5rem;
 }
 
-.eng-projects .empty-state .empty-message{
+.eng-projects .empty-state .empty-message {
   text-align: center;
   color: #666666;
 }
 
-.eng-projects .empty-state .empty-message p{
+.eng-projects .empty-state .empty-message p {
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 160%;
@@ -120,7 +118,7 @@
   margin-bottom: 0.5rem;
 }
 
-.eng-projects .empty-state .empty-message p:first-child{
+.eng-projects .empty-state .empty-message p:first-child {
   font-weight: 600;
   font-size: 1rem;
   color: #333333;
@@ -130,16 +128,16 @@
   border-bottom: 0;
 } */
 
-.acc-info-wrap{
+.acc-info-wrap {
   /* border-top: 1px dashed #eee; */
   padding: 0.5rem 2rem 2rem 2rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 3.75rem
+  gap: 3.75rem;
 }
 
-.acc-info-wrap .img-wrap{
+.acc-info-wrap .img-wrap {
   width: 390px;
   height: 15rem;
   border-radius: 1rem;
@@ -151,17 +149,17 @@
 }
 
 @media (max-width: 1070px) {
-  .acc-info-wrap{
+  .acc-info-wrap {
     flex-direction: column;
     align-items: flex-start;
     gap: 2rem;
   }
-  .acc-info-wrap .img-wrap{
+  .acc-info-wrap .img-wrap {
     width: 100%;
   }
 }
 
-.eng-projects .acc-info{
+.eng-projects .acc-info {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -170,45 +168,39 @@
   line-height: 160%;
   color: #969696;
 }
-.eng-projects .acc-info .label{
+.eng-projects .acc-info .label {
   min-width: 5rem;
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 160%;
   color: #969696;
 }
-.eng-projects .acc-info .value{
+.eng-projects .acc-info .value {
   font-weight: 500;
   font-size: 1rem;
   line-height: 160%;
   color: #333333;
 }
 
-
-
 /* 관리자 - 입력폼 */
 
-
-
 /* 공통 이미지 */
-.image-wrap{
+.image-wrap {
   width: 100%;
   height: 100%;
 }
-.image-wrap > img{
+.image-wrap > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-
-
 /* 연돌현상 소개 */
-.intro-acc{
+.intro-acc {
   background: #fff;
   border-radius: 0.625rem;
 }
-.intro-acc button{
+.intro-acc button {
   padding: 1.188rem 1.25rem;
   display: flex;
   align-items: center;
@@ -217,59 +209,59 @@
   border: 0;
   border-radius: 0.75rem;
 }
-.intro-acc:last-child{
+.intro-acc:last-child {
   border-bottom: 0;
 }
-.intro{
+.intro {
   /* border-top: 1px dashed #eee; */
   padding: 0.5rem 2.5rem 2.5rem 2.5rem;
 }
 .intro-text,
-.intro-text p{
+.intro-text p {
   font-size: 1rem;
   font-weight: 500;
   line-height: 160%;
   letter-spacing: -0.025rem;
   color: #333333;
 }
-.intro-text h4{
+.intro-text h4 {
   font-weight: 700;
   font-size: 1.125rem;
   line-height: 140%;
-  color: #12121B;
+  color: #12121b;
   position: relative;
   padding-left: 0.75rem;
   margin-bottom: 1rem;
 }
-.intro-text h4::before{
+.intro-text h4::before {
   content: '';
   width: 0.25rem;
   height: 1.125rem;
   border-radius: 0.25rem;
-  background: #FF4500;
+  background: #ff4500;
   position: absolute;
   top: 0.313rem;
   left: 0;
 }
-.intro-text h4.no-marker{
+.intro-text h4.no-marker {
   padding-left: 0;
 }
-.intro-text h4.no-marker::before{
+.intro-text h4.no-marker::before {
   display: none;
 }
-.intro-text h5{
+.intro-text h5 {
   font-weight: 700;
   font-size: 1rem;
-  color: #12121B;
+  color: #12121b;
   display: flex;
   align-items: flex-start;
   margin-bottom: 0.5rem;
 }
-.intro-text h5 span{
+.intro-text h5 span {
   font-size: 0.625rem;
   font-weight: 900;
   line-height: 0;
-  border: 2px solid #12121B;
+  border: 2px solid #12121b;
   border-radius: 50%;
   width: 1rem;
   height: 1rem;
@@ -282,25 +274,25 @@
   padding-right: 0.063rem;
   margin-top: 0.313rem;
 }
-.intro-text ul{
+.intro-text ul {
   font-weight: 500;
   font-size: 1rem;
   line-height: 160%;
   color: #333333;
   padding-left: 1.5rem;
 }
-.intro-text ul li{
+.intro-text ul li {
   font-weight: 500;
   font-size: 0.938rem;
   line-height: 160%;
   color: #666666;
-  position: relative; 
+  position: relative;
   padding-left: 1.125rem;
 }
-.intro-text ul li:first-child{
+.intro-text ul li:first-child {
   margin-top: 0.25rem;
 }
-.intro-text ul li::before{
+.intro-text ul li::before {
   content: '•';
   color: #666666;
   font-size: 0.875rem;
@@ -308,17 +300,17 @@
   top: -0.063rem;
   left: 0.25rem;
 }
-.intro-text ul li.no-marker{
+.intro-text ul li.no-marker {
   padding-left: 0;
 }
-.intro-text ul li.no-marker::before{
+.intro-text ul li.no-marker::before {
   display: none;
 }
-.marker{
+.marker {
   position: relative;
   padding-left: 1.5rem;
 }
-.marker::before{
+.marker::before {
   content: 'ㆍ';
   color: #333333;
   font-size: 1.5rem;
@@ -327,38 +319,37 @@
   left: 0;
 }
 
-.intro hr{
+.intro hr {
   margin: 2rem 0;
-  border-color: #EAEAEA;
+  border-color: #eaeaea;
 }
-.intro-row{
+.intro-row {
   display: flex;
   align-items: center;
   gap: 2.5rem;
 }
 @media (max-width: 800px) {
-  .intro-row{
+  .intro-row {
     flex-direction: column;
     gap: 2rem;
   }
 }
 
-
 /* 기술자료 게시판 */
-.board-wrap{
+.board-wrap {
   background: #fff;
   border-radius: 1.25rem;
   padding: 2rem;
 }
-.board-wrap > h2{
+.board-wrap > h2 {
   font-weight: 700;
   font-size: 2rem;
   line-height: 140%;
-  color: #12121B;
+  color: #12121b;
   margin-bottom: 2rem;
 }
-.board-wrap .board-item{
-  border: 1px solid #DDDDDD !important;
+.board-wrap .board-item {
+  border: 1px solid #dddddd !important;
   border-radius: 0.75rem !important;
   padding: 1.25rem;
   display: flex;
@@ -383,16 +374,13 @@
   line-height: 1.4;
 }
 
-
-
 /* ========================================================== */
 /* 관리자 페이지 */
 /* ========================================================== */
-.admin-page{
-
+.admin-page {
 }
 
-.admin-page .admin-tab-active{
-  background: #FF4500;
+.admin-page .admin-tab-active {
+  background: #ff4500;
   color: #fff;
 }

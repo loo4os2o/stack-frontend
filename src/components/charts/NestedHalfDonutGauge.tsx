@@ -1,6 +1,6 @@
 // components/GaugeNestedFullDonut.tsx
-import ReactECharts from "echarts-for-react";
-import React from "react";
+import ReactECharts from 'echarts-for-react';
+import React from 'react';
 // 문제 발생 예상층
 interface Props {
   dangerPercent: number; // 예: 0.49
@@ -21,39 +21,39 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
     title: [
       {
         text: `${Math.round(dangerPercent * 100)}%`,
-        left: "center",
-        top: "40%",
+        left: 'center',
+        top: '40%',
         textStyle: {
           fontSize: 24,
-          fontWeight: "bold",
-          color: "#a32020",
+          fontWeight: 'bold',
+          color: '#a32020',
         },
       },
       {
         text: `${Math.round(warningPercent * 100)}%`,
-        left: "center",
-        top: "70%",
+        left: 'center',
+        top: '70%',
         textStyle: {
           fontSize: 18,
-          fontWeight: "bold",
-          color: "#e78f8f",
+          fontWeight: 'bold',
+          color: '#e78f8f',
         },
       },
     ],
     legend: {
-      orient: "horizontal",
+      orient: 'horizontal',
       top: 10,
-      left: "center",
+      left: 'center',
       data: [
         {
-          name: "문제 주의층",
-          icon: "circle",
-          itemStyle: { color: "#e78f8f" },
+          name: '문제 주의층',
+          icon: 'circle',
+          itemStyle: { color: '#e78f8f' },
         },
         {
-          name: "문제 발생층",
-          icon: "circle",
-          itemStyle: { color: "#a32020" },
+          name: '문제 발생층',
+          icon: 'circle',
+          itemStyle: { color: '#a32020' },
         },
       ],
       textStyle: {
@@ -65,24 +65,24 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
     series: [
       // 바깥쪽 (더 굵음): 문제 주의층
       {
-        name: "문제 주의층",
-        type: "gauge",
+        name: '문제 주의층',
+        type: 'gauge',
         startAngle: 90,
         endAngle: -270,
-        radius: "80%",
-        center: ["50%", "55%"],
+        radius: '80%',
+        center: ['50%', '55%'],
         progress: {
           show: true,
           roundCap: true,
           width: 16,
           itemStyle: {
-            color: "#e78f8f",
+            color: '#e78f8f',
           },
         },
         axisLine: {
           lineStyle: {
             width: 20,
-            color: [[1, "#eee"]],
+            color: [[1, '#eee']],
           },
         },
         pointer: { show: false },
@@ -95,24 +95,24 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
       },
       // 안쪽 (얇음): 문제 발생층
       {
-        name: "문제 발생층",
-        type: "gauge",
+        name: '문제 발생층',
+        type: 'gauge',
         startAngle: 90,
         endAngle: -270,
-        radius: "65%",
-        center: ["50%", "55%"],
+        radius: '65%',
+        center: ['50%', '55%'],
         progress: {
           show: true,
           roundCap: true,
           width: 10,
           itemStyle: {
-            color: "#a32020",
+            color: '#a32020',
           },
         },
         axisLine: {
           lineStyle: {
             width: 10,
-            color: [[1, "#eee"]],
+            color: [[1, '#eee']],
           },
         },
         pointer: { show: false },
