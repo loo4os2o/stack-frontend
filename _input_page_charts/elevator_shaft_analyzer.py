@@ -5,6 +5,8 @@
 
 from typing import Dict, Any
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 class ElevatorShaftCalculator:
     """엘리베이터 샤프트 계산 엔진"""
@@ -467,6 +469,118 @@ def analyze_elevator_shaft_system(input_data: Dict[str, Any]) -> pd.DataFrame:
     return df
 
 
+def draw_elevator_shaft_chart(result_df: pd.DataFrame, save_path: str = None, show_chart: bool = True):
+    """
+    엘리베이터 샤프트 분석 결과 차트 그리기 (이미지와 유사한 단순한 형태)
+    
+    Args:
+        result_df: analyze_elevator_shaft_system()로 생성된 결과 DataFrame
+        save_path: 차트 저장 경로 (선택사항)
+        show_chart: 차트 화면 표시 여부
+    """
+    # 차트 설정
+    fig, ax = plt.subplots(1, 1, figsize=(8, 10))
+    plt.rcParams['font.family'] = ['Arial Unicode MS', 'Apple SD Gothic Neo', 'DejaVu Sans', 'sans-serif']
+    
+    # 샤프트별 데이터 준비
+    shaft_types = result_df['shaft_type'].values
+    x = np.arange(len(shaft_types))
+    width = 0.4  # 더 좁은 막대
+    
+    # 각 샤프트별 총 높이 계산
+    for i, (idx, row) in enumerate(result_df.iterrows()):
+        basement_value = row['served_zone_basement'] if not pd.isna(row['served_zone_basement']) else 0
+        
+        # 지상층 총합 계산
+        ground_total = 0
+        ground_zones = ['express_zone_local_shaft', 'served_zone_lobby', 'express_zone_main', 
+                       'served_zone_main', 'express_zone_skylobby', 'served_zone_skylobby']
+        
+        for zone in ground_zones:
+            val = row[zone]
+            if not pd.isna(val) and val is not None and val != 0:
+                ground_total += val
+        
+        # 색상 결정
+        if i == 0:  # low-rise shaft
+            color = '#2F2F2F'  # 검은색
+        elif i == 1:  # mid-rise shaft 
+            color = '#2F2F2F'  # 검은색
+        elif i == 2:  # high-rise shaft
+            color = '#2F2F2F'  # 검은색 (상단)
+            ground_color = '#C0C0C0'  # 회색 (하단)
+        elif i == 3:  # basement shuttle shaft
+            color = '#2F2F2F'  # 검은색
+        else:  # sky lobby shuttle shaft
+            color = '#2F2F2F'  # 검은색
+        
+        # 지하층 그리기 (음수)
+        if basement_value < 0:
+            ax.bar(i, abs(basement_value), width, bottom=basement_value,
+                  color='#2F2F2F', alpha=0.9, edgecolor='black', linewidth=0.5)
+        
+        # 지상층 그리기 (high-rise shaft는 세 부분으로 스택)
+        if i == 2 and ground_total > 0:  # high-rise shaft
+            lobby_zone = row['served_zone_lobby'] if not pd.isna(row['served_zone_lobby']) else 0
+            main_zone = row['served_zone_main'] if not pd.isna(row['served_zone_main']) else 0
+            express_main = row['express_zone_main'] if not pd.isna(row['express_zone_main']) else 0
+            
+            current_height = 0
+            
+            # 1. Lobby zone (맨 아래) - 검은색
+            if lobby_zone > 0:
+                ax.bar(i, lobby_zone, width, bottom=current_height,
+                      color='#2F2F2F', alpha=0.9, edgecolor='black', linewidth=0.5)
+                current_height += lobby_zone
+            
+            # 2. Express main zone (중간) - 진한 회색  
+            if express_main > 0:
+                ax.bar(i, express_main, width, bottom=current_height,
+                      color='#C0C0C0', alpha=0.9, edgecolor='black', linewidth=0.5)
+                current_height += express_main
+            
+            # 3. Served main zone (맨 위) - 검은색
+            if main_zone > 0:
+                ax.bar(i, main_zone, width, bottom=current_height,
+                      color='#2F2F2F', alpha=0.9, edgecolor='black', linewidth=0.5)
+        elif ground_total > 0:
+            ax.bar(i, ground_total, width, bottom=0,
+                  color=color, alpha=0.9, edgecolor='black', linewidth=0.5)
+    
+    # 축 설정
+    ax.set_ylabel('층수', fontsize=12, fontweight='bold')
+    ax.set_title('엘리베이터 샤프트 분석', fontsize=14, fontweight='bold', pad=20)
+    
+    # X축 라벨 설정 (숫자로)
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(i+1) for i in range(len(x))])
+    
+    # Y축 범위 설정 (이미지와 동일하게)
+    ax.set_ylim(-30, 40)
+    
+    # 0 라인 강조 (지면)
+    ax.axhline(y=0, color='black', linestyle='-', linewidth=1, alpha=0.7)
+    
+    # 격자 추가
+    ax.grid(True, alpha=0.3, axis='y')
+    
+    # Y축 눈금 설정
+    ax.set_yticks(range(-30, 41, 10))
+    
+    plt.tight_layout()
+    
+    # 저장
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"차트가 저장되었습니다: {save_path}")
+    
+    # 화면 표시
+    if show_chart:
+        plt.show()
+    
+    return fig
+
+
 def main():
     """
     엘리베이터 샤프트 분석기 메인 함수
@@ -541,6 +655,11 @@ def main():
     
     print("=" * 120)
     print(f"📈 총 {len(result_df)}개 샤프트 분석 완료")
+    
+    # 차트 그리기
+    print("\n🎨 분석 결과 차트 생성 중...")
+    draw_elevator_shaft_chart(result_df, save_path="elevator_shaft_analysis.png")
+    print("✅ 차트 생성 완료!")
     
     return result_df
 
