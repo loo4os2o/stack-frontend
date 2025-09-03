@@ -3,19 +3,22 @@
 import ArrowRight from '@/assets/icons/icon-btn-more.png';
 import ImgEv1 from '@/assets/images/evaluation/img-ev-1.png';
 import ExImgCppe from '@/assets/images/ex/ex-img-cppe.png';
-import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
+import ExImgIntro4 from '@/assets/images/ex/sample-intro-4.png';
+import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
+import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import Modal from '@/components/common/Modal';
 import TooltipButton from '@/components/common/TooltipButton';
 import ImagePreview from '@/components/ImagePreview';
 import ImageUploadButton from '@/components/ImageUploadButton';
 import '@/css/evaluation.css';
+import { generateSectionDataArray } from '@/lib/buildingSection';
+import { analyzeElevatorShaftSystem } from '@/lib/elevatorCalc';
 import { useUserStore } from '@/utils/store';
 import { createClient } from '@supabase/supabase-js';
 import humps from 'humps';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ExImgIntro4 from '@/assets/images/ex/sample-intro-4.png';
 
 export default function EvaluationPage() {
   const router = useRouter();
@@ -371,6 +374,33 @@ export default function EvaluationPage() {
       setModalOpen(false);
     }
   }
+
+  const input = {
+    numFloorGround: 120,
+    numFloorBasement: 7,
+    EVZoningtypeSingle: false,
+    EVZoningtypeTwo: true,
+    EVZoningtypeMulti: false,
+    EVSkylobby: false,
+    EVTopfloorLow: 20,
+    EVTopfloorMid: 0,
+    EVTopfloorHigh: 30,
+    EVBasementshuttle: true,
+  };
+
+  const result: any = analyzeElevatorShaftSystem(input);
+  console.log('result: ', result);
+
+  // 1) 바로 전체 결과 얻기
+  const buildingSectionData = generateSectionDataArray({
+    groundFloors: 30,
+    basementFloors: 7,
+    hasPodium: true,
+    podiumFloors: 5,
+  });
+
+  // 3) 샘플 결과
+  console.log('buildingSectionData: ', buildingSectionData);
 
   return (
     <div className="container mx-auto py-10 evaluation">
@@ -748,8 +778,10 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton tooltipText="
-                        지면부터 포디움 최상층의 천장 슬래브 상단까지의 높이를 입력해 주세요." />
+                      <TooltipButton
+                        tooltipText="
+                        지면부터 포디움 최상층의 천장 슬래브 상단까지의 높이를 입력해 주세요."
+                      />
                     </div>
                   </div>
                 </div>
@@ -780,10 +812,12 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton tooltipText="
+                      <TooltipButton
+                        tooltipText="
                         기준층(상층부 타워) 외피 길이 대비 포디움 외피 길이의 비율을 입력해 주세요.
                         <br/>※ 계산식 : (포디움 외피 둘레) / (기준층 외피 둘레)
-                      " />
+                      "
+                      />
                     </div>
                   </div>
                 </div>
@@ -895,18 +929,29 @@ export default function EvaluationPage() {
                 <div className="flex gap-4 md:flex-row flex-col w-full">
                   {/* 차트 영역 */}
                   <div className="chart-wrap md:w-2/5">
-                    <RangeBarWithBullet
-                      ranges={chartData.ranges}
-                      bullets={chartData.bullets}
-                      height={340}
-                      width="100%"
+                    <SectionStackedBarChart
+                      data={[
+                        { section: 1, basement: 0, soil: -16, envelope: 0 },
+                        { section: 2, basement: -6, soil: -16, envelope: 0 },
+                        { section: 3, basement: -6, soil: -16, envelope: 35 },
+                        { section: 4, basement: -6, soil: -16, envelope: 35 },
+                        { section: 5, basement: -6, soil: -16, envelope: 35 },
+                        { section: 6, basement: -6, soil: -16, envelope: 35 },
+                        { section: 7, basement: -6, soil: -16, envelope: 35 },
+                        { section: 8, basement: -6, soil: -16, envelope: 35 },
+                        { section: 9, basement: -6, soil: -16, envelope: 4 },
+                        { section: 10, basement: -6, soil: -16, envelope: 4 },
+                        { section: 11, basement: -6, soil: -16, envelope: 0 },
+                        { section: 12, basement: 0, soil: -16, envelope: 0 },
+                      ]}
+                      width={240}
+                      height={300}
                     />
                   </div>
 
                   {/* 이미지 영역 */}
                   <div className="image-section md:w-3/5">
-                    <div className="image-wrap" 
-                      style={{ minHeight: '240px', maxHeight: '240px' }}>
+                    <div className="image-wrap" style={{ minHeight: '240px', maxHeight: '240px' }}>
                       <Image src={ExImgIntro4} alt={'이미지 영역'} />
                     </div>
                     <p>
@@ -931,10 +976,13 @@ export default function EvaluationPage() {
                     <h3 style={{ marginBottom: 0 }}>
                       수직조닝 타입<span className="text-red-500 ml-1">*</span>
                     </h3>
-                    <TooltipButton position="right" tooltipText="
+                    <TooltipButton
+                      position="right"
+                      tooltipText="
                       건물 높이 또는 용도에 따라 구획된 엘리베이터존 구성방식을 선택해주세요.
                       <br/>※ 승강기 운행계획도 또는 단면도 참조
-                    " />
+                    "
+                    />
                   </div>
 
                   {/* 라디오 버튼 */}
@@ -980,10 +1028,13 @@ export default function EvaluationPage() {
                     <h3 style={{ marginBottom: 0 }}>
                       샤프트별 최고운행층<span className="text-red-500 ml-1">*</span>
                     </h3>
-                    <TooltipButton position="right" tooltipText="
+                    <TooltipButton
+                      position="right"
+                      tooltipText="
                       각 샤프트(엘리베이터 그룹) 별로 최상단 정차증의 층수를 입력해 주세요.
                       구획된 존별 승강기 운행계획을 기준으로 합니다.
-                    " />
+                    "
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
@@ -1094,25 +1145,61 @@ export default function EvaluationPage() {
                 <div className="flex gap-4 md:flex-row flex-col w-full">
                   {/* 차트 영역 */}
                   <div className="chart-wrap md:w-2/5">
-                    <RangeBarWithBullet
-                      ranges={chartData.ranges}
-                      bullets={chartData.bullets}
-                      height={340}
-                      width="100%"
+                    <ElevatorStackedBarChart
+                      data={[
+                        {
+                          shaftType: 'low-rise shaft',
+                          servedZoneBasement: 0,
+                          expressZoneLocalShaft: 0,
+                          servedZoneLobby: 0,
+                          expressZoneMain: 0,
+                          servedZoneMain: 20,
+                        },
+                        {
+                          shaftType: 'mid-rise shaft',
+                          servedZoneBasement: 0,
+                          expressZoneLocalShaft: 0,
+                          servedZoneLobby: 0,
+                          expressZoneMain: 0,
+                          servedZoneMain: 0,
+                        },
+                        {
+                          shaftType: 'high-rise shaft',
+                          servedZoneBasement: 0,
+                          expressZoneLocalShaft: 0,
+                          servedZoneLobby: 2,
+                          expressZoneMain: 18,
+                          servedZoneMain: 10,
+                        },
+                        {
+                          shaftType: 'basement shuttle shaft',
+                          servedZoneBasement: -7,
+                          expressZoneLocalShaft: 0,
+                          servedZoneLobby: 0,
+                          expressZoneMain: 0,
+                          servedZoneMain: 2,
+                        },
+                        {
+                          shaftType: 'sky lobby shuttle shaft',
+                          servedZoneBasement: 0,
+                          expressZoneLocalShaft: 0,
+                          servedZoneLobby: 0,
+                          expressZoneMain: 0,
+                          servedZoneMain: 0,
+                        },
+                      ]}
                     />
                   </div>
 
                   {/* 이미지 영역 */}
                   <div className="image-section md:w-3/5">
-                    <div className="image-wrap" 
-                      style={{ minHeight: '240px', maxHeight: '240px' }}>
+                    <div className="image-wrap" style={{ minHeight: '240px', maxHeight: '240px' }}>
                       <Image src={ExImgIntro4} alt={'이미지 영역'} />
                     </div>
                     <p>
-                      스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해
-                      중간층에 배치되는 환승용 공용로비로, 승객은 저층용 엘리베이터를 타고
-                      스카이로비까지 이동한 뒤, 고층부 전용 엘리베이터로 환승해
-                      상층부로 이동한다.
+                      스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해 중간층에 배치되는
+                      환승용 공용로비로, 승객은 저층용 엘리베이터를 타고 스카이로비까지 이동한 뒤,
+                      고층부 전용 엘리베이터로 환승해 상층부로 이동한다.
                     </p>
                   </div>
                 </div>
