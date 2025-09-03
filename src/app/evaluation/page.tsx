@@ -15,6 +15,7 @@ import humps from 'humps';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import ExImgIntro4 from '@/assets/images/ex/sample-intro-4.png';
 
 export default function EvaluationPage() {
   const router = useRouter();
@@ -679,8 +680,8 @@ export default function EvaluationPage() {
           {/* 2. 건물 매스 계획 */}
           <h2 className="mt-8">2. 건물 매스 계획</h2>
           <section>
-            <div className="flex flex-col md:flex-row gap-8">
-              <div className="w-full md:w-1/2 left">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-2/5 left">
                 {/* 스위치 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <h3>저층부 포디움</h3>
@@ -747,7 +748,8 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton tooltipText="포디움 높이 (m)" />
+                      <TooltipButton tooltipText="
+                        지면부터 포디움 최상층의 천장 슬래브 상단까지의 높이를 입력해 주세요." />
                     </div>
                   </div>
                 </div>
@@ -778,7 +780,10 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton tooltipText="외피 둘레비율 (m)" />
+                      <TooltipButton tooltipText="
+                        기준층(상층부 타워) 외피 길이 대비 포디움 외피 길이의 비율을 입력해 주세요.
+                        <br/>※ 계산식 : (포디움 외피 둘레) / (기준층 외피 둘레)
+                      " />
                     </div>
                   </div>
                 </div>
@@ -885,15 +890,31 @@ export default function EvaluationPage() {
                   </div>
                 </div>
               </div>{' '}
-              {/* 2. 물 매스 계획 : 왼쪽 영역 끝 */}
-              <div className="w-full md:w-1/2 right">
-                <div className="chart-wrap">
-                  <RangeBarWithBullet
-                    ranges={chartData.ranges}
-                    bullets={chartData.bullets}
-                    height={340}
-                    width="100%"
-                  />
+              {/* 2. 건물 매스 계획 : 왼쪽 영역 끝 */}
+              <div className="w-full lg:w-3/5 right">
+                <div className="flex gap-4 md:flex-row flex-col w-full">
+                  {/* 차트 영역 */}
+                  <div className="chart-wrap md:w-2/5">
+                    <RangeBarWithBullet
+                      ranges={chartData.ranges}
+                      bullets={chartData.bullets}
+                      height={340}
+                      width="100%"
+                    />
+                  </div>
+
+                  {/* 이미지 영역 */}
+                  <div className="image-section md:w-3/5">
+                    <div className="image-wrap" 
+                      style={{ minHeight: '240px', maxHeight: '240px' }}>
+                      <Image src={ExImgIntro4} alt={'이미지 영역'} />
+                    </div>
+                    <p>
+                      포디움 상층부 타워와는 다른 기능(예: 상업, 켜뮤니티, 로비, 주차 등)을
+                      수용하며, 저층부의 매스를 통해 상부 타워와의 용도-동선-파사드 분리를
+                      계획적으로 구현하는 기반부 구성이다.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -902,15 +923,18 @@ export default function EvaluationPage() {
           {/* 3. 승객용 엘리베이터 샤프트 계획 */}
           <h2 className="mt-8">3. 승객용 엘리베이터 샤프트 계획</h2>
           <section>
-            <div className="flex flex-col md:flex-row gap-8">
-              <div className="w-full md:w-1/2 left">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-2/5 left">
                 {/* 수직조닝 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 mb-5">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 style={{ marginBottom: 0 }}>
-                      수직조닝<span className="text-red-500 ml-1">*</span>
+                      수직조닝 타입<span className="text-red-500 ml-1">*</span>
                     </h3>
-                    <TooltipButton position="right" tooltipText="설명" />
+                    <TooltipButton position="right" tooltipText="
+                      건물 높이 또는 용도에 따라 구획된 엘리베이터존 구성방식을 선택해주세요.
+                      <br/>※ 승강기 운행계획도 또는 단면도 참조
+                    " />
                   </div>
 
                   {/* 라디오 버튼 */}
@@ -956,7 +980,10 @@ export default function EvaluationPage() {
                     <h3 style={{ marginBottom: 0 }}>
                       샤프트별 최고운행층<span className="text-red-500 ml-1">*</span>
                     </h3>
-                    <TooltipButton position="right" tooltipText="설명" />
+                    <TooltipButton position="right" tooltipText="
+                      각 샤프트(엘리베이터 그룹) 별로 최상단 정차증의 층수를 입력해 주세요.
+                      구획된 존별 승강기 운행계획을 기준으로 합니다.
+                    " />
                   </div>
 
                   <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
@@ -996,7 +1023,7 @@ export default function EvaluationPage() {
                       </div>
                     </div>
 
-                    {/* 추가가 */}
+                    {/* 추가 */}
                     <div>
                       <label htmlFor="shaftAdditionalAboveFloors" className="small">
                         추가
@@ -1061,16 +1088,33 @@ export default function EvaluationPage() {
                     </div>
                   </div>
                 </div>
-              </div>{' '}
+              </div>
               {/* 3. 승객용 엘리베이터 샤프트 계획 : 왼쪽 영역 끝 */}
-              <div className="w-full md:w-1/2 right">
-                <div className="chart-wrap">
-                  <RangeBarWithBullet
-                    ranges={chartData.ranges}
-                    bullets={chartData.bullets}
-                    height={340}
-                    width="100%"
-                  />
+              <div className="w-full lg:w-3/5 right">
+                <div className="flex gap-4 md:flex-row flex-col w-full">
+                  {/* 차트 영역 */}
+                  <div className="chart-wrap md:w-2/5">
+                    <RangeBarWithBullet
+                      ranges={chartData.ranges}
+                      bullets={chartData.bullets}
+                      height={340}
+                      width="100%"
+                    />
+                  </div>
+
+                  {/* 이미지 영역 */}
+                  <div className="image-section md:w-3/5">
+                    <div className="image-wrap" 
+                      style={{ minHeight: '240px', maxHeight: '240px' }}>
+                      <Image src={ExImgIntro4} alt={'이미지 영역'} />
+                    </div>
+                    <p>
+                      스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해
+                      중간층에 배치되는 환승용 공용로비로, 승객은 저층용 엘리베이터를 타고
+                      스카이로비까지 이동한 뒤, 고층부 전용 엘리베이터로 환승해
+                      상층부로 이동한다.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
