@@ -21,11 +21,17 @@ type ChartDataItem = {
 
 interface StackedBarChartProps {
   data: ChartDataItem[];
+  width?: number | string;
+  height?: number;
 }
 
-export default function StackedBarChart({ data }: StackedBarChartProps) {
+export default function StackedBarChart({
+  data,
+  width = '100%',
+  height = 400,
+}: StackedBarChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width={width} height={height}>
       <BarChart data={data} stackOffset="sign">
         <YAxis tickCount={5} />
         <CartesianGrid vertical={false} />
