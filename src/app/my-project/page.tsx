@@ -19,13 +19,15 @@ import resultChartEx1 from '@/assets/images/evaluation/img-result-chart-ex1.png'
 import resultChartEx2 from '@/assets/images/evaluation/img-result-chart-ex2.png';
 import resultChartEx3 from '@/assets/images/evaluation/img-result-chart-ex3.png';
 import DonutGauge from '@/components/charts/DonutGauge';
+import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
 import HorizontalBarWithBullet from '@/components/charts/HorizontalBarWithBullet';
 import HorizontalGaugeBar from '@/components/charts/HorizontalGaugeBar';
 import NestedHalfDonutGauge from '@/components/charts/NestedHalfDonutGauge';
+import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
-import '@/css/evaluation.css';
 import LoadingComponent from '@/components/common/loading';
+import '@/css/evaluation.css';
 
 // 프로젝트 타입
 // 예시 데이터
@@ -130,7 +132,7 @@ export default function MyProjectPage() {
     }
 
     const user = userData.user;
-    
+
     // 관리자 권한 확인 (예: 이메일로 관리자 판단)
     const adminEmails = ['admin@example.com']; // 관리자 이메일
     const isUserAdmin = adminEmails.includes(user.email || '');
@@ -164,11 +166,11 @@ export default function MyProjectPage() {
       try {
         const result: any = await get_my_projects();
         console.log('Fetched result:', result);
-        
+
         const allProjects = [...result.projects, ...tmpProjects];
         setProjects(allProjects);
         setIsAdmin(result.isAdmin);
-        
+
         // 프로젝트가 있으면 첫 번째 프로젝트를 선택하여 상세보기 페이지 표시
         if (allProjects.length > 0) {
           setSelectedProject(allProjects[0]);
@@ -238,10 +240,7 @@ export default function MyProjectPage() {
 
       {isLoading ? (
         <div className="loading-wrap">
-          <LoadingComponent
-            message="프로젝트를 불러오는 중입니다."
-            variant="inline"
-          />
+          <LoadingComponent message="프로젝트를 불러오는 중입니다." variant="inline" />
         </div>
       ) : showNoProject ? (
         // 빈 프로젝트 화면 (확인용 뷰어)
@@ -574,11 +573,75 @@ export default function MyProjectPage() {
                     <div className="flex flex-row gap-8" style={{ height: '400px' }}>
                       <div className="chart-wrap w-1/6">
                         {/* 차트 - 문제 발생 예상층 */}
-                        <VerticalRangeBar blocks={chartData.blocks} />
+                        {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
+                        <SectionStackedBarChart
+                          data={[
+                            { section: 1, basement: 0, soil: -16, envelope: 0 },
+                            { section: 2, basement: -6, soil: -16, envelope: 0 },
+                            { section: 3, basement: -6, soil: -16, envelope: 35 },
+                            { section: 4, basement: -6, soil: -16, envelope: 35 },
+                            { section: 5, basement: -6, soil: -16, envelope: 35 },
+                            { section: 6, basement: -6, soil: -16, envelope: 35 },
+                            { section: 7, basement: -6, soil: -16, envelope: 35 },
+                            { section: 8, basement: -6, soil: -16, envelope: 35 },
+                            { section: 9, basement: -6, soil: -16, envelope: 4 },
+                            { section: 10, basement: -6, soil: -16, envelope: 4 },
+                            { section: 11, basement: -6, soil: -16, envelope: 0 },
+                            { section: 12, basement: 0, soil: -16, envelope: 0 },
+                          ]}
+                          width={200}
+                          height={400}
+                        />
                       </div>
                       <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
                         {/* 차트 - 중성대 위치 */}
-                        <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} />
+                        {/* <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} /> */}
+                        <ElevatorStackedBarChart
+                          data={[
+                            {
+                              shaftType: 'low-rise shaft',
+                              servedZoneBasement: 0,
+                              expressZoneLocalShaft: 0,
+                              servedZoneLobby: 0,
+                              expressZoneMain: 0,
+                              servedZoneMain: 20,
+                            },
+                            {
+                              shaftType: 'mid-rise shaft',
+                              servedZoneBasement: 0,
+                              expressZoneLocalShaft: 0,
+                              servedZoneLobby: 0,
+                              expressZoneMain: 0,
+                              servedZoneMain: 0,
+                            },
+                            {
+                              shaftType: 'high-rise shaft',
+                              servedZoneBasement: 0,
+                              expressZoneLocalShaft: 0,
+                              servedZoneLobby: 2,
+                              expressZoneMain: 18,
+                              servedZoneMain: 10,
+                            },
+                            {
+                              shaftType: 'basement shuttle shaft',
+                              servedZoneBasement: -7,
+                              expressZoneLocalShaft: 0,
+                              servedZoneLobby: 0,
+                              expressZoneMain: 0,
+                              servedZoneMain: 2,
+                            },
+                            {
+                              shaftType: 'sky lobby shuttle shaft',
+                              servedZoneBasement: 0,
+                              expressZoneLocalShaft: 0,
+                              servedZoneLobby: 0,
+                              expressZoneMain: 0,
+                              servedZoneMain: 0,
+                            },
+                          ]}
+                          width={360}
+                          height={360}
+                        />
                       </div>
                       <div className="chart-wrap w-3/6" style={{ paddingBottom: 0 }}>
                         {/* 차트 - 압력분포 프로파일 */}
