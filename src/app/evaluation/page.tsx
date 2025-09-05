@@ -930,20 +930,26 @@ export default function EvaluationPage() {
                   {/* 차트 영역 */}
                   <div className="chart-wrap md:w-2/5">
                     <SectionStackedBarChart
-                      data={[
-                        { section: 1, basement: 0, soil: -16, envelope: 0 },
-                        { section: 2, basement: -6, soil: -16, envelope: 0 },
-                        { section: 3, basement: -6, soil: -16, envelope: 35 },
-                        { section: 4, basement: -6, soil: -16, envelope: 35 },
-                        { section: 5, basement: -6, soil: -16, envelope: 35 },
-                        { section: 6, basement: -6, soil: -16, envelope: 35 },
-                        { section: 7, basement: -6, soil: -16, envelope: 35 },
-                        { section: 8, basement: -6, soil: -16, envelope: 35 },
-                        { section: 9, basement: -6, soil: -16, envelope: 4 },
-                        { section: 10, basement: -6, soil: -16, envelope: 4 },
-                        { section: 11, basement: -6, soil: -16, envelope: 0 },
-                        { section: 12, basement: 0, soil: -16, envelope: 0 },
-                      ]}
+                      data={generateSectionDataArray({
+                        groundFloors: formData.aboveFloors,
+                        basementFloors: formData.belowFloors,
+                        hasPodium: formData.hasPodium,
+                        podiumFloors: formData.podiumHeight,
+                      })}
+                      // data={[
+                      //   { section: 1, basement: 0, soil: -17, envelope: 0 },
+                      //   { section: 2, basement: -7, soil: -10, envelope: 0 },
+                      //   { section: 3, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 4, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 5, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 6, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 7, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 8, basement: -7, soil: -10, envelope: 30 },
+                      //   { section: 9, basement: -7, soil: -10, envelope: 5 },
+                      //   { section: 10, basement: -7, soil: -10, envelope: 5 },
+                      //   { section: 11, basement: -7, soil: -10, envelope: 0 },
+                      //   { section: 12, basement: 0, soil: -17, envelope: 0 },
+                      // ]}
                       width={240}
                       height={300}
                     />
@@ -1146,48 +1152,18 @@ export default function EvaluationPage() {
                   {/* 차트 영역 */}
                   <div className="chart-wrap md:w-2/5">
                     <ElevatorStackedBarChart
-                      data={[
-                        {
-                          shaftType: 'low-rise shaft',
-                          servedZoneBasement: 0,
-                          expressZoneLocalShaft: 0,
-                          servedZoneLobby: 0,
-                          expressZoneMain: 0,
-                          servedZoneMain: 20,
-                        },
-                        {
-                          shaftType: 'mid-rise shaft',
-                          servedZoneBasement: 0,
-                          expressZoneLocalShaft: 0,
-                          servedZoneLobby: 0,
-                          expressZoneMain: 0,
-                          servedZoneMain: 0,
-                        },
-                        {
-                          shaftType: 'high-rise shaft',
-                          servedZoneBasement: 0,
-                          expressZoneLocalShaft: 0,
-                          servedZoneLobby: 2,
-                          expressZoneMain: 18,
-                          servedZoneMain: 10,
-                        },
-                        {
-                          shaftType: 'basement shuttle shaft',
-                          servedZoneBasement: -7,
-                          expressZoneLocalShaft: 0,
-                          servedZoneLobby: 0,
-                          expressZoneMain: 0,
-                          servedZoneMain: 2,
-                        },
-                        {
-                          shaftType: 'sky lobby shuttle shaft',
-                          servedZoneBasement: 0,
-                          expressZoneLocalShaft: 0,
-                          servedZoneLobby: 0,
-                          expressZoneMain: 0,
-                          servedZoneMain: 0,
-                        },
-                      ]}
+                      data={analyzeElevatorShaftSystem({
+                        numFloorGround: formData.aboveFloors,
+                        numFloorBasement: formData.belowFloors,
+                        EVZoningtypeSingle: formData.zoningType === 'single',
+                        EVZoningtypeTwo: formData.zoningType === 'two',
+                        EVZoningtypeMulti: formData.zoningType === 'multi',
+                        EVSkylobby: formData.skyLobby,
+                        EVTopfloorLow: formData.shaftBelowFloors,
+                        EVTopfloorMid: formData.shaftAboveFloors,
+                        EVTopfloorHigh: formData.shaftAdditionalAboveFloors,
+                        EVBasementshuttle: formData.shuttleElevator,
+                      })}
                     />
                   </div>
 
