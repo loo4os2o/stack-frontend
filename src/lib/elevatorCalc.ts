@@ -17,11 +17,11 @@ export type ElevatorInput = {
 
 export type ShaftResult = {
   shaftType: string;
-  servedZoneBasement: number | null;
-  expressZoneLocalShaft: number | null;
-  servedZoneLobby: number | null;
-  expressZoneMain: number | null;
-  servedZoneMain: number | null;
+  servedZoneBasement: number;
+  expressZoneLocalShaft: number;
+  servedZoneLobby: number;
+  expressZoneMain: number;
+  servedZoneMain: number;
   //   expressZoneSkylobby: number | null;
   //   servedZoneSkylobby: number | null;
 };
