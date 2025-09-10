@@ -28,6 +28,8 @@ import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
 import LoadingComponent from '@/components/common/loading';
 import '@/css/evaluation.css';
+import { generateSectionDataArray } from '@/lib/buildingSection';
+import { analyzeElevatorShaftSystem } from '@/lib/elevatorCalc';
 
 // 프로젝트 타입
 // 예시 데이터
@@ -89,7 +91,7 @@ const tmpProjects: Project[] = [
 const chartData: {
   ranges: { x: number; start: number; end: number }[];
   bullets: { x: number; y: number }[];
-  blocks: { start: number; end: number; type: 'danger' | 'warning' }[];
+  blocks: { start: number; end: number; type: 'danger' | 'warning' | 'normal' }[];
 } = {
   ranges: [
     { x: 1, start: 0, end: 50 },
@@ -104,10 +106,12 @@ const chartData: {
     { x: 4, y: 100 },
   ],
   blocks: [
-    { start: 0, end: 30, type: 'danger' },
-    { start: 30, end: 60, type: 'warning' },
-    { start: 60, end: 90, type: 'danger' },
-    { start: 90, end: 100, type: 'warning' },
+    { start: 0, end: 3, type: 'warning' },
+    { start: 3, end: 6, type: 'normal' },
+    { start: 6, end: 10, type: 'warning' },
+    { start: 10, end: 16, type: 'normal' },
+    { start: 16, end: 20, type: 'danger' },
+    { start: 20, end: 25, type: 'warning' },
   ],
 };
 
@@ -184,6 +188,8 @@ export default function MyProjectPage() {
 
     fetchProjects();
   }, []);
+
+  useEffect(() => console.log('selectedProject', selectedProject), [selectedProject]);
 
   // 탭부분 (※ 연돌현상 예측평가 결과와 동일하게 퍼블리싱)
   const [activeTab, setActiveTab] = useState('analysis');
@@ -575,20 +581,12 @@ export default function MyProjectPage() {
                         {/* 차트 - 문제 발생 예상층 */}
                         {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
                         <SectionStackedBarChart
-                          data={[
-                            { section: 1, basement: 0, soil: -16, envelope: 0 },
-                            { section: 2, basement: -6, soil: -16, envelope: 0 },
-                            { section: 3, basement: -6, soil: -16, envelope: 35 },
-                            { section: 4, basement: -6, soil: -16, envelope: 35 },
-                            { section: 5, basement: -6, soil: -16, envelope: 35 },
-                            { section: 6, basement: -6, soil: -16, envelope: 35 },
-                            { section: 7, basement: -6, soil: -16, envelope: 35 },
-                            { section: 8, basement: -6, soil: -16, envelope: 35 },
-                            { section: 9, basement: -6, soil: -16, envelope: 4 },
-                            { section: 10, basement: -6, soil: -16, envelope: 4 },
-                            { section: 11, basement: -6, soil: -16, envelope: 0 },
-                            { section: 12, basement: 0, soil: -16, envelope: 0 },
-                          ]}
+                          data={generateSectionDataArray({
+                            groundFloors: selectedProject?.aboveFloors ?? 0,
+                            basementFloors: selectedProject?.belowFloors ?? 0,
+                            hasPodium: selectedProject?.hasPodium ?? true,
+                            podiumFloors: selectedProject?.podiumHeight ?? 0,
+                          })}
                           width={200}
                           height={400}
                         />
@@ -597,48 +595,18 @@ export default function MyProjectPage() {
                         {/* 차트 - 중성대 위치 */}
                         {/* <RangeBarWithBullet ranges={chartData.ranges} bullets={chartData.bullets} /> */}
                         <ElevatorStackedBarChart
-                          data={[
-                            {
-                              shaftType: 'low-rise shaft',
-                              servedZoneBasement: 0,
-                              expressZoneLocalShaft: 0,
-                              servedZoneLobby: 0,
-                              expressZoneMain: 0,
-                              servedZoneMain: 20,
-                            },
-                            {
-                              shaftType: 'mid-rise shaft',
-                              servedZoneBasement: 0,
-                              expressZoneLocalShaft: 0,
-                              servedZoneLobby: 0,
-                              expressZoneMain: 0,
-                              servedZoneMain: 0,
-                            },
-                            {
-                              shaftType: 'high-rise shaft',
-                              servedZoneBasement: 0,
-                              expressZoneLocalShaft: 0,
-                              servedZoneLobby: 2,
-                              expressZoneMain: 18,
-                              servedZoneMain: 10,
-                            },
-                            {
-                              shaftType: 'basement shuttle shaft',
-                              servedZoneBasement: -7,
-                              expressZoneLocalShaft: 0,
-                              servedZoneLobby: 0,
-                              expressZoneMain: 0,
-                              servedZoneMain: 2,
-                            },
-                            {
-                              shaftType: 'sky lobby shuttle shaft',
-                              servedZoneBasement: 0,
-                              expressZoneLocalShaft: 0,
-                              servedZoneLobby: 0,
-                              expressZoneMain: 0,
-                              servedZoneMain: 0,
-                            },
-                          ]}
+                          data={analyzeElevatorShaftSystem({
+                            numFloorGround: selectedProject?.aboveFloors ?? 0,
+                            numFloorBasement: selectedProject?.belowFloors ?? 0,
+                            EVZoningtypeSingle: selectedProject?.zoningType === 'single',
+                            EVZoningtypeTwo: selectedProject?.zoningType === 'two',
+                            EVZoningtypeMulti: selectedProject?.zoningType === 'multi',
+                            EVSkylobby: selectedProject?.skyLobby ?? false,
+                            EVTopfloorLow: selectedProject?.shaftBelowFloors ?? 0,
+                            EVTopfloorMid: selectedProject?.shaftAboveFloors ?? 0,
+                            EVTopfloorHigh: selectedProject?.shaftAdditionalAboveFloors ?? 0,
+                            EVBasementshuttle: selectedProject?.shuttleElevator ?? false,
+                          })}
                           width={360}
                           height={360}
                         />
