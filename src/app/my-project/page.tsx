@@ -91,7 +91,10 @@ const tmpProjects: Project[] = [
 const chartData: {
   ranges: { x: number; start: number; end: number }[];
   bullets: { x: number; y: number }[];
-  blocks: { start: number; end: number; type: 'danger' | 'warning' | 'normal' }[];
+  blocksData: {
+    name: string;
+    blocks: { start: number; end: number; type: 'danger' | 'warning' | 'normal' }[];
+  }[];
 } = {
   ranges: [
     { x: 1, start: 0, end: 50 },
@@ -105,13 +108,40 @@ const chartData: {
     { x: 3, y: 80 },
     { x: 4, y: 100 },
   ],
-  blocks: [
-    { start: 0, end: 3, type: 'warning' },
-    { start: 3, end: 6, type: 'normal' },
-    { start: 6, end: 10, type: 'warning' },
-    { start: 10, end: 16, type: 'normal' },
-    { start: 16, end: 20, type: 'danger' },
-    { start: 20, end: 25, type: 'warning' },
+  blocksData: [
+    {
+      name: 'a',
+      blocks: [
+        { start: 0, end: 3, type: 'warning' },
+        { start: 3, end: 6, type: 'normal' },
+        { start: 6, end: 10, type: 'warning' },
+        { start: 10, end: 16, type: 'normal' },
+        { start: 16, end: 20, type: 'danger' },
+        { start: 20, end: 25, type: 'warning' },
+      ],
+    },
+    {
+      name: 'b',
+      blocks: [
+        { start: 0, end: 3, type: 'warning' },
+        { start: 3, end: 6, type: 'normal' },
+        { start: 6, end: 10, type: 'warning' },
+        { start: 10, end: 16, type: 'normal' },
+        { start: 16, end: 20, type: 'danger' },
+        { start: 20, end: 25, type: 'warning' },
+      ],
+    },
+    {
+      name: 'c',
+      blocks: [
+        { start: 0, end: 3, type: 'warning' },
+        { start: 3, end: 6, type: 'normal' },
+        { start: 6, end: 10, type: 'warning' },
+        { start: 10, end: 16, type: 'normal' },
+        { start: 16, end: 20, type: 'danger' },
+        { start: 20, end: 25, type: 'warning' },
+      ],
+    },
   ],
 };
 
@@ -707,7 +737,7 @@ export default function MyProjectPage() {
                         >
                           <div className="chart-wrap w-1/3">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
+                            <VerticalRangeBar data={chartData.blocksData} />
                           </div>
                           <div className="chart-wrap w-2/3">
                             {/* 차트 - 문제 발생 예상층 */}
@@ -807,7 +837,7 @@ export default function MyProjectPage() {
                         <div className="comm-border flex flex-row gap-4 col-span-2">
                           <div className="chart-wrap w-1/4">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
+                            <VerticalRangeBar data={chartData.blocksData} />
                           </div>
                           <div className="chart-wrap w-3/4">
                             {/* 차트 - 주요층 압력차 */}

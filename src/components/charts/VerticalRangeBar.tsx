@@ -10,7 +10,7 @@ interface Block {
 }
 
 interface Props {
-  blocks: Block[];
+  data: { name: string; blocks: Block[] }[];
   width?: string | number;
   height?: string | number;
   className?: string;
@@ -46,15 +46,15 @@ function buildTicks(maxEnd: number): number[] {
 }
 
 const VerticalRangeBar: React.FC<Props> = ({
-  blocks,
-  width = 100,
+  data,
+  width = 30,
   height = 300,
   className = '',
   labelFormatter,
   labelWidth = 36,
 }) => {
-  console.log('blocks', blocks);
-  const maxEnd = useMemo(() => getMaxEnd(blocks), [blocks]);
+  console.log('blocks', data);
+  const maxEnd = useMemo(() => getMaxEnd(data.flatMap((d) => d.blocks)), [data]);
   const ticks = useMemo(() => buildTicks(maxEnd), [maxEnd]);
 
   return (
@@ -86,42 +86,50 @@ const VerticalRangeBar: React.FC<Props> = ({
       </div>
 
       {/* 차트 본체 */}
-      <div
-        className={className}
-        style={{
-          position: 'relative',
-          width,
-          height,
-          background: '#e0e0e0',
-          margin: 'auto',
-          overflow: 'hidden',
-        }}
-      >
-        {blocks.map((block, idx) => {
-          const segHeightPct = ((block.end - block.start) / maxEnd) * 100;
-          const segBottomPct = (block.start / maxEnd) * 100;
-          const color =
-            block.type === 'danger' ? '#a32020' : block.type === 'warning' ? '#e78f8f' : '#e0e0e0';
-          const opacity = 0.85;
+      {data.map((datum, index) => (
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <div
+            className={className}
+            style={{
+              position: 'relative',
+              width,
+              height,
+              background: '#e0e0e0',
+              margin: 'auto',
+              overflow: 'hidden',
+            }}
+          >
+            {datum.blocks.map((block, idx) => {
+              const segHeightPct = ((block.end - block.start) / maxEnd) * 100;
+              const segBottomPct = (block.start / maxEnd) * 100;
+              const color =
+                block.type === 'danger'
+                  ? '#a32020'
+                  : block.type === 'warning'
+                    ? '#e78f8f'
+                    : '#e0e0e0';
+              const opacity = 0.85;
 
-          // 잘못된 범위 방지
-          if (segHeightPct <= 0) return null;
+              // 잘못된 범위 방지
+              if (segHeightPct <= 0) return null;
 
-          return (
-            <div
-              key={idx}
-              style={{
-                position: 'absolute',
-                bottom: `${segBottomPct}%`,
-                height: `${segHeightPct}%`,
-                width: '100%',
-                backgroundColor: color,
-                opacity,
-              }}
-            />
-          );
-        })}
-      </div>
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    position: 'absolute',
+                    bottom: `${segBottomPct}%`,
+                    height: `${segHeightPct}%`,
+                    width: '100%',
+                    backgroundColor: color,
+                    opacity,
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
