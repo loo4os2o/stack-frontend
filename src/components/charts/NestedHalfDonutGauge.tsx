@@ -46,14 +46,14 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
       left: 'center',
       data: [
         {
-          name: '문제 주의층',
-          icon: 'circle',
-          itemStyle: { color: '#e78f8f' },
-        },
-        {
           name: '문제 발생층',
           icon: 'circle',
           itemStyle: { color: '#a32020' },
+        },
+        {
+          name: '문제 주의층',
+          icon: 'circle',
+          itemStyle: { color: '#e78f8f' },
         },
       ],
       textStyle: {

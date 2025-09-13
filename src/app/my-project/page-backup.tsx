@@ -15,9 +15,9 @@ import ArrowLeft from '@/assets/icons/icon-btn-more-bg.png';
 import IconEx from '@/assets/icons/icon-btn-more.png';
 import iconDecrease from '@/assets/icons/icon-decrease.png';
 import iconLightOn from '@/assets/icons/icon-result-light.png';
-import resultChartEx1 from '@/assets/images/evaluation/img-result-chart-ex1.png';
-import resultChartEx2 from '@/assets/images/evaluation/img-result-chart-ex2.png';
-import resultChartEx3 from '@/assets/images/evaluation/img-result-chart-ex3.png';
+import resultChartEx1 from '@/assets/images/evaluation/08_result_001.png';
+import resultChartEx2 from '@/assets/images/evaluation/09_solution _001.png';
+import resultChartEx3 from '@/assets/images/evaluation/09_solution _002.png';
 import DonutGauge from '@/components/charts/DonutGauge';
 import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
 import HorizontalBarWithBullet from '@/components/charts/HorizontalBarWithBullet';
@@ -493,7 +493,7 @@ export default function MyProjectPage() {
                     <div className="flex flex-row gap-8" style={{ height: '400px' }}>
                       <div className="chart-wrap w-1/6">
                         {/* 차트 - 문제 발생 예상층 */}
-                        <VerticalRangeBar blocks={chartData.blocks} />
+                        {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
                       </div>
                       <div className="chart-wrap w-2/6" style={{ paddingBottom: 0 }}>
                         {/* 차트 - 중성대 위치 */}
@@ -595,7 +595,7 @@ export default function MyProjectPage() {
                         >
                           <div className="chart-wrap w-1/3">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
+                            {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
                           </div>
                           <div className="chart-wrap w-2/3">
                             {/* 차트 - 문제 발생 예상층 */}
@@ -695,7 +695,7 @@ export default function MyProjectPage() {
                         <div className="comm-border flex flex-row gap-4 col-span-2">
                           <div className="chart-wrap w-1/4">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar blocks={chartData.blocks} />
+                            {/* <VerticalRangeBar blocks={chartData.blocks} /> */}
                           </div>
                           <div className="chart-wrap w-3/4">
                             {/* 차트 - 주요층 압력차 */}

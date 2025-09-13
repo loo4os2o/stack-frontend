@@ -15,9 +15,9 @@ import ArrowLeft from '@/assets/icons/icon-btn-more-bg.png';
 import IconEx from '@/assets/icons/icon-btn-more.png';
 import iconDecrease from '@/assets/icons/icon-decrease.png';
 import iconLightOn from '@/assets/icons/icon-result-light.png';
-import resultChartEx1 from '@/assets/images/evaluation/img-result-chart-ex1.png';
-import resultChartEx2 from '@/assets/images/evaluation/img-result-chart-ex2.png';
-import resultChartEx3 from '@/assets/images/evaluation/img-result-chart-ex3.png';
+import resultChartEx1 from '@/assets/images/evaluation/08_result_001.png';
+import resultChartEx2 from '@/assets/images/evaluation/09_solution _001.png';
+import resultChartEx3 from '@/assets/images/evaluation/09_solution _002.png';
 import DonutGauge from '@/components/charts/DonutGauge';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
@@ -30,6 +30,9 @@ import LoadingComponent from '@/components/common/loading';
 import '@/css/evaluation.css';
 import { generateSectionDataArray } from '@/lib/buildingSection';
 import { analyzeElevatorShaftSystem } from '@/lib/elevatorCalc';
+
+import ImageChart1 from '@/assets/images/03_input _000.png';
+import ImageChart2 from '@/assets/images/03_input _002.png';
 
 // 프로젝트 타입
 // 예시 데이터
@@ -573,15 +576,15 @@ export default function MyProjectPage() {
                       </div>
 
                       <div className="comm-border">
-                        <h3>최대 연돌 압력차(PA)</h3>
+                        <h3>최대 연돌 압력차(Pa)</h3>
                         <div className="flex flex-row items-center">
                           <div className="flex flex-col gap-2 w-1/2">
                             <h2 className="data-box">
-                              <span className="mr-4">최저층</span>
+                              <span className="mr-4">최상층</span>
                               145 - 150 Pa
                             </h2>
                             <h2 className="data-box">
-                              <span className="mr-4">최고층</span>
+                              <span className="mr-4">로비층</span>
                               230 - 240 Pa
                             </h2>
                           </div>
@@ -658,7 +661,7 @@ export default function MyProjectPage() {
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="w-full md:w-2/2 left">
                     {/* 주요 문제 및 하자 */}
-                    <div className="mb-8">
+                    <div className="mb-8 md:mb-0">
                       <h3 className="icon">주요 문제 및 하자</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {/* 리스트 */}
@@ -721,8 +724,10 @@ export default function MyProjectPage() {
                         </div>
 
                         {/* 차트 */}
-                        <div className="image-wrap" style={{ height: '600px' }}>
-                          <Image src={resultChartEx1} alt="주요 문제 및 하자 차트1" />
+                        <div className="image-wrap" style={{ height: '680px' }}>
+                          <Image src={resultChartEx1} alt="주요 문제 및 하자 차트1"
+                            style={{ objectFit: 'contain', height: '100%' }}
+                          />
                         </div>
                       </div>
                     </div>
@@ -787,39 +792,46 @@ export default function MyProjectPage() {
                           className="comm-border flex flex-row gap-4 col-span-2"
                           style={{ height: '560px' }}
                         >
-                          <div className="chart-wrap w-1/3">
+                          <div className="chart-wrap w-1/2">
                             {/* 차트 - 중성대 위치 */}
                             <RangeBarWithBullet
                               ranges={chartData.ranges}
                               bullets={chartData.bullets}
                             />
                           </div>
-                          <div className="chart-wrap w-2/3">
-                            {/* 차트 - 압력분포 프로파일 */}
+
+                          {/* 차트 - 압력분포 프로파일 */}
+                          {/* <div className="chart-wrap w-1/2">
                             <RangeBarWithBullet
                               ranges={chartData.ranges}
                               bullets={chartData.bullets}
                             />
+                          </div> */}
+
+                          {/* 퍼블리싱 - 압력분포 차트영역 이미지로 대체 */}
+                          <div className="image-wrap">
+                            <Image src={ImageChart1} alt="차트 대용 이미지" />
                           </div>
+
                         </div>
 
                         <div className="flex flex-col gap-5 col-span-1">
                           <div className="box-wrap">
                             <div className="box-title">저층존 샤프트 중성대</div>
                             <div className="data-box">
-                              13F (42m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              13F (42m)<span className="ml-2.5"></span>
                             </div>
                           </div>
                           <div className="box-wrap">
                             <div className="box-title">중층존 샤프트 중성대</div>
                             <div className="data-box">
-                              25F (78m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              25F (78m)<span className="ml-2.5"></span>
                             </div>
                           </div>
                           <div className="box-wrap">
                             <div className="box-title">고층존 샤프트 중성대</div>
                             <div className="data-box">
-                              43F (135m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              43F (135m)<span className="ml-2.5"></span>
                             </div>
                           </div>
                           <div className="box-wrap-bg">
@@ -841,8 +853,8 @@ export default function MyProjectPage() {
                           </div>
                           <div className="chart-wrap w-3/4">
                             {/* 차트 - 주요층 압력차 */}
-                            <HorizontalGaugeBar value={149} />
-                            <HorizontalGaugeBar value={160} />
+                            <HorizontalGaugeBar value={149} label="최상층" />
+                            <HorizontalGaugeBar value={160} label="로비층" />
                           </div>
                         </div>
 
@@ -874,11 +886,12 @@ export default function MyProjectPage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {/* 차트 */}
                         <div className="comm-border flex flex-col items-center justify-center gap-4 col-span-2">
-                          <div className="text-xl font-medium">차트</div>
-                          <div className="dev-note">
-                            개발자: 실제 구현 시 차트 라이브러리를 사용해 구현
+                          {/* 퍼블리싱 - 차트영역 이미지로 대체 */}
+                          <div className="image-wrap">
+                            <Image src={ImageChart2} alt="난방시즌 차트 대용 이미지" />
                           </div>
                         </div>
+
 
                         <div className="flex flex-col gap-5 col-span-1">
                           <div className="box-wrap">
@@ -1171,7 +1184,7 @@ export default function MyProjectPage() {
                           </div>
                         </div>
 
-                        <div className="comm-border">
+                        <div className="comm-border-none">
                           <div className="image-wrap">
                             <Image src={resultChartEx2} alt="연돌현상 설계검토" />
                           </div>
@@ -1198,7 +1211,7 @@ export default function MyProjectPage() {
                           </div>
                         </div>
 
-                        <div className="comm-border">
+                        <div className="comm-border-none">
                           <div className="image-wrap">
                             <Image src={resultChartEx3} alt="연돌현상 시뮬레이션" />
                           </div>

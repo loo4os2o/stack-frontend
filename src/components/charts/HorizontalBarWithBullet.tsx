@@ -14,8 +14,8 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
   className = '',
 }) => {
   const data = [
-    { name: '최상층', value: 25 },
     { name: '로비층', value: 35 },
+    { name: '최상층', value: 25 },
   ];
 
   const option = {

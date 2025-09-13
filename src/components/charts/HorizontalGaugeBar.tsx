@@ -3,9 +3,10 @@ import React from 'react';
 interface Props {
   value: number; // 퍼센트 값 (예: 149)
   className?: string;
+  label?: string;
 }
 
-const HorizontalCriteriaBar: React.FC<Props> = ({ value, className = '' }) => {
+const HorizontalCriteriaBar: React.FC<Props> = ({ value, label, className = '' }) => {
   const fullBarWidth = 250;
   const cappedValue = Math.min(value, 200);
   const fillWidth = (cappedValue / 100) * fullBarWidth;
@@ -25,7 +26,9 @@ const HorizontalCriteriaBar: React.FC<Props> = ({ value, className = '' }) => {
       }}
     >
       {/* 텍스트 라벨 */}
-      <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 16 }}>최상층: 145 - 150 Pa</div>
+      <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 16 }}>
+        {label === '최상층' ? '최상층: 145 - 150 Pa' : '로비층: 230 - 240 Pa'}
+      </div>
 
       {/* Bar Wrapper */}
       <div

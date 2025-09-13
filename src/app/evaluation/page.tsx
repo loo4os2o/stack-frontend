@@ -1,9 +1,7 @@
 'use client';
 
 import ArrowRight from '@/assets/icons/icon-btn-more.png';
-import ImgEv1 from '@/assets/images/evaluation/img-ev-1.png';
-import ExImgCppe from '@/assets/images/ex/ex-img-cppe.png';
-import ExImgIntro4 from '@/assets/images/ex/sample-intro-4.png';
+import ExImgIntro4 from '@/assets/images/12_stackeffect _001.jpg';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import Modal from '@/components/common/Modal';
@@ -19,6 +17,15 @@ import humps from 'humps';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import slideImg1 from '@/assets/images/03_input _001.png';
+import slideImg2 from '@/assets/images/03_input _002.png';
+import EvaluationDiagram1 from '@/assets/images/03_input _003.png';
+import EvaluationDiagram2 from '@/assets/images/03_input _004.png';
 
 export default function EvaluationPage() {
   const router = useRouter();
@@ -26,6 +33,12 @@ export default function EvaluationPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [promoModalOpen, setPromoModalOpen] = useState(false);
   const promoVideoRef = useRef<HTMLVideoElement>(null);
+
+  // 슬라이드 이미지 배열
+  const slides = [
+    { src: slideImg1, alt: '평가하기 슬라이드 공유용 이미지-1' },
+    { src: slideImg2, alt: '평가하기 슬라이드 공유용 이미지-2' },
+  ];
 
   const user = useUserStore((state) => state.user);
   const [formData, setFormData] = useState({
@@ -442,14 +455,65 @@ export default function EvaluationPage() {
               <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
             </button>
           </div>
+
+          {/* 슬라이드 영역 */}
           <div className="w-full md:w-3/5 right" style={{ padding: 0 }}>
-            <div className="image-wrap">
-              <Image src={ImgEv1} alt="이미지1 설명입니다." />
+            <div className="swiper-cover h-full p-5">
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={{
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                }}
+                pagination={{
+                  clickable: true,
+                  el: '.swiper-pagination',
+                }}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                loop={true}
+                className="h-full"
+              >
+                {slides.map((slide, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={slide.src}
+                        alt={slide.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+
+                {/* Navigation 버튼 */}
+                <div className="swiper-button-prev custom-swiper-button-prev"></div>
+                <div className="swiper-button-next custom-swiper-button-next"></div>
+
+                {/* Pagination */}
+                <div className="swiper-pagination custom-swiper-pagination"></div>
+              </Swiper>
             </div>
           </div>
         </div>
-        <div className="image-wrap mt-16">
-          <Image src={ExImgCppe} alt="HOW DO WE ASSESS?" />
+        {/* 이미지 영역 */}
+        <div className="flex flex-col gap-4 mt-16 diagram">
+          <h2>HOW DO WE ASSESS?</h2>
+          <h4>Core algorithm and parameters</h4>
+          <div className="image-wrap pb-1">
+            <Image src={EvaluationDiagram1} alt="HOW DO WE ASSESS?" />
+          </div>
+
+          <h4 className="mt-5">Stack Prediction</h4>
+          <div className="image-wrap" style={{ borderRadius: '0' }}>
+            <Image src={EvaluationDiagram2} alt="Stack Prediction" />
+          </div>
         </div>
       </section>
 

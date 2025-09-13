@@ -172,15 +172,15 @@ export default function EvaluationResultPage() {
                       </div>
 
                       <div className="comm-border">
-                        <h3>최대 연돌 압력차(PA)</h3>
+                        <h3>최대 연돌 압력차(Pa)</h3>
                         <div className="flex flex-row items-center">
                           <div className="flex flex-col gap-2 w-1/2">
                             <h2 className="data-box">
-                              <span className="mr-4">최저층</span>
+                              <span className="mr-4">최상층</span>
                               145 - 150 Pa
                             </h2>
                             <h2 className="data-box">
-                              <span className="mr-4">최고층</span>
+                              <span className="mr-4">로비층</span>
                               230 - 240 Pa
                             </h2>
                           </div>

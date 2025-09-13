@@ -3,11 +3,13 @@
 import ArrowRightOpacity from '@/assets/icons/icon-btn-more-bg-opacity.png';
 import ArrowRight from '@/assets/icons/icon-btn-more.png';
 import IconService from '@/assets/icons/icon-service.png';
-import slideImg3 from '@/assets/images/acro.jpg';
-import Background from '@/assets/images/architecture-1867194_1920.png';
-import slideImg2 from '@/assets/images/haeundae.jpg';
-import slideImg1 from '@/assets/images/lotte-tower.jpg';
-import slideImg4 from '@/assets/images/lusail.png';
+// import Background from '@/assets/images/architecture-1867194_1920.png';
+import Background from '@/assets/images/01_home _001.jpeg';
+import slideImg1 from '@/assets/images/01_home _002.png';
+import slideImg2 from '@/assets/images/01_home _003.png';
+import slideImg3 from '@/assets/images/01_home _004.png';
+// import slideImg3 from '@/assets/images/acro.jpg';
+// import slideImg4 from '@/assets/images/lusail.png';
 import { useUserStore } from '@/utils/store';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,10 +28,9 @@ export default function Home() {
 
   // 슬라이드 이미지 배열
   const slides = [
-    { src: slideImg1, alt: '슬라이드1' },
-    { src: slideImg2, alt: '슬라이드2' },
-    { src: slideImg3, alt: '슬라이드3' },
-    { src: slideImg4, alt: '슬라이드4' },
+    { src: slideImg1, alt: '메인 슬라이드 공유용 이미지-1' },
+    { src: slideImg2, alt: '메인 슬라이드 공유용 이미지-2' },
+    { src: slideImg3, alt: '메인 슬라이드 공유용 이미지-3' },
   ];
 
   const user = useUserStore((state) => state.user);
@@ -170,8 +171,8 @@ export default function Home() {
           <div className="card-features">
             <h3>즉시 활용가능한 결과</h3>
             <p>
-              온라인 도구를 사용하여 연돌현상 영향을 평가하고, 해결방안을 확인하여 대응전략 수립
-              방향을 마련하세요.
+              연돌예측검토 보고서부터 개선전략에 관한 설계도면,
+              시뮬레이션 결과까지 다양하게 제공됩니다.
             </p>
             <div className="btn-primary mt-10">
               <a
@@ -239,7 +240,7 @@ export default function Home() {
 
           {/* <div className="w-full md:w-1/2 intro-image"> */}
           <div className="w-full md:w-1/2 intro-image">
-            <div className="swiper-container" style={{ height: '445px' }}>
+            <div className="swiper-container p-5" style={{ height: '445px' }}>
               <Swiper
                 modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={0}
@@ -267,7 +268,7 @@ export default function Home() {
                         alt={slide.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover rounded-lg"
+                        className="object-contain rounded-lg"
                       />
                     </div>
                   </SwiperSlide>

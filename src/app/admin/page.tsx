@@ -498,7 +498,7 @@ export default function AdminPage() {
                           <th className="px-4 py-3 text-center font-semibold">프로젝트 번호</th>
                           <th className="px-4 py-3 text-center font-semibold">프로젝트 생성일자</th>
                           <th className="px-4 py-3 text-center font-semibold">프로젝트명</th>
-                          <th className="px-4 py-3 text-center font-semibold">이용 서비스</th>
+                          {/* <th className="px-4 py-3 text-center font-semibold">이용 서비스</th> */}
                           <th className="px-4 py-3 text-center font-semibold">
                             기본 보고서 다운로드
                           </th>
@@ -545,7 +545,7 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 py-3 text-center">{row.createdAt}</td>
                             <td className="px-4 py-3 text-center">{row.name}</td>
-                            <td className="px-4 py-3 text-center">
+                            {/* <td className="px-4 py-3 text-center">
                               {row.service.map((s) => (
                                 <span
                                   key={s}
@@ -554,7 +554,7 @@ export default function AdminPage() {
                                   {s}
                                 </span>
                               ))}
-                            </td>
+                            </td> */}
                             <td className="px-4 py-3 text-center">
                               {row.reportUrl ? (
                                 <a href={row.reportUrl} download className="btn-primary btn-small">
