@@ -4,7 +4,7 @@ import lotteTowerImg from '@/assets/images/lotte-tower.jpg';
 import type { Project } from '@/utils/commonInterface';
 import { createClient } from '@supabase/supabase-js';
 // import "@/css/myproject.css";
-import ArrowRight from '@/assets/icons/icon-btn-more.png';
+import { default as ArrowRight, default as IconEx } from '@/assets/icons/icon-btn-more.png';
 import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
 import humps from 'humps';
 import Image from 'next/image';
@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import ArrowLeft from '@/assets/icons/icon-btn-more-bg.png';
-import IconEx from '@/assets/icons/icon-btn-more.png';
 import iconDecrease from '@/assets/icons/icon-decrease.png';
 import iconLightOn from '@/assets/icons/icon-result-light.png';
 import resultChartEx1 from '@/assets/images/evaluation/08_result_001.png';
@@ -20,7 +19,6 @@ import resultChartEx2 from '@/assets/images/evaluation/09_solution _001.png';
 import resultChartEx3 from '@/assets/images/evaluation/09_solution _002.png';
 import DonutGauge from '@/components/charts/DonutGauge';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
-import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
 import HorizontalBarWithBullet from '@/components/charts/HorizontalBarWithBullet';
 import HorizontalGaugeBar from '@/components/charts/HorizontalGaugeBar';
 import NestedHalfDonutGauge from '@/components/charts/NestedHalfDonutGauge';
@@ -961,14 +959,17 @@ export default function MyProjectPage() {
                         <h3>연돌현상 영향도</h3>
                         <div className="chart-wrap" style={{ height: '160px' }}>
                           {/* 차트 - 연돌현상 영향도 */}
-                          <GradientGaugeBar
-                            leftLabel="최상층"
-                            leftPosition={40}
-                            rightLabel="최하층"
-                            rightPosition={70}
+                          <HorizontalFillWithMarkers
+                            fillValue={70}
+                            fillLabel="Before"
+                            markerValue={40}
+                            markerLabel="After Professional Plus"
+                            max={100}
+                            height={64}
+                            showTooltip={false}
                           />
                         </div>
-                        <div className="flex flex-row gap-4 mt-6 justify-between">
+                        {/* <div className="flex flex-row gap-4 mt-6 justify-between">
                           <div className="flex-row-center border-2 rounded-full">
                             <Image src={IconEx} alt="icon1" width={60} height={60} />
                           </div>
@@ -984,7 +985,7 @@ export default function MyProjectPage() {
                           <div className="flex-row-center border-2 rounded-full">
                             <Image src={IconEx} alt="icon5" width={60} height={60} />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="comm-border">
