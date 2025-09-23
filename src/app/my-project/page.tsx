@@ -33,6 +33,7 @@ import { analyzeElevatorShaftSystem } from '@/lib/elevatorCalc';
 
 import ImageChart1 from '@/assets/images/03_input _000.png';
 import ImageChart2 from '@/assets/images/03_input _002.png';
+import HorizontalFillWithMarkers from '@/components/charts/HorizontalFillWithMarker';
 
 // 프로젝트 타입
 // 예시 데이터
@@ -515,11 +516,20 @@ export default function MyProjectPage() {
                         <h3>연돌현상 영향도</h3>
                         <div className="chart-wrap" style={{ height: '160px' }}>
                           {/* 차트 - 연돌현상 영향도 */}
-                          <GradientGaugeBar
+                          {/* <GradientGaugeBar
                             leftLabel="최상층"
                             leftPosition={40}
                             rightLabel="최하층"
                             rightPosition={70}
+                          /> */}
+                          <HorizontalFillWithMarkers
+                            fillValue={70}
+                            fillLabel="Before"
+                            markerValue={40}
+                            markerLabel="After Professional Plus"
+                            max={100}
+                            height={64}
+                            showTooltip={false}
                           />
                         </div>
                         <div className="flex flex-row gap-4 mt-6 justify-between">
@@ -725,7 +735,9 @@ export default function MyProjectPage() {
 
                         {/* 차트 */}
                         <div className="image-wrap" style={{ height: '680px' }}>
-                          <Image src={resultChartEx1} alt="주요 문제 및 하자 차트1"
+                          <Image
+                            src={resultChartEx1}
+                            alt="주요 문제 및 하자 차트1"
                             style={{ objectFit: 'contain', height: '100%' }}
                           />
                         </div>
@@ -812,7 +824,6 @@ export default function MyProjectPage() {
                           <div className="image-wrap">
                             <Image src={ImageChart1} alt="차트 대용 이미지" />
                           </div>
-
                         </div>
 
                         <div className="flex flex-col gap-5 col-span-1">
@@ -891,7 +902,6 @@ export default function MyProjectPage() {
                             <Image src={ImageChart2} alt="난방시즌 차트 대용 이미지" />
                           </div>
                         </div>
-
 
                         <div className="flex flex-col gap-5 col-span-1">
                           <div className="box-wrap">
@@ -1129,23 +1139,6 @@ export default function MyProjectPage() {
                           <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
                           <div className="sub">시뮬레이션 검토 필요</div>
                         </div>
-                      </div>
-                    </div>
-
-                    <div className="box-wrap-bg mt-8">
-                      <div className="box-title" style={{ marginBottom: '0.5rem' }}>
-                        특수방안
-                      </div>
-                      200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                      넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대 압력차인 000Pa에
-                      대해 149% 수준의 압력차가 발생할 것입니다.
-                      <div className="bg-white py-3 px-4 mt-2 rounded-xl">
-                        <ul>
-                          <li>엘리베이터 스크린도어 설치</li>
-                          <li>엘리베이터 홀 회전문 설치</li>
-                          <li>Core인접 벽체 추가구획</li>
-                          <li>설비를 통한 가감압 조절</li>
-                        </ul>
                       </div>
                     </div>
                   </div>
