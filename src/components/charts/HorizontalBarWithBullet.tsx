@@ -6,23 +6,30 @@ interface HorizontalBarWithBulletProps {
   width?: string | number;
   height?: string | number;
   className?: string;
+  highestFloor: number;
+  lowestFloor: number;
+  median: number;
 }
 
 const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
   width = '100%',
   height = 200,
   className = '',
+  highestFloor = 0,
+  lowestFloor = 0,
+  median = 0,
 }) => {
+  console.log('median: ', median);
   const data = [
-    { name: '로비층', value: 35 },
-    { name: '최상층', value: 25 },
+    { name: '로비층', value: highestFloor },
+    { name: '최상층', value: lowestFloor },
   ];
 
   const option = {
     xAxis: {
       type: 'value',
       min: 0,
-      max: 40,
+      max: Math.max(highestFloor, lowestFloor) * 1.1,
       splitLine: { show: false },
     },
     yAxis: {
@@ -59,7 +66,7 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
       {
         name: 'threshold',
         type: 'line',
-        data: [20, 20],
+        data: [median, median],
         xAxisIndex: 0,
         yAxisIndex: 0,
         lineStyle: {
@@ -81,7 +88,7 @@ const HorizontalBarWithBullet: React.FC<HorizontalBarWithBulletProps> = ({
           },
           data: [
             {
-              xAxis: 20,
+              xAxis: median,
             },
           ],
           lineStyle: {

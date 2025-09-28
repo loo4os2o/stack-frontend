@@ -89,7 +89,7 @@ const HorizontalFillWithMarkers: React.FC<Props> = ({
               fontSize: 12,
               fill: '#4B5563',
             }}
-            stroke="#4B5563"
+            stroke="#fff"
           />
           <ReferenceLine
             x={safeMax}
@@ -101,7 +101,7 @@ const HorizontalFillWithMarkers: React.FC<Props> = ({
               fontSize: 12,
               fill: '#4B5563',
             }}
-            stroke="#4B5563"
+            stroke="#fff"
           />
 
           {/* 회색 배경 + 빨간 채움 */}

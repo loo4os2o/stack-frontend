@@ -31,7 +31,7 @@ export default function StackedBarChart({
   height = 400,
 }: StackedBarChartProps) {
   return (
-    <ResponsiveContainer width={width} height={height}>
+    <ResponsiveContainer width={width} height={height} style={{ marginLeft: '-15px' }}>
       <BarChart data={data} stackOffset="sign">
         <YAxis tickCount={5} />
         <CartesianGrid vertical={false} />

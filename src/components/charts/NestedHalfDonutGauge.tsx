@@ -17,6 +17,8 @@ const GaugeNestedFullDonut: React.FC<Props> = ({
   height = 360,
   className = '',
 }) => {
+  console.log('dangerPercent: ', dangerPercent);
+  console.log('warningPercent: ', warningPercent);
   const option = {
     title: [
       {

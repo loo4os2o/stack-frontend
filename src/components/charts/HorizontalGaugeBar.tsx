@@ -7,7 +7,7 @@ interface Props {
 }
 
 const HorizontalCriteriaBar: React.FC<Props> = ({ value, label, className = '' }) => {
-  const fullBarWidth = 250;
+  const fullBarWidth = 180;
   const cappedValue = Math.min(value, 200);
   const fillWidth = (cappedValue / 100) * fullBarWidth;
   const criteriaX = fullBarWidth; // 100% 위치
@@ -21,7 +21,7 @@ const HorizontalCriteriaBar: React.FC<Props> = ({ value, label, className = '' }
         height: 'auto',
         paddingBottom: 30,
         position: 'relative',
-        left: -90,
+        left: -120,
         // border: "1px solid red",
       }}
     >
