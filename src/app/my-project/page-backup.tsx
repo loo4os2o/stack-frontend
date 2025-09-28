@@ -20,10 +20,8 @@ import resultChartEx2 from '@/assets/images/evaluation/09_solution _001.png';
 import resultChartEx3 from '@/assets/images/evaluation/09_solution _002.png';
 import DonutGauge from '@/components/charts/DonutGauge';
 import GradientGaugeBar from '@/components/charts/GradientGaugeBar';
-import HorizontalBarWithBullet from '@/components/charts/HorizontalBarWithBullet';
 import HorizontalGaugeBar from '@/components/charts/HorizontalGaugeBar';
 import NestedHalfDonutGauge from '@/components/charts/NestedHalfDonutGauge';
-import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
 import '@/css/evaluation.css';
 
 // 프로젝트 타입
@@ -474,7 +472,7 @@ export default function MyProjectPage() {
                             style={{ height: '180px', background: '#fff', padding: 0 }}
                           >
                             {/* 차트 - 최대 연돌 압력차 */}
-                            <HorizontalBarWithBullet />
+                            {/* <HorizontalBarWithBullet /> */}
                           </div>
                         </div>
                       </div>

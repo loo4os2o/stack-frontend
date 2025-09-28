@@ -16,10 +16,21 @@ import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
 import StackedRangeBar from '@/components/charts/StackedRangeBar';
 import VerticalRangeBar from '@/components/charts/VerticalRangeBar';
 import '@/css/evaluation.css';
+import type { Project } from '@/utils/commonInterface';
+import { useUserStore } from '@/utils/store';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import {
+  getIssueForecast,
+  getPressureDiffrentials,
+  getSolutionOverview,
+  getSolutionRecommendations,
+  getSolutionSimulation,
+  getStackEffectForecast,
+  getSummary,
+} from '@/api/api';
 import ImageChart1 from '@/assets/images/03_input _000.png';
 import ImageChart2 from '@/assets/images/03_input _002.png';
 import HorizontalFillWithMarker from '@/components/charts/HorizontalFillWithMarker';
@@ -27,6 +38,108 @@ import HorizontalFillWithMarker from '@/components/charts/HorizontalFillWithMark
 export default function EvaluationResultPage() {
   const [activeTab, setActiveTab] = useState('analysis'); // 'analysis' | 'solution'
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [summary, setSummary] = useState<any>(null);
+  const [stackEffectForecast, setStackEffectForecast] = useState<any>(null);
+  const [issueForecast, setIssueForecast] = useState<any>(null);
+  const [pressureDiffrentials, setPressureDiffrentials] = useState<any>(null);
+  const [solutionOverview, setSolutionOverview] = useState<any>(null);
+  const [solutionRecommendations, setSolutionRecommendations] = useState<any>(null);
+  const [solutionSimulation, setSolutionSimulation] = useState<any>(null);
+  const { user, accessToken, refreshToken } = useUserStore();
+
+  useEffect(() => {
+    if (user && accessToken && refreshToken) {
+      console.log('user', user);
+      console.log('accessToken', accessToken);
+      console.log('refreshToken', refreshToken);
+    }
+  }, [user, accessToken, refreshToken]);
+
+  const fetchSummary = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const summary = await getSummary(selectedProject?.id, accessToken);
+    console.log('summary', summary);
+    setSummary(summary);
+  };
+
+  const fetchStackEffectForecast = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const stackEffectForecast = await getStackEffectForecast(selectedProject?.id, accessToken);
+    console.log('stackEffectForecast', stackEffectForecast);
+    setStackEffectForecast(stackEffectForecast);
+  };
+
+  const fetchIssueForecast = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const issueForecast = await getIssueForecast(selectedProject?.id, accessToken);
+    console.log('issueForecast', issueForecast);
+    setIssueForecast(issueForecast);
+  };
+
+  const fetchPressureDiffrentials = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const pressureDiffrentials = await getPressureDiffrentials(selectedProject?.id, accessToken);
+    console.log('pressureDiffrentials', pressureDiffrentials);
+    setPressureDiffrentials(pressureDiffrentials);
+  };
+
+  const fetchSolutionOverview = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const solutionOverview = await getSolutionOverview(selectedProject?.id, accessToken);
+    console.log('solutionOverview', solutionOverview);
+    setSolutionOverview(solutionOverview);
+  };
+
+  const fetchSolutionRecommendations = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const solutionRecommendations = await getSolutionRecommendations(
+      selectedProject?.id,
+      accessToken
+    );
+    console.log('solutionRecommendations', solutionRecommendations);
+    setSolutionRecommendations(solutionRecommendations);
+  };
+
+  const fetchSolutionSimulation = async () => {
+    if (!accessToken) {
+      console.error('accessToken is null');
+      return;
+    }
+    const solutionSimulation = await getSolutionSimulation(selectedProject?.id, accessToken);
+    console.log('solutionSimulation', solutionSimulation);
+    setSolutionSimulation(solutionSimulation);
+  };
+
+  useEffect(() => {
+    if (selectedProject) {
+      fetchSummary();
+      fetchStackEffectForecast();
+      fetchIssueForecast();
+      fetchPressureDiffrentials();
+      fetchSolutionOverview();
+      fetchSolutionRecommendations();
+      fetchSolutionSimulation();
+    }
+  }, [selectedProject]);
 
   // 차트 데이터
   const chartData: {
@@ -53,11 +166,6 @@ export default function EvaluationResultPage() {
       { start: 90, end: 100, type: 'warning' },
     ],
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 4000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="container mx-auto py-10 ev-result-page">
@@ -122,10 +230,12 @@ export default function EvaluationResultPage() {
                             rightPosition={70}
                           /> */}
                           <HorizontalFillWithMarker
-                            fillValue={62} // 빨간 채움 62
-                            markerValue={75} // 75 지점에 수직 실선
+                            fillValue={summary?.optimization?.currentProj}
+                            fillLabel="Before"
+                            markerValue={summary?.optimization?.solutionOptimization}
+                            markerLabel="After Professional Plus"
                             max={100}
-                            height={28}
+                            height={64}
                             showTooltip={false}
                           />
                         </div>
@@ -168,8 +278,10 @@ export default function EvaluationResultPage() {
                           <div className="flex flex-col gap-3 justify-center w-1/2">
                             <p>기준압력차를 초과하는 층의 비율</p>
                             <h2 className="data-box">
-                              29개층
-                              <span className="ml-2.5">/&nbsp; 60개층</span>
+                              {summary?.problem?.exceededFloors}개층
+                              <span className="ml-2.5">
+                                /&nbsp; {summary?.problem?.totalFloors}개층
+                              </span>
                             </h2>
                           </div>
                           <div
@@ -177,7 +289,17 @@ export default function EvaluationResultPage() {
                             style={{ height: '200px', background: '#fff', padding: 0 }}
                           >
                             {/* 차트 - 문제발생 예상층 */}
-                            <DonutGauge percentage={40} />
+                            <DonutGauge
+                              percentage={
+                                summary?.problem?.exceededFloors && summary?.problem?.totalFloors
+                                  ? Math.round(
+                                      (summary?.problem?.exceededFloors /
+                                        summary?.problem?.totalFloors) *
+                                        100
+                                    )
+                                  : 0
+                              }
+                            />
                           </div>
                         </div>
                       </div>
@@ -188,11 +310,25 @@ export default function EvaluationResultPage() {
                           <div className="flex flex-col gap-2 w-1/2">
                             <h2 className="data-box">
                               <span className="mr-4">최상층</span>
-                              145 - 150 Pa
+                              {summary?.pressure?.minLowestFloor
+                                ? Math.floor(summary?.pressure?.minLowestFloor)
+                                : 0}{' '}
+                              -{' '}
+                              {summary?.pressure?.maxLowestFloor
+                                ? Math.floor(summary?.pressure?.maxLowestFloor)
+                                : 0}{' '}
+                              Pa
                             </h2>
                             <h2 className="data-box">
                               <span className="mr-4">로비층</span>
-                              230 - 240 Pa
+                              {summary?.pressure?.minHighestFloor
+                                ? Math.floor(summary?.pressure?.minHighestFloor)
+                                : 0}{' '}
+                              -{' '}
+                              {summary?.pressure?.maxHighestFloor
+                                ? Math.floor(summary?.pressure?.maxHighestFloor)
+                                : 0}{' '}
+                              Pa
                             </h2>
                           </div>
                           <div
@@ -200,7 +336,11 @@ export default function EvaluationResultPage() {
                             style={{ height: '180px', background: '#fff', padding: 0 }}
                           >
                             {/* 차트 - 최대 연돌 압력차 */}
-                            <HorizontalBarWithBullet />
+                            <HorizontalBarWithBullet
+                              highestFloor={Math.floor(summary?.pressure?.highestFloor)}
+                              lowestFloor={Math.floor(summary?.pressure?.Lobby)}
+                              median={summary?.pressure?.Median}
+                            />
                           </div>
                         </div>
                       </div>
@@ -248,61 +388,69 @@ export default function EvaluationResultPage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {/* 리스트 */}
                         <div className="flex flex-col gap-4 col-span-2">
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">화재 및 피난 안전</div>
-                              <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
-                              <div className="sub">개선안 설계도서 반영 필요</div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list disabled">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">건축 요소/자재 하자</div>
-                              <div className="desc">건축 요소/자재 하자건축요소 자재하자 건축</div>
-                              <div className="sub">시뮬레이션 검토 필요</div>
-                            </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
-                            </div>
-                            <div className="text-wrap">
-                              <div className="title">엘리베이터 도어 오작동 및 고장</div>
-                              <div className="desc">
-                                화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난
-                                화재 및 피난
+                          {issueForecast?.MajorIssuesAndDefects?.fireEvacuationSafety && (
+                            <div className={`icon-list`}>
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">화재 및 피난 안전</div>
+                                <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
+                                <div className="sub">개선안 설계도서 반영 필요</div>
                               </div>
                             </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
+                          )}
+                          {issueForecast?.MajorIssuesAndDefects?.constructionDefect && (
+                            <div className={`icon-list`}>
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">건축 요소/자재 하자</div>
+                                <div className="desc">
+                                  건축 요소/자재 하자건축요소 자재하자 건축
+                                </div>
+                                <div className="sub">시뮬레이션 검토 필요</div>
+                              </div>
                             </div>
-                            <div className="text-wrap">
-                              <div className="title">도어 소음 (휘슬링)</div>
-                              <div className="desc">도어 소음 (휘슬링)</div>
+                          )}
+                          {issueForecast?.MajorIssuesAndDefects?.elevatorDoorFailure && (
+                            <div className={`icon-list`}>
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">엘리베이터 도어 오작동 및 고장</div>
+                                <div className="desc">
+                                  화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난
+                                  화재 및 피난
+                                </div>
+                              </div>
                             </div>
-                          </div>
-
-                          <div className="icon-list">
-                            <div className="icon-box">
-                              <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
+                          )}
+                          {issueForecast?.MajorIssuesAndDefects?.doorNoise && (
+                            <div className={`icon-list`}>
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">도어 소음 (휘슬링)</div>
+                                <div className="desc">도어 소음 (휘슬링)</div>
+                              </div>
                             </div>
-                            <div className="text-wrap">
-                              <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
-                              <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
-                              <div className="sub">시뮬레이션 검토 필요</div>
+                          )}
+                          {issueForecast?.MajorIssuesAndDefects?.energySystemError && (
+                            <div className={`icon-list`}>
+                              <div className="icon-box">
+                                <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
+                              </div>
+                              <div className="text-wrap">
+                                <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
+                                <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
+                                <div className="sub">시뮬레이션 검토 필요</div>
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
 
                         {/* 차트 */}
@@ -326,11 +474,40 @@ export default function EvaluationResultPage() {
                         >
                           <div className="chart-wrap w-1/3">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar data={[{ name: '층별', blocks: chartData.blocks }]} />
+                            <VerticalRangeBar
+                              data={
+                                issueForecast?.problemFloorChart
+                                  ? issueForecast?.problemFloorChart
+                                  : []
+                              }
+                            />
                           </div>
                           <div className="chart-wrap w-2/3">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <NestedHalfDonutGauge dangerPercent={0.49} warningPercent={0.68} />
+                            <NestedHalfDonutGauge
+                              dangerPercent={
+                                issueForecast?.problemFloorSummary?.problemOccurFloor &&
+                                issueForecast?.problemFloorSummary?.totalProblemOccurFloor > 0
+                                  ? Math.round(
+                                      (issueForecast?.problemFloorSummary?.problemOccurFloor /
+                                        issueForecast?.problemFloorSummary
+                                          ?.totalProblemOccurFloor) *
+                                        100
+                                    ) / 100
+                                  : 0
+                              }
+                              warningPercent={
+                                issueForecast?.problemFloorSummary?.problemAttentionFloor &&
+                                issueForecast?.problemFloorSummary?.totalProblemAttentionFloor > 0
+                                  ? Math.round(
+                                      (issueForecast?.problemFloorSummary?.problemAttentionFloor /
+                                        issueForecast?.problemFloorSummary
+                                          ?.totalProblemAttentionFloor) *
+                                        100
+                                    ) / 100
+                                  : 0
+                              }
+                            />
                           </div>
                         </div>
 
@@ -339,20 +516,40 @@ export default function EvaluationResultPage() {
                             <div className="box-wrap w-1/2">
                               <div className="box-title">문제 발생층</div>
                               <div className="data-box">
-                                29개층<span className="ml-2.5">/&nbsp; 60개층</span>
+                                {issueForecast?.problemFloorSummary?.problemOccurFloor
+                                  ? issueForecast?.problemFloorSummary?.problemOccurFloor
+                                  : 0}
+                                개층
+                                <span className="ml-2.5">
+                                  /&nbsp;{' '}
+                                  {issueForecast?.problemFloorSummary?.totalProblemOccurFloor
+                                    ? issueForecast?.problemFloorSummary?.totalProblemOccurFloor
+                                    : 0}
+                                  개층
+                                </span>
                               </div>
                             </div>
                             <div className="box-wrap w-1/2">
                               <div className="box-title">문제 주의층</div>
                               <div className="data-box">
-                                42개층<span className="ml-2.5">/&nbsp; 60개층</span>
+                                {issueForecast?.problemFloorSummary?.problemAttentionFloor
+                                  ? issueForecast?.problemFloorSummary?.problemAttentionFloor
+                                  : 0}
+                                개층
+                                <span className="ml-2.5">
+                                  /&nbsp;{' '}
+                                  {issueForecast?.problemFloorSummary?.totalProblemAttentionFloor
+                                    ? issueForecast?.problemFloorSummary?.totalProblemAttentionFloor
+                                    : 0}
+                                  개층
+                                </span>
                               </div>
                             </div>
                           </div>
                           <div className="box-wrap-bg">
-                            200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                            넘어가면 문제 발생 가능성이 증가합니다. 해당 건물은 적정 최대 압력차인
-                            000Pa에 대해 149% 수준의 압력차가 발생할 것입니다.
+                            {issueForecast?.problemFloorSummary?.problemDesc
+                              ? issueForecast?.problemFloorSummary?.problemDesc
+                              : ''}
                           </div>
                         </div>
                       </div>
@@ -402,24 +599,36 @@ export default function EvaluationResultPage() {
                           <div className="box-wrap">
                             <div className="box-title">저층존 샤프트 중성대</div>
                             <div className="data-box">
-                              13F (42m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              {pressureDiffrentials?.neutralZoneProfile?.lowRiseShaftFloor}F (
+                              {pressureDiffrentials?.neutralZoneProfile?.lowRiseShaftHeight}m)
+                              <span className="ml-2.5">
+                                {pressureDiffrentials?.neutralZoneProfile?.totalFloor}개층
+                              </span>
                             </div>
                           </div>
                           <div className="box-wrap">
                             <div className="box-title">중층존 샤프트 중성대</div>
                             <div className="data-box">
-                              25F (78m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              {pressureDiffrentials?.neutralZoneProfile?.middleLayerShaftFloor}F (
+                              {pressureDiffrentials?.neutralZoneProfile?.middleLayerShaftHeight}
+                              m)
+                              <span className="ml-2.5">
+                                {pressureDiffrentials?.neutralZoneProfile?.totalFloor}개층
+                              </span>
                             </div>
                           </div>
                           <div className="box-wrap">
                             <div className="box-title">고층존 샤프트 중성대</div>
                             <div className="data-box">
-                              43F (135m)<span className="ml-2.5">/&nbsp; 60개층</span>
+                              {pressureDiffrentials?.neutralZoneProfile?.highRiseShaftFloor}F (
+                              {pressureDiffrentials?.neutralZoneProfile?.highRiseShaftHeight}m)
+                              <span className="ml-2.5">
+                                {pressureDiffrentials?.neutralZoneProfile?.totalFloor}개층
+                              </span>
                             </div>
                           </div>
                           <div className="box-wrap-bg">
-                            200m 규모의 건물에서의 적정 평균 압력은 00Pa 이며, 최대 압력차가 000Pa을
-                            넘어가면 문제 발생 가능성이 증가합니다.
+                            {pressureDiffrentials?.neutralZoneProfile?.shaftResultDesc}
                           </div>
                         </div>
                       </div>
@@ -432,31 +641,73 @@ export default function EvaluationResultPage() {
                         <div className="comm-border flex flex-row gap-4 col-span-2">
                           <div className="chart-wrap w-1/4">
                             {/* 차트 - 문제 발생 예상층 */}
-                            <VerticalRangeBar data={[{ name: '층별', blocks: chartData.blocks }]} />
+                            <VerticalRangeBar
+                              data={pressureDiffrentials?.pressureDifferentialChart ?? []}
+                            />
                           </div>
                           <div className="chart-wrap w-3/4">
                             {/* 차트 - 주요층 압력차 */}
-                            <HorizontalGaugeBar value={149} label="최상층" />
-                            <HorizontalGaugeBar value={160} label="로비층" />
+                            <HorizontalGaugeBar
+                              value={
+                                pressureDiffrentials?.pressureDifferentials
+                                  ?.topFloorPressureValue ?? 0
+                              }
+                              label="최상층"
+                            />
+                            <HorizontalGaugeBar
+                              value={
+                                pressureDiffrentials?.pressureDifferentials?.lobbyPressureValue ?? 0
+                              }
+                              label="로비층"
+                            />
                           </div>
                         </div>
 
                         <div className="flex flex-col gap-5 col-span-1">
                           <div className="box-wrap">
                             <div className="box-title">최상층 최대 압력차</div>
-                            <div className="data-box">145 - 150 Pa</div>
+                            <div className="data-box">
+                              {pressureDiffrentials?.pressureDifferentials?.topFloorPressureMin ??
+                                0}{' '}
+                              -{' '}
+                              {pressureDiffrentials?.pressureDifferentials?.topFloorPressureMax ??
+                                0}
+                              Pa
+                            </div>
                             <div className="detail-info">
-                              <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
+                              <span>엘리베이터 도어 압력차</span>
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.topFloorElevatorDoorPressureMin ?? 0}
+                              -
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.topFloorElevatorDoorPressureMax ?? 0}
+                              Pa
                             </div>
                           </div>
                           <div className="box-wrap">
                             <div className="box-title">로비층 최대 압력차</div>
-                            <div className="data-box">230 - 240 Pa</div>
-                            <div className="detail-info">
-                              <span>엘리베이터 도어 압력차</span> 62 - 72 Pa
+                            <div className="data-box">
+                              {pressureDiffrentials?.pressureDifferentials?.lobbyPressureMin ?? 0}-
+                              {pressureDiffrentials?.pressureDifferentials?.lobbyPressureMax ?? 0}
+                              Pa
                             </div>
                             <div className="detail-info">
-                              <span>외부 출입문 압력차</span> 62 - 72 Pa
+                              <span>엘리베이터 도어 압력차</span>
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.lobbyElevatorDoorPressureMin ?? 0}
+                              -
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.lobbyElevatorDoorPressureMax ?? 0}
+                              Pa
+                            </div>
+                            <div className="detail-info">
+                              <span>외부 출입문 압력차</span>
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.lobbyExternalDoorPressureMin ?? 0}
+                              -
+                              {pressureDiffrentials?.pressureDifferentials
+                                ?.lobbyExternalDoorPressureMax ?? 0}
+                              Pa
                             </div>
                           </div>
                         </div>
