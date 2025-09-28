@@ -1,6 +1,10 @@
 'use client';
 
 import ArrowRight from '@/assets/icons/icon-btn-more.png';
+import slideImg1 from '@/assets/images/03_input _001.png';
+import slideImg2 from '@/assets/images/03_input _002.png';
+import EvaluationDiagram1 from '@/assets/images/03_input _003.png';
+import EvaluationDiagram2 from '@/assets/images/03_input _004.png';
 import ExImgIntro4 from '@/assets/images/12_stackeffect _001.jpg';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
@@ -22,10 +26,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import slideImg1 from '@/assets/images/03_input _001.png';
-import slideImg2 from '@/assets/images/03_input _002.png';
-import EvaluationDiagram1 from '@/assets/images/03_input _003.png';
-import EvaluationDiagram2 from '@/assets/images/03_input _004.png';
 
 export default function EvaluationPage() {
   const router = useRouter();
@@ -340,7 +340,7 @@ export default function EvaluationPage() {
         alert('프로젝트 생성에 실패했습니다.');
       } else {
         console.log('Project inserted successfully');
-        alert('프로젝트가 성공적으로 생성성되었습니다.');
+        alert('프로젝트가 성공적으로 생성되었습니다.');
         setFormData({
           projectName: '',
           location: '',
