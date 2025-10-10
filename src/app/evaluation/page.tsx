@@ -212,7 +212,25 @@ export default function EvaluationPage() {
     ];
 
     for (const field of requiredFields) {
-      if (!upsertFormData[field.key]) {
+      // 0을 허용하는 필드들
+      const zeroAllowedFields = [
+        'belowFloors',
+        'shaftBelowFloors',
+        'shaftAboveFloors',
+        'shaftAdditionalAboveFloors',
+        'lobbyHeight',
+      ];
+
+      if (
+        zeroAllowedFields.includes(field.key) &&
+        (upsertFormData[field.key] === undefined || upsertFormData[field.key] === null)
+      ) {
+        alert(field.message);
+        document.querySelector(`[name="${field.key}"]`)?.scrollIntoView({ behavior: 'smooth' });
+        return false;
+      }
+      // 다른 필드들은 기존대로 검사
+      else if (!zeroAllowedFields.includes(field.key) && !upsertFormData[field.key]) {
         alert(field.message);
         document.querySelector(`[name="${field.key}"]`)?.scrollIntoView({ behavior: 'smooth' });
         return false;
@@ -286,6 +304,53 @@ export default function EvaluationPage() {
     return true;
   }
 
+  const initModalHandler = () => {
+    setFormData({
+      projectName: '',
+      location: '',
+      completionYear: '',
+      belowFloors: 1,
+      aboveFloors: 1,
+      buildingHeight: 0,
+      buildingGeneralPlanResidential: false,
+      buildingGeneralPlanOffice: false,
+      buildingGeneralPlanNeighborhood: false,
+      buildingGeneralPlanCultural: false,
+      buildingGeneralEtcChecked: false,
+      buildingGeneralEtcInput: '',
+      hasPodium: false,
+      podiumHeight: 0,
+      perimeterRatio: 0,
+      buildingMassPlanResidential: false,
+      buildingMassPlanOffice: false,
+      buildingMassPlanNeighborhood: false,
+      buildingMassPlanCultural: false,
+      buildingMassEtcChecked: false,
+      buildingMassEtcInput: '',
+      zoningType: 'single',
+      shaftBelowFloors: 1,
+      shaftAboveFloors: 1,
+      shaftAdditionalAboveFloors: 1,
+      shuttleElevator: false,
+      skyLobby: false,
+      evacuationZoneCount: 0,
+      firstStairShaftFloors: 1,
+      secondStairShaftFloors: 1,
+      thirdStairShaftFloors: 1,
+      fourthStairShaftFloors: 1,
+      fifthStairShaftFloors: 1,
+      lobbyHeight: 0,
+      elevatorHallPartition: false,
+      lobbyAccessFloor: false,
+      elevatorHallPartitionStandard: false,
+      balcony: false,
+      observationFloor: false,
+      rooftopGarden: false,
+    });
+    setPreview(null);
+    setModalOpen(false);
+  };
+
   async function handleFormSubmit(isEvaluation: boolean) {
     let imagePath = null;
     if (preview) {
@@ -332,7 +397,20 @@ export default function EvaluationPage() {
         alert('프로젝트가 성공적으로 업데이트되었습니다.');
       }
     } else {
-      // Insert new record
+      // Update all existing projects' is_used to false
+      const { error: updateError } = await supabase
+        .from('project')
+        .update({ is_used: false })
+        .eq('created_by', user.id);
+
+      if (updateError) {
+        console.error('Error updating existing projects:', updateError);
+        alert('기존 프로젝트 상태 업데이트에 실패했습니다.');
+        return;
+      }
+
+      // Insert new record with is_used set to true
+      upsertFormData.is_used = true;
       const { error } = await supabase.from('project').insert(upsertFormData);
 
       if (error) {
@@ -383,9 +461,11 @@ export default function EvaluationPage() {
           observationFloor: false,
           rooftopGarden: false,
         });
+        setPromoModalOpen(true);
       }
-      setModalOpen(false);
     }
+    setModalOpen(false);
+    setPreview(null);
   }
 
   const input = {
@@ -520,7 +600,7 @@ export default function EvaluationPage() {
       {/* 시작하기 모달 */}
       <Modal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={initModalHandler}
         title={'연돌현상 예측평가'}
         footer={' '}
         // width={'80%'}

@@ -1,8 +1,6 @@
 'use client';
 
-import lotteTowerImg from '@/assets/images/lotte-tower.jpg';
 import type { Project } from '@/utils/commonInterface';
-import { createClient } from '@supabase/supabase-js';
 // import "@/css/myproject.css";
 import { default as ArrowRight, default as IconEx } from '@/assets/icons/icon-btn-more.png';
 import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
@@ -43,62 +41,7 @@ import ImageChart1 from '@/assets/images/03_input _000.png';
 import ImageChart2 from '@/assets/images/03_input _002.png';
 import HorizontalFillWithMarkers from '@/components/charts/HorizontalFillWithMarker';
 import { useUserStore } from '@/utils/store';
-
-// 프로젝트 타입
-// 예시 데이터
-const tmpProjects: Project[] = [
-  {
-    id: 1001,
-    createdAt: '2025-05-10',
-    projectName: 'A 오피스타워',
-
-    buildingGeneralPlanResidential: false,
-    buildingGeneralPlanOffice: false,
-    buildingGeneralPlanNeighborhood: true,
-    buildingGeneralPlanCultural: false,
-    buildingGeneralEtcChecked: false,
-    buildingGeneralEtcInput: '',
-    location: '서울 강서구',
-    buildingHeight: 120,
-    zoningType: '싱글존 샤프트',
-    imageUrl: lotteTowerImg,
-    reportUrl: '/dummy-report-1.pdf',
-  },
-  {
-    id: 1002,
-    createdAt: '2025-06-05',
-    projectName: 'B 주상복합',
-
-    buildingGeneralPlanResidential: false,
-    buildingGeneralPlanOffice: true,
-    buildingGeneralPlanNeighborhood: false,
-    buildingGeneralPlanCultural: false,
-    buildingGeneralEtcChecked: false,
-    buildingGeneralEtcInput: '',
-    location: '대전 서구',
-    buildingHeight: 200,
-    zoningType: '투존 샤프트',
-    imageUrl: null,
-    reportUrl: null,
-  },
-  {
-    id: 1003,
-    createdAt: '2025-02-15',
-    projectName: 'C 호텔',
-
-    buildingGeneralPlanResidential: false,
-    buildingGeneralPlanOffice: false,
-    buildingGeneralPlanNeighborhood: false,
-    buildingGeneralPlanCultural: false,
-    buildingGeneralEtcChecked: true,
-    buildingGeneralEtcInput: '기타 용도도',
-    location: '서울 강남구',
-    buildingHeight: 300,
-    zoningType: '멀티존 샤프트',
-    imageUrl: lotteTowerImg,
-    reportUrl: '/dummy-report-3.pdf',
-  },
-];
+import { createClient } from '@supabase/supabase-js';
 
 // 차트 데이터
 const chartData: {
@@ -180,21 +123,12 @@ export default function MyProjectPage() {
   const [solutionRecommendations, setSolutionRecommendations] = useState<any>(null);
   const [solutionSimulation, setSolutionSimulation] = useState<any>(null);
 
-  useEffect(() => {
-    if (user && accessToken && refreshToken) {
-      console.log('user', user);
-      console.log('accessToken', accessToken);
-      console.log('refreshToken', refreshToken);
-    }
-  }, [user, accessToken, refreshToken]);
-
   const fetchSummary = async () => {
     if (!accessToken) {
       console.error('accessToken is null');
       return;
     }
     const summary = await getSummary(selectedProject?.id, accessToken);
-    console.log('summary', summary);
     setSummary(summary);
   };
   const fetchStackEffectForecast = async () => {
@@ -203,7 +137,6 @@ export default function MyProjectPage() {
       return;
     }
     const stackEffectForecast = await getStackEffectForecast(selectedProject?.id, accessToken);
-    console.log('stackEffectForecast', stackEffectForecast);
     setStackEffectForecast(stackEffectForecast);
   };
 
@@ -213,7 +146,6 @@ export default function MyProjectPage() {
       return;
     }
     const issueForecast = await getIssueForecast(selectedProject?.id, accessToken);
-    console.log('issueForecast', issueForecast);
     setIssueForecast(issueForecast);
   };
 
@@ -223,7 +155,6 @@ export default function MyProjectPage() {
       return;
     }
     const pressureDiffrentials = await getPressureDiffrentials(selectedProject?.id, accessToken);
-    console.log('pressureDiffrentials', pressureDiffrentials);
     setPressureDiffrentials(pressureDiffrentials);
   };
 
@@ -233,7 +164,6 @@ export default function MyProjectPage() {
       return;
     }
     const solutionOverview = await getSolutionOverview(selectedProject?.id, accessToken);
-    console.log('solutionOverview', solutionOverview);
     setSolutionOverview(solutionOverview);
   };
 
@@ -246,7 +176,6 @@ export default function MyProjectPage() {
       selectedProject?.id,
       accessToken
     );
-    console.log('solutionRecommendations', solutionRecommendations);
     setSolutionRecommendations(solutionRecommendations);
   };
 
@@ -256,13 +185,11 @@ export default function MyProjectPage() {
       return;
     }
     const solutionSimulation = await getSolutionSimulation(selectedProject?.id, accessToken);
-    console.log('solutionSimulation', solutionSimulation);
     setSolutionSimulation(solutionSimulation);
   };
 
   useEffect(() => {
     if (selectedProject) {
-      console.log('accessToken', accessToken);
       fetchSummary();
       fetchStackEffectForecast();
       fetchIssueForecast();
@@ -300,7 +227,7 @@ export default function MyProjectPage() {
       data.map((item) => {
         return {
           ...item,
-          imageUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/project-image/${item.image_path}
+          imageUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/project-image/${item.imagePath}
 `,
         };
       })
@@ -313,19 +240,44 @@ export default function MyProjectPage() {
     const fetchProjects = async () => {
       setIsLoading(true);
       try {
-        const result: any = await get_my_projects();
-        console.log('Fetched result:', result);
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError || !userData) {
+          console.error('사용자 인증 오류:', userError);
+          return;
+        }
+        console.log('userData', userData);
+        const { data: projects, error } = await supabase
+          .from('project')
+          .select('*')
+          .eq('created_by', userData.user.id)
+          .eq('is_used', true)
+          .order('created_at', { ascending: false });
 
-        const allProjects = [...result.projects, ...tmpProjects];
-        setProjects(allProjects);
-        setIsAdmin(result.isAdmin);
+        if (error) throw error;
+
+        // snake case를 camel case로 변환 및 이미지 URL 추가
+        const camelCaseProjects = projects
+          ? projects.map((project) => {
+              const camelProject = humps.camelizeKeys(project) as Project;
+              return {
+                ...camelProject,
+                imageUrl: camelProject.imagePath
+                  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/project-image/${camelProject.imagePath}`
+                  : null,
+              };
+            })
+          : [];
+
+        console.log('프로젝트 조회 결과:', camelCaseProjects);
+        setProjects(camelCaseProjects);
+        setIsAdmin(userData.user.user_metadata?.is_admin || false);
 
         // 프로젝트가 있으면 첫 번째 프로젝트를 선택하여 상세보기 페이지 표시
-        if (allProjects.length > 0) {
-          setSelectedProject(allProjects[0]);
+        if (camelCaseProjects.length > 0) {
+          setSelectedProject(camelCaseProjects[0]);
         }
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.error('프로젝트 조회 중 오류 발생:', error);
       } finally {
         setIsLoading(false);
       }
