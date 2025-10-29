@@ -170,7 +170,7 @@ export function HeaderMenu() {
                     className={`nav-link ${isActiveMenu('/evaluation') ? 'active' : ''}`}
                     onClick={(e) => handleNavigation(e, '/evaluation')}
                   >
-                    연돌현상 평가
+                    연돌현상 예측평가
                   </a>
                 </li>
                 <li>
@@ -277,7 +277,7 @@ export function HeaderMenu() {
               className={`drawer-link ${isActiveMenu('/evaluation') ? 'active' : ''}`} 
               onClick={(e) => handleNavigation(e, '/evaluation')}
             >
-              연돌현상 평가
+              연돌현상 예측평가
             </a>
             {/* <Link href="/service-request" className="drawer-link">
               서비스 요청하기

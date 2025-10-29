@@ -120,7 +120,7 @@ const MainHeader2 = () => {
           <ul className="nav-menu">
             <li>
               <a href="#" className="nav-link" onClick={(e) => handleNavigation(e, '/evaluation')}>
-                연돌현상 평가
+              연돌현상 예측평가
               </a>
             </li>
 

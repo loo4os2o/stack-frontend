@@ -506,34 +506,35 @@ export default function EvaluationPage() {
             <h2 className="mb-1">연돌현상</h2>
             <h3 className="mb-3">Stack Effect, Chimney Phenomenon</h3>
             <p>
-              실내외 온도 차이로 인해 공기가 수직으로 이동하는 자연 현상 즉, 따뜻한 공기는 위로
-              상승하고, 찬 공기는 아래로 내려가는 물리 법칙에 따라, 건물 내부의 공기 흐름이 굴뚝처럼
-              위로 올라가는 현상을 말합니다.
+              연돌현상 예측평가는 건물 내·외부의 온도차와 수직공간 구성을 기반으로 압력분포를 계산하고,
+              그 영향을 정량적으로 분석하는 과정입니다. 이를 통해 설계 단계에서 잠재적인 문제를
+              사전에 파악하고 대응 전략을 수립할 수 있습니다.
             </p>
             <div className="text-box mb-4">
               <h4 className="mb-2">예측평가를 위해 필요한 정보</h4>
               <ul className="mt-3">
-                <li>건물 높이 및 층 정보</li>
-                <li>매스계획</li>
-                <li>엘리베이터 샤프트 계획</li>
-                <li>기본 평면 계획 정보</li>
+                <li>건물 개요: 위치, 층수, 높이, 용도</li>
+                <li>매스 계획: 로비층 높이, 포디움 높이 및 둘레 길이</li>
+                <li>샤프트 계획: 엘리베이터 조닝 및 운행층, 계단실 구성</li>
+                <li>기타: 일반 건축계획 사항</li>
               </ul>
             </div>
-            <button
-              className="btn-primary w-full btn-50 rounded-xl
-              flex items-center justify-between gap-2"
-              onClick={() => {
-                if (!user || !user?.email) {
-                  alert('로그인 후 이용해주세요.');
-                  router.push('/login');
-                  return;
-                }
-                setModalOpen(true);
-              }}
-            >
-              시작하기
-              <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
-            </button>
+            <div className="flex justify-end">
+              <button
+                className="btn-primary btn-50 rounded-xl flex items-center justify-between gap-2 w-1/2"
+                onClick={() => {
+                  if (!user || !user?.email) {
+                    alert('로그인 후 이용해주세요.');
+                    router.push('/login');
+                    return;
+                  }
+                  setModalOpen(true);
+                }}
+              >
+                시작하기
+                <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
+              </button>
+            </div>
           </div>
 
           {/* 슬라이드 영역 */}
@@ -590,9 +591,10 @@ export default function EvaluationPage() {
             <Image src={EvaluationDiagram1} alt="HOW DO WE ASSESS?" />
           </div>
 
-          <h4 className="mt-5">Stack Prediction</h4>
-          <div className="image-wrap" style={{ borderRadius: '0' }}>
-            <Image src={EvaluationDiagram2} alt="Stack Prediction" />
+          <div className="flex justify-center">
+            <a className="btn-secondary btn-50 w-1/4 flex-row-center" href="/about">
+              Learn more
+            </a>
           </div>
         </div>
       </section>
