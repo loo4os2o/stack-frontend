@@ -154,7 +154,7 @@ export default function Home() {
           <div className="card-features">
             <h3>신속·정확한 연돌현상 평가</h3>
             <p>
-            STACK 으로 연돌현상을 정확하게 진단하고,문제 예측부터 체계적 개선방향까지 검토
+            STACK 으로 연돌현상을 정확하게 진단하고, 문제 예측부터 체계적 개선방향까지 검토
             </p>
             <div className="btn-primary mt-10">
               <a
@@ -170,8 +170,7 @@ export default function Home() {
           <div className="card-features">
             <h3>최적의 대응전략 수립</h3>
             <p>
-              연돌예측검토 보고서부터 개선전략에 관한 설계도면,
-              시뮬레이션 결과까지 다양하게 제공됩니다.
+            연돌현상 예측평가 보고서 + 설계·시공·준공 단계 전 과정 엔지니어링 전략을 제공
             </p>
             <div className="btn-primary mt-10">
               <a
@@ -187,8 +186,7 @@ export default function Home() {
           <div className="card-features">
             <h3>최고의 엔지니어링 전문가</h3>
             <p>
-              국내 최고 연돌현상 전문가와 함께 솔루션을 제공받고, 효과적인 개선 전략을 실행할 수
-              있습니다.
+            최고 전문가가 만든 STACK 은 80개 국내외  프로젝트·실증 데이터를 기반으로 개발
             </p>
             <div className="btn-primary mt-10">
               <a
