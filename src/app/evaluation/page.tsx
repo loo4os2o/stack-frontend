@@ -630,10 +630,11 @@ export default function EvaluationPage() {
                   </div>
 
                   {/* 프로젝트 대표사진 업로드 */}
-                  <div className="form-group">
-                    <label htmlFor="imageUpload" className="hidden"></label>
-                    <ImageUploadButton onImageSelect={setPreview} />
-                    {/* <input type="file" id="imageUpload" /> */}
+                  <div className="form-group mt-4">
+                    <label htmlFor="projectImage">프로젝트 사진 선택</label>
+                    <ImageUploadButton
+                      onImageSelect={setPreview}
+                    />
                   </div>
                 </div>
 
@@ -664,10 +665,10 @@ export default function EvaluationPage() {
                   </div>
                 </div>
 
-                {/* 준공(예정)연도 */}
+                {/* 준공예정연도 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
-                    <label htmlFor="completionYear">준공(예정)연도</label>
+                    <label htmlFor="completionYear">준공예정연도</label>
                     <input
                       type="text"
                       id="completionYear"
@@ -680,11 +681,11 @@ export default function EvaluationPage() {
                   </div>
                 </div>
 
-                {/* 건물 규모 */}
+                {/* 건물규모 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
                     <label>
-                      건물 규모 <span className="text-red-500 ml-1">*</span>
+                      건물규모(층수) <span className="text-red-500 ml-1">*</span>
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       {/* 지하 */}
@@ -726,11 +727,11 @@ export default function EvaluationPage() {
                   </div>
                 </div>
 
-                {/* 건물 높이 */}
+                {/* 건물높이 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
                     <label htmlFor="buildingHeight">
-                      건물 높이 (m)<span className="text-red-500 ml-1">*</span>
+                      건물높이 <span className="text-red-500 ml-1">*</span>
                     </label>
                     <div className="flex items-center gap-2 w-full">
                       <div className="input-unit-wrap w-full">
