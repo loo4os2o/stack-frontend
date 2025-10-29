@@ -99,7 +99,7 @@ export default function Home() {
         <div className="main-menu">
           <div className="menu-item">
             <a href="#" className="menu-link" onClick={(e) => handleNavigation(e, '/evaluation')}>
-              연돌현상 평가
+            연돌현상 예측평가
             </a>
           </div>
 
@@ -151,10 +151,9 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="card-features">
-            <h3>빠르고 정확한 연돌현상평가</h3>
+            <h3>신속·정확한 연돌현상 평가</h3>
             <p>
-              온라인 도구를 사용하여 연돌현상 영향을 평가하고, 해결방안을 확인하여 대응전략 수립
-              방향을 마련하세요.
+            STACK 으로 연돌현상을 정확하게 진단하고,문제 예측부터 체계적 개선방향까지 검토
             </p>
             <div className="btn-primary mt-10">
               <a
@@ -168,7 +167,7 @@ export default function Home() {
             </div>
           </div>
           <div className="card-features">
-            <h3>즉시 활용가능한 결과</h3>
+            <h3>최적의 대응전략 수립</h3>
             <p>
               온라인 도구를 사용하여 연돌현상 영향을 평가하고, 해결방안을 확인하여 대응전략 수립
               방향을 마련하세요.
