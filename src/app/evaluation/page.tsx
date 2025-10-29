@@ -859,44 +859,67 @@ export default function EvaluationPage() {
           <section>
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/5 left">
-                {/* 스위치 */}
+                {/* 로비 층고 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
-                  <h3>저층부 포디움</h3>
-                  <label className="switch-container">
-                    <input
-                      type="checkbox"
-                      name="hasPodium"
-                      checked={formData.hasPodium}
-                      onChange={(e) => {
-                        setFormData((prevData) => ({
-                          ...prevData,
-                          hasPodium: e.target.checked,
-                          podiumHeight: e.target.checked ? formData.podiumHeight : 0,
-                          perimeterRatio: e.target.checked ? formData.perimeterRatio : 0,
-                          buildingMassPlanResidential: e.target.checked
-                            ? formData.buildingMassPlanResidential
-                            : false,
-                          buildingMassPlanOffice: e.target.checked
-                            ? formData.buildingMassPlanOffice
-                            : false,
-                          buildingMassPlanNeighborhood: e.target.checked
-                            ? formData.buildingMassPlanNeighborhood
-                            : false,
-                          buildingMassPlanCultural: e.target.checked
-                            ? formData.buildingMassPlanCultural
-                            : false,
-                          buildingMassEtcChecked: e.target.checked
-                            ? formData.buildingMassEtcChecked
-                            : false,
-                          buildingMassEtcInput: e.target.checked
-                            ? formData.buildingMassEtcInput
-                            : '',
-                        }));
-                      }}
-                      className="switch-input"
-                    />
-                    <span className={`switch-slider ${formData.hasPodium ? 'active' : ''}`} />
-                  </label>
+                  <div className="form-group">
+                    <label htmlFor="lobbyHeight">로비 층고</label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="input-unit-wrap w-2/3">
+                        <input
+                          type="number"
+                          id="lobbyHeight"
+                          name="lobbyHeight"
+                          placeholder="0"
+                          value={formData.lobbyHeight}
+                          onChange={handleChange}
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
+                      </div>
+                      <TooltipButton position="right" tooltipText="로비 층고를 입력해 주세요." />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 스위치 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 mt-6">
+                  <div className="flex items-center gap-3">
+                    <h3 className="mb-0 whitespace-nowrap">저층부 포디움</h3>
+                    <label className="switch-container switch-inline">
+                      <input
+                        type="checkbox"
+                        name="hasPodium"
+                        checked={formData.hasPodium}
+                        onChange={(e) => {
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            hasPodium: e.target.checked,
+                            podiumHeight: e.target.checked ? formData.podiumHeight : 0,
+                            perimeterRatio: e.target.checked ? formData.perimeterRatio : 0,
+                            buildingMassPlanResidential: e.target.checked
+                              ? formData.buildingMassPlanResidential
+                              : false,
+                            buildingMassPlanOffice: e.target.checked
+                              ? formData.buildingMassPlanOffice
+                              : false,
+                            buildingMassPlanNeighborhood: e.target.checked
+                              ? formData.buildingMassPlanNeighborhood
+                              : false,
+                            buildingMassPlanCultural: e.target.checked
+                              ? formData.buildingMassPlanCultural
+                              : false,
+                            buildingMassEtcChecked: e.target.checked
+                              ? formData.buildingMassEtcChecked
+                              : false,
+                            buildingMassEtcInput: e.target.checked
+                              ? formData.buildingMassEtcInput
+                              : '',
+                          }));
+                        }}
+                        className="switch-input"
+                      />
+                      <span className={`switch-slider ${formData.hasPodium ? 'active' : ''}`} />
+                    </label>
+                  </div>
                 </div>
 
                 {/* 포디움 높이 */}
@@ -1424,27 +1447,6 @@ export default function EvaluationPage() {
             <div className="flex flex-col md:flex-row gap-8">
               <div className="w-full md:w-2/2 left">
                 <div className="title-divider">로비층</div>
-                {/* 로비 층고 */}
-                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
-                  <div className="form-group">
-                    <label htmlFor="lobbyHeight">로비 층고</label>
-                    <div className="flex items-center gap-2 w-full">
-                      <div className="input-unit-wrap w-1/3">
-                        <input
-                          type="number"
-                          id="lobbyHeight"
-                          name="lobbyHeight"
-                          placeholder="0"
-                          value={formData.lobbyHeight}
-                          onChange={handleChange}
-                        />
-                        <span className="text-gray-500 ml-2">m</span>
-                      </div>
-                      <TooltipButton position="right" tooltipText="설명" />
-                    </div>
-                  </div>
-                </div>
-
                 {/* 체크박스 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
                   <div className="checkbox-group">

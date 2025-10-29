@@ -175,6 +175,16 @@ h1 {
   top: 2px;
 }
 
+.switch-row-label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 8.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 140%;
+  color: #12121b;
+}
+
 .title-divider {
   font-weight: 700;
   font-size: 1.25rem;
