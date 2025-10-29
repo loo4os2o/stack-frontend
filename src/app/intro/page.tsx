@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import '@/css/projects.css';
 import Image from 'next/image';
 import pdfFileIcon from '@/assets/icons/icon-pdf.png';
-import ExImgIntro1 from '@/assets/images/ex/sample-intro-1.png';
-import ExImgIntro2 from '@/assets/images/ex/sample-intro-2.png';
-import ExImgIntro3 from '@/assets/images/ex/sample-intro-3.png';
-import ExImgIntro4 from '@/assets/images/ex/sample-intro-4.png';
+import ExImgIntro2 from '@/assets/images/12_stackeffect _002.png';
+import ExImgIntro4 from '@/assets/images/12_stackeffect _001.jpg';
 import accMinus from '@/assets/icons/icon-minus.png';
 import accPlus from '@/assets/icons/icon-plus.png';
 
@@ -18,7 +16,7 @@ const accordionData = [
         <div className="intro-row">
           <div
             className="image-wrap"
-            style={{ borderRadius: '0.375rem', maxWidth: '258px', maxHeight: '280px' }}
+            style={{ borderRadius: '0.375rem', maxWidth: '258px' }}
           >
             <Image src={ExImgIntro4} alt={'이미지 영역'} />
           </div>
@@ -179,7 +177,7 @@ const accordionData = [
             <li>풍압 (바람)</li>
             <li>기계설비 시스템 (기계환기, 기압제연 등)</li>
           </ul>
-          <ul className="mt-2 mb-6">
+          <ul className="mt-2 mb-10">
             풍압은 난류에 의해 시시각각 변화하며, 순간적으로 큰 압력을 유도할 수 있으나 지속시간이
             짧다.
             <br />
@@ -190,7 +188,8 @@ const accordionData = [
             °C 이상일 경우, 연돌효과가 전체 압력차의 70% 이상을 차지할 수 있다.
           </ul>
 
-          <div className="image-wrap m-auto" style={{ maxWidth: '640px', maxHeight: '319px' }}>
+          <div className="image-wrap m-auto pb-4" 
+            style={{ maxWidth: '640px', maxHeight: '319px' }}>
             <Image src={ExImgIntro2} alt={'이미지 영역'} />
           </div>
           <hr />

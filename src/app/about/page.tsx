@@ -3,9 +3,9 @@ import React from 'react';
 
 import '@/css/about.css';
 import Image from 'next/image';
-import ExImgDiagram0 from '@/assets/images/ex/sample-diagram-0.png';
-// import ExImgDiagram1 from "@/assets/images/ex/sample-diagram-1.png";
-import ExImgDiagram2 from '@/assets/images/ex/sample-diagram-2.png';
+import AboutStackDiagram1 from '@/assets/images/02_about STACK _001.png';
+import AboutStackDiagram2 from '@/assets/images/02_about STACK _002.png';
+import ExImgDiagram2 from '@/assets/images/02_about STACK _003.png';
 import TargetBlank from '@/assets/icons/icon-target-blank.png';
 import logoAbout from '@/assets/images/logo-STACK-about.png';
 
@@ -22,7 +22,7 @@ export default function AboutPage() {
 
           <div className="mb-5 about-wrap">
             <div className="image-wrap">
-              <Image src={ExImgDiagram0} alt="샘플이미지0" />
+              <Image src={AboutStackDiagram1} alt="STACK 소개 이미지-1" />
             </div>
           </div>
 
@@ -47,7 +47,7 @@ export default function AboutPage() {
             </p>
 
             {/* 차트영역 */}
-            <div className="flex gap-4 mt-5 w-full">
+            {/* <div className="flex gap-4 mt-5 w-full">
               <div
                 className="chart-wrap w-3/5 gap-4"
                 style={{ height: '416px', flexDirection: 'row', padding: '1rem' }}
@@ -67,6 +67,11 @@ export default function AboutPage() {
                   차트3 <br /> 최대연돌 압력차(∆P)
                 </div>
               </div>
+            </div> */}
+
+            {/* 차트영역 이미지로 대체 */}
+            <div className="image-wrap mt-6">
+              <Image src={AboutStackDiagram2} alt="STACK 소개 이미지-2" />
             </div>
           </div>
 

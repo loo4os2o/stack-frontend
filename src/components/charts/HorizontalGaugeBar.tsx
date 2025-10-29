@@ -3,10 +3,11 @@ import React from 'react';
 interface Props {
   value: number; // 퍼센트 값 (예: 149)
   className?: string;
+  label?: string;
 }
 
-const HorizontalCriteriaBar: React.FC<Props> = ({ value, className = '' }) => {
-  const fullBarWidth = 250;
+const HorizontalCriteriaBar: React.FC<Props> = ({ value, label, className = '' }) => {
+  const fullBarWidth = 180;
   const cappedValue = Math.min(value, 200);
   const fillWidth = (cappedValue / 100) * fullBarWidth;
   const criteriaX = fullBarWidth; // 100% 위치
@@ -20,12 +21,14 @@ const HorizontalCriteriaBar: React.FC<Props> = ({ value, className = '' }) => {
         height: 'auto',
         paddingBottom: 30,
         position: 'relative',
-        left: -90,
+        left: -120,
         // border: "1px solid red",
       }}
     >
       {/* 텍스트 라벨 */}
-      <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 16 }}>최상층: 145 - 150 Pa</div>
+      <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 16 }}>
+        {label === '최상층' ? '최상층: 145 - 150 Pa' : '로비층: 230 - 240 Pa'}
+      </div>
 
       {/* Bar Wrapper */}
       <div
