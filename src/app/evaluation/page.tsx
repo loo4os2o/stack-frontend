@@ -864,7 +864,7 @@ export default function EvaluationPage() {
                   <div className="form-group">
                     <label htmlFor="lobbyHeight">로비 층고</label>
                     <div className="flex items-center gap-2 w-full pl-6">
-                      <div className="input-unit-wrap w-2/3">
+                      <div className="input-unit-wrap w-full md:w-[12.5rem]">
                         <input
                           type="number"
                           id="lobbyHeight"
