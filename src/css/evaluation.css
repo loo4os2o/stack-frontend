@@ -130,6 +130,9 @@ h1 {
   min-width: 8.75rem;
   margin-bottom: 0;
 }
+.evaluation-page .form-group.disabled label {
+  color: #9ca3af;
+}
 @media (max-width: 1240px) {
   .evaluation-page .form-group {
     flex-direction: column;

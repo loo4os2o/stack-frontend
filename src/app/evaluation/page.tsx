@@ -924,7 +924,7 @@ export default function EvaluationPage() {
 
                 {/* 포디움 높이 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
-                  <div className="form-group sub">
+                  <div className={`form-group sub ${!formData.hasPodium ? 'disabled' : ''}`}>
                     <label htmlFor="podiumHeight">
                       포디움 높이 (m)<span className="text-red-500 ml-1">*</span>
                     </label>
@@ -958,7 +958,7 @@ export default function EvaluationPage() {
 
                 {/* 외피 둘레비율 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
-                  <div className="form-group sub">
+                  <div className={`form-group sub ${!formData.hasPodium ? 'disabled' : ''}`}>
                     <label htmlFor="">
                       외피 둘레비율<span className="text-red-500 ml-1">*</span>
                     </label>
@@ -1171,7 +1171,7 @@ export default function EvaluationPage() {
                         checked={formData.zoningType === 'single'}
                         onChange={handleChange}
                       />
-                      싱글존
+                      Single-zone Type
                     </label>
 
                     <label>
@@ -1182,7 +1182,7 @@ export default function EvaluationPage() {
                         checked={formData.zoningType === 'two'}
                         onChange={handleChange}
                       />
-                      투존 (저층존 - 고층존)
+                      Two-zone Type (저층부, 고층부)
                     </label>
 
                     <label>
@@ -1193,7 +1193,7 @@ export default function EvaluationPage() {
                         checked={formData.zoningType === 'multi'}
                         onChange={handleChange}
                       />
-                      멀티존 (저층존 - 중층존 - 고층존)
+                      Multi-zone Type (저층부, 중층부, 고층부)
                     </label>
                   </div>
                 </div>
@@ -1202,7 +1202,7 @@ export default function EvaluationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-6 mb-5">
                   <div className="flex items-center gap-2 mb-2 sub">
                     <h3 style={{ marginBottom: 0 }}>
-                      샤프트별 최고운행층<span className="text-red-500 ml-1">*</span>
+                      샤프트별 최고 운행 층<span className="text-red-500 ml-1">*</span>
                     </h3>
                     <TooltipButton
                       position="right"
@@ -1307,7 +1307,7 @@ export default function EvaluationPage() {
                             }))
                           }
                         />
-                        스카이로비
+                        환승층
                         <span className="ml-3 mt-0.5">
                           <TooltipButton position="right" tooltipText="설명" />
                         </span>
@@ -1361,9 +1361,9 @@ export default function EvaluationPage() {
                 {/* 피난안전구역 개소 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
-                    <label htmlFor="evacuationZoneCount">피난안전구역 개소</label>
+                    <label htmlFor="evacuationZoneCount">피난안전구역 개수</label>
                     <div className="flex items-center gap-2 w-full">
-                      <div className="input-unit-wrap w-50">
+                      <div className="input-unit-wrap w-40">
                         <input
                           type="number"
                           id="evacuationZoneCount"
@@ -1372,9 +1372,8 @@ export default function EvaluationPage() {
                           value={formData.evacuationZoneCount}
                           onChange={handleChange}
                         />
-                        <span className="text-gray-500 ml-2">개소</span>
+                        <span className="text-gray-500 ml-2">개</span>
                       </div>
-                      <TooltipButton position="right" tooltipText="설명" />
                     </div>
                   </div>
                 </div>
@@ -1388,7 +1387,7 @@ export default function EvaluationPage() {
                     <label>위치</label>
 
                     <div className="grid grid-cols-3 gap-2 lg:grid-cols-5">
-                      <div className="input-unit-wrap w-full">
+                      <div className="input-unit-wrap w-40">
                         <input
                           type="number"
                           name="firstStairShaftFloors"
@@ -1397,7 +1396,7 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-full">
+                      <div className="input-unit-wrap w-40">
                         <input
                           type="number"
                           name="secondStairShaftFloors"
@@ -1406,7 +1405,7 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-full">
+                      <div className="input-unit-wrap w-40">
                         <input
                           type="number"
                           name="thirdStairShaftFloors"
@@ -1415,20 +1414,11 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-full">
+                      <div className="input-unit-wrap w-40">
                         <input
                           type="number"
                           name="fourthStairShaftFloors"
                           value={formData.fourthStairShaftFloors}
-                          onChange={handleChange}
-                        />
-                        <span className="text-gray-500 ml-2">F</span>
-                      </div>
-                      <div className="input-unit-wrap w-full">
-                        <input
-                          type="number"
-                          name="fifthStairShaftFloors"
-                          value={formData.fifthStairShaftFloors}
                           onChange={handleChange}
                         />
                         <span className="text-gray-500 ml-2">F</span>
