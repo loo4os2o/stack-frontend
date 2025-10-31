@@ -115,6 +115,33 @@ export default function MyProjectPage() {
   const [projects, setProjects] = useState<any[]>([]);
   const { user, accessToken, refreshToken } = useUserStore();
 
+  const buildingGeneralUsageOptions: Array<{ key: keyof Project; label: string }> = [
+    { key: 'buildingGeneralPlanResidentialGeneral', label: '공동주택(일반)' },
+    { key: 'buildingGeneralPlanResidentialMixed', label: '공동주택(주상복합)' },
+    { key: 'buildingGeneralPlanOffice', label: '업무시설' },
+    { key: 'buildingGeneralPlanHotel', label: '호텔시설' },
+    { key: 'buildingGeneralPlanComplex', label: '복합시설(예: 주거+호텔)' },
+    { key: 'buildingGeneralPlanRetail', label: '판매시설' },
+    { key: 'buildingGeneralPlanCultural', label: '문화집회시설' },
+    { key: 'buildingGeneralPlanNeighborhood', label: '근린생활시설' },
+  ];
+  const buildingUsageDisplay =
+    selectedProject == null
+      ? ''
+      : (() => {
+          const selected = buildingGeneralUsageOptions
+            .filter(({ key }) => Boolean(selectedProject[key]))
+            .map(({ label }) => label);
+
+          if (selectedProject.buildingGeneralEtcChecked && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          } else if (!selected.length && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          }
+
+          return selected.join(', ');
+        })();
+
   const [summary, setSummary] = useState<any>(null);
   const [stackEffectForecast, setStackEffectForecast] = useState<any>(null);
   const [issueForecast, setIssueForecast] = useState<any>(null);
@@ -468,17 +495,7 @@ export default function MyProjectPage() {
                   </tr>
                   <tr>
                     <th>건물용도</th>
-                    <td>
-                      {selectedProject.buildingGeneralPlanResidential
-                        ? '공동주택'
-                        : selectedProject.buildingGeneralPlanOffice
-                          ? '업무시설'
-                          : selectedProject.buildingGeneralPlanNeighborhood
-                            ? '근린생활시설'
-                            : selectedProject.buildingGeneralPlanCultural
-                              ? '문화/집회시설'
-                              : selectedProject.buildingGeneralEtcInput}
-                    </td>
+                    <td>{buildingUsageDisplay || '-'}</td>
                   </tr>
                   <tr>
                     <th>위치</th>

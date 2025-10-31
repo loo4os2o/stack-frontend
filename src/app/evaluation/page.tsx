@@ -27,6 +27,16 @@ import 'swiper/css/pagination';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+type GeneralUsageKey =
+  | 'buildingGeneralPlanResidentialGeneral'
+  | 'buildingGeneralPlanResidentialMixed'
+  | 'buildingGeneralPlanOffice'
+  | 'buildingGeneralPlanHotel'
+  | 'buildingGeneralPlanComplex'
+  | 'buildingGeneralPlanRetail'
+  | 'buildingGeneralPlanCultural'
+  | 'buildingGeneralPlanNeighborhood';
+
 export default function EvaluationPage() {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
@@ -48,10 +58,14 @@ export default function EvaluationPage() {
     belowFloors: 1,
     aboveFloors: 1,
     buildingHeight: 0,
-    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanResidentialGeneral: false,
+    buildingGeneralPlanResidentialMixed: false,
     buildingGeneralPlanOffice: false,
-    buildingGeneralPlanNeighborhood: false,
+    buildingGeneralPlanHotel: false,
+    buildingGeneralPlanComplex: false,
+    buildingGeneralPlanRetail: false,
     buildingGeneralPlanCultural: false,
+    buildingGeneralPlanNeighborhood: false,
     buildingGeneralEtcChecked: false,
     buildingGeneralEtcInput: '',
     hasPodium: false,
@@ -84,6 +98,21 @@ export default function EvaluationPage() {
     rooftopGarden: false,
   });
 
+  const setGeneralUsage = (key: GeneralUsageKey | 'etc') => {
+    setFormData((prevData) => ({
+      ...prevData,
+      buildingGeneralPlanResidentialGeneral: key === 'buildingGeneralPlanResidentialGeneral',
+      buildingGeneralPlanResidentialMixed: key === 'buildingGeneralPlanResidentialMixed',
+      buildingGeneralPlanOffice: key === 'buildingGeneralPlanOffice',
+      buildingGeneralPlanHotel: key === 'buildingGeneralPlanHotel',
+      buildingGeneralPlanComplex: key === 'buildingGeneralPlanComplex',
+      buildingGeneralPlanRetail: key === 'buildingGeneralPlanRetail',
+      buildingGeneralPlanCultural: key === 'buildingGeneralPlanCultural',
+      buildingGeneralPlanNeighborhood: key === 'buildingGeneralPlanNeighborhood',
+      buildingGeneralEtcChecked: key === 'etc',
+    }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const isChecked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
@@ -94,11 +123,9 @@ export default function EvaluationPage() {
   };
 
   const handleGeneralEtcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      buildingGeneralEtcChecked: checked,
-    }));
+    if (e.target.checked) {
+      setGeneralUsage('etc');
+    }
   };
 
   const handleGeneralEtcInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -238,10 +265,14 @@ export default function EvaluationPage() {
     }
 
     const usageFields = [
-      'buildingGeneralPlanResidential',
+      'buildingGeneralPlanResidentialGeneral',
+      'buildingGeneralPlanResidentialMixed',
       'buildingGeneralPlanOffice',
-      'buildingGeneralPlanNeighborhood',
+      'buildingGeneralPlanHotel',
+      'buildingGeneralPlanComplex',
+      'buildingGeneralPlanRetail',
       'buildingGeneralPlanCultural',
+      'buildingGeneralPlanNeighborhood',
       'buildingGeneralEtcChecked',
     ];
 
@@ -249,7 +280,7 @@ export default function EvaluationPage() {
     if (!isAnyUsageFieldTrue) {
       alert('건물 일반 정보 건물 용도를 선택해주세요.');
       document
-        .querySelector(`[name="buildingMassPlanResidential"]`)
+        .querySelector('input[name="buildingGeneralUsage"]')
         ?.scrollIntoView({ behavior: 'smooth' });
       return false;
     }
@@ -312,10 +343,14 @@ export default function EvaluationPage() {
       belowFloors: 1,
       aboveFloors: 1,
       buildingHeight: 0,
-      buildingGeneralPlanResidential: false,
+      buildingGeneralPlanResidentialGeneral: false,
+      buildingGeneralPlanResidentialMixed: false,
       buildingGeneralPlanOffice: false,
-      buildingGeneralPlanNeighborhood: false,
+      buildingGeneralPlanHotel: false,
+      buildingGeneralPlanComplex: false,
+      buildingGeneralPlanRetail: false,
       buildingGeneralPlanCultural: false,
+      buildingGeneralPlanNeighborhood: false,
       buildingGeneralEtcChecked: false,
       buildingGeneralEtcInput: '',
       hasPodium: false,
@@ -426,10 +461,14 @@ export default function EvaluationPage() {
           belowFloors: 1,
           aboveFloors: 1,
           buildingHeight: 0,
-          buildingGeneralPlanResidential: false,
+          buildingGeneralPlanResidentialGeneral: false,
+          buildingGeneralPlanResidentialMixed: false,
           buildingGeneralPlanOffice: false,
-          buildingGeneralPlanNeighborhood: false,
+          buildingGeneralPlanHotel: false,
+          buildingGeneralPlanComplex: false,
+          buildingGeneralPlanRetail: false,
           buildingGeneralPlanCultural: false,
+          buildingGeneralPlanNeighborhood: false,
           buildingGeneralEtcChecked: false,
           buildingGeneralEtcInput: '',
           hasPodium: false,
@@ -764,31 +803,47 @@ export default function EvaluationPage() {
                       <div className="radio">
                         <label>
                           <input
-                            type="checkbox"
-                            name="buildingGeneralPlanResidential"
-                            checked={formData.buildingGeneralPlanResidential}
-                            onChange={(e) =>
-                              setFormData((prevData) => ({
-                                ...prevData,
-                                buildingGeneralPlanResidential: e.target.checked,
-                              }))
-                            }
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanResidentialGeneral"
+                            checked={formData.buildingGeneralPlanResidentialGeneral}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanResidentialGeneral');
+                              }
+                            }}
                           />
-                          <span>공동주택</span>
+                          <span>공동주택(일반)</span>
                         </label>
                       </div>
                       <div className="radio">
                         <label>
                           <input
-                            type="checkbox"
-                            name="buildingGeneralPlanOffice"
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanResidentialMixed"
+                            checked={formData.buildingGeneralPlanResidentialMixed}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanResidentialMixed');
+                              }
+                            }}
+                          />
+                          <span>공동주택(주상복합)</span>
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanOffice"
                             checked={formData.buildingGeneralPlanOffice}
-                            onChange={(e) =>
-                              setFormData((prevData) => ({
-                                ...prevData,
-                                buildingGeneralPlanOffice: e.target.checked,
-                              }))
-                            }
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanOffice');
+                              }
+                            }}
                           />
                           <span>업무시설</span>
                         </label>
@@ -796,33 +851,81 @@ export default function EvaluationPage() {
                       <div className="radio">
                         <label>
                           <input
-                            type="checkbox"
-                            name="buildingGeneralPlanNeighborhood"
-                            checked={formData.buildingGeneralPlanNeighborhood}
-                            onChange={(e) =>
-                              setFormData((prevData) => ({
-                                ...prevData,
-                                buildingGeneralPlanNeighborhood: e.target.checked,
-                              }))
-                            }
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanHotel"
+                            checked={formData.buildingGeneralPlanHotel}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanHotel');
+                              }
+                            }}
                           />
-                          <span>근린생활시설</span>
+                          <span>호텔시설</span>
                         </label>
                       </div>
                       <div className="radio">
                         <label>
                           <input
-                            type="checkbox"
-                            name="buildingGeneralPlanCultural"
-                            checked={formData.buildingGeneralPlanCultural}
-                            onChange={(e) =>
-                              setFormData((prevData) => ({
-                                ...prevData,
-                                buildingGeneralPlanCultural: e.target.checked,
-                              }))
-                            }
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanComplex"
+                            checked={formData.buildingGeneralPlanComplex}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanComplex');
+                              }
+                            }}
                           />
-                          <span>문화/집회시설</span>
+                          <span>복합시설(예: 주거+호텔)</span>
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanRetail"
+                            checked={formData.buildingGeneralPlanRetail}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanRetail');
+                              }
+                            }}
+                          />
+                          <span>판매시설</span>
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanCultural"
+                            checked={formData.buildingGeneralPlanCultural}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanCultural');
+                              }
+                            }}
+                          />
+                          <span>문화집회시설</span>
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="buildingGeneralPlanNeighborhood"
+                            checked={formData.buildingGeneralPlanNeighborhood}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setGeneralUsage('buildingGeneralPlanNeighborhood');
+                              }
+                            }}
+                          />
+                          <span>근린생활시설</span>
                         </label>
                       </div>
 
@@ -830,8 +933,9 @@ export default function EvaluationPage() {
                       <label className="radio-etc">
                         <div>
                           <input
-                            type="checkbox"
-                            name="buildingGeneralEtc"
+                            type="radio"
+                            name="buildingGeneralUsage"
+                            value="etc"
                             checked={formData.buildingGeneralEtcChecked}
                             onChange={handleGeneralEtcChange}
                           />
@@ -839,8 +943,10 @@ export default function EvaluationPage() {
                         </div>
                         <input
                           type="text"
+                          name="buildingGeneralEtcInput"
                           value={formData.buildingGeneralEtcInput}
                           onChange={handleGeneralEtcInputChange}
+                          disabled={!formData.buildingGeneralEtcChecked}
                         />
                       </label>
                     </div>
@@ -862,7 +968,7 @@ export default function EvaluationPage() {
                 {/* 로비 층고 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
-                    <label htmlFor="lobbyHeight">로비 층고</label>
+                    <label htmlFor="lobbyHeight">로비층고</label>
                     <div className="flex items-center gap-2 w-full pl-6">
                       <div className="input-unit-wrap w-full md:w-[12.5rem] md:max-w-[12.5rem] md:flex-none">
                         <input
@@ -875,7 +981,6 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton position="right" tooltipText="로비 층고를 입력해 주세요." />
                     </div>
                   </div>
                 </div>
@@ -949,8 +1054,7 @@ export default function EvaluationPage() {
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
                       <TooltipButton
-                        tooltipText="
-                        지면부터 포디움 최상층의 천장 슬래브 상단까지의 높이를 입력해 주세요."
+                        tooltipText="지면으로부터 포디움 최상층까지의 높이"
                       />
                     </div>
                   </div>
@@ -982,18 +1086,12 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">m</span>
                       </div>
-                      <TooltipButton
-                        tooltipText="
-                        기준층(상층부 타워) 외피 길이 대비 포디움 외피 길이의 비율을 입력해 주세요.
-                        <br/>※ 계산식 : (포디움 외피 둘레) / (기준층 외피 둘레)
-                      "
-                      />
                     </div>
                   </div>
                 </div>
 
                 {/* 건물용도 */}
-                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                {/*  <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
                   <div
                     className="form-group sub top"
                     style={{ alignItems: 'flex-start', marginBottom: 0 }}
@@ -1072,7 +1170,6 @@ export default function EvaluationPage() {
                         </label>
                       </div>
 
-                      {/* 기타 + 입력 */}
                       <label className={`radio-etc ${!formData.hasPodium ? 'disabled' : ''}`}>
                         <div>
                           <input
@@ -1092,8 +1189,8 @@ export default function EvaluationPage() {
                       </label>
                     </div>
                   </div>
-                </div>
-              </div>{' '}
+                </div> */}
+              </div>
               {/* 2. 건물 매스 계획 : 왼쪽 영역 끝 */}
               <div className="w-full lg:w-3/5 right">
                 <div className="flex gap-4 md:flex-row flex-col w-full">
@@ -1154,10 +1251,7 @@ export default function EvaluationPage() {
                     </h3>
                     <TooltipButton
                       position="right"
-                      tooltipText="
-                      건물 높이 또는 용도에 따라 구획된 엘리베이터존 구성방식을 선택해주세요.
-                      <br/>※ 승강기 운행계획도 또는 단면도 참조
-                    "
+                      tooltipText="건물높이•용도에 따라 구획된 엘리베이터 존 구성 방식을 선택"
                     />
                   </div>
 
@@ -1206,10 +1300,7 @@ export default function EvaluationPage() {
                     </h3>
                     <TooltipButton
                       position="right"
-                      tooltipText="
-                      각 샤프트(엘리베이터 그룹) 별로 최상단 정차증의 층수를 입력해 주세요.
-                      구획된 존별 승강기 운행계획을 기준으로 합니다.
-                    "
+                      tooltipText="각 샤프트 별로 최상단 정차층의 층수"
                     />
                   </div>
 
@@ -1309,7 +1400,6 @@ export default function EvaluationPage() {
                         />
                         환승층
                         <span className="ml-3 mt-0.5">
-                          <TooltipButton position="right" tooltipText="설명" />
                         </span>
                       </label>
                     </div>
@@ -1384,7 +1474,7 @@ export default function EvaluationPage() {
                     className="form-group flex-col sub top"
                     style={{ alignItems: 'flex-start', marginBottom: 0 }}
                   >
-                    <label>위치(층)(최상층부터 입력)                    </label>
+                    <label>위치(층)</label>
 
                     <div className="grid grid-cols-3 gap-2 lg:grid-cols-4">
                       <div className="input-unit-wrap w-full">

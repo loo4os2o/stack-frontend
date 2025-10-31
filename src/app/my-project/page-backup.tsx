@@ -32,10 +32,14 @@ const tmpProjects: Project[] = [
     createdAt: '2025-05-10',
     projectName: 'A 오피스타워',
 
-    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanResidentialGeneral: false,
+    buildingGeneralPlanResidentialMixed: false,
     buildingGeneralPlanOffice: false,
-    buildingGeneralPlanNeighborhood: true,
+    buildingGeneralPlanHotel: false,
+    buildingGeneralPlanComplex: false,
+    buildingGeneralPlanRetail: false,
     buildingGeneralPlanCultural: false,
+    buildingGeneralPlanNeighborhood: true,
     buildingGeneralEtcChecked: false,
     buildingGeneralEtcInput: '',
     location: '서울 강서구',
@@ -49,10 +53,14 @@ const tmpProjects: Project[] = [
     createdAt: '2025-06-05',
     projectName: 'B 주상복합',
 
-    buildingGeneralPlanResidential: false,
-    buildingGeneralPlanOffice: true,
-    buildingGeneralPlanNeighborhood: false,
+    buildingGeneralPlanResidentialGeneral: false,
+    buildingGeneralPlanResidentialMixed: true,
+    buildingGeneralPlanOffice: false,
+    buildingGeneralPlanHotel: false,
+    buildingGeneralPlanComplex: false,
+    buildingGeneralPlanRetail: false,
     buildingGeneralPlanCultural: false,
+    buildingGeneralPlanNeighborhood: false,
     buildingGeneralEtcChecked: false,
     buildingGeneralEtcInput: '',
     location: '대전 서구',
@@ -66,10 +74,14 @@ const tmpProjects: Project[] = [
     createdAt: '2025-02-15',
     projectName: 'C 호텔',
 
-    buildingGeneralPlanResidential: false,
+    buildingGeneralPlanResidentialGeneral: false,
+    buildingGeneralPlanResidentialMixed: false,
     buildingGeneralPlanOffice: false,
-    buildingGeneralPlanNeighborhood: false,
+    buildingGeneralPlanHotel: true,
+    buildingGeneralPlanComplex: false,
+    buildingGeneralPlanRetail: false,
     buildingGeneralPlanCultural: false,
+    buildingGeneralPlanNeighborhood: false,
     buildingGeneralEtcChecked: true,
     buildingGeneralEtcInput: '기타 용도도',
     location: '서울 강남구',
@@ -114,6 +126,33 @@ export default function MyProjectPage() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY || '';
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
   const [projects, setProjects] = useState<any[]>([]);
+
+  const buildingGeneralUsageOptions: Array<{ key: keyof Project; label: string }> = [
+    { key: 'buildingGeneralPlanResidentialGeneral', label: '공동주택(일반)' },
+    { key: 'buildingGeneralPlanResidentialMixed', label: '공동주택(주상복합)' },
+    { key: 'buildingGeneralPlanOffice', label: '업무시설' },
+    { key: 'buildingGeneralPlanHotel', label: '호텔시설' },
+    { key: 'buildingGeneralPlanComplex', label: '복합시설(예: 주거+호텔)' },
+    { key: 'buildingGeneralPlanRetail', label: '판매시설' },
+    { key: 'buildingGeneralPlanCultural', label: '문화집회시설' },
+    { key: 'buildingGeneralPlanNeighborhood', label: '근린생활시설' },
+  ];
+  const buildingUsageDisplay =
+    selectedProject == null
+      ? ''
+      : (() => {
+          const selected = buildingGeneralUsageOptions
+            .filter(({ key }) => Boolean(selectedProject[key]))
+            .map(({ label }) => label);
+
+          if (selectedProject.buildingGeneralEtcChecked && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          } else if (!selected.length && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          }
+
+          return selected.join(', ');
+        })();
 
   async function get_my_projects() {
     const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -283,17 +322,7 @@ export default function MyProjectPage() {
                   </tr>
                   <tr>
                     <th>건물용도</th>
-                    <td>
-                      {selectedProject.buildingGeneralPlanResidential
-                        ? '공동주택'
-                        : selectedProject.buildingGeneralPlanOffice
-                          ? '업무시설'
-                          : selectedProject.buildingGeneralPlanNeighborhood
-                            ? '근린생활시설'
-                            : selectedProject.buildingGeneralPlanCultural
-                              ? '문화/집회시설'
-                              : selectedProject.buildingGeneralEtcInput}
-                    </td>
+                    <td>{buildingUsageDisplay || '-'}</td>
                   </tr>
                   <tr>
                     <th>위치</th>

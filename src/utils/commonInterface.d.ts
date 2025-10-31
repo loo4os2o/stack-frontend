@@ -37,10 +37,14 @@ export interface Project {
   thirdStairShaftFloors?: number | null;
   fourthStairShaftFloors?: number | null;
   fifthStairShaftFloors?: number | null;
-  buildingGeneralPlanResidential?: boolean | null;
+  buildingGeneralPlanResidentialGeneral?: boolean | null;
+  buildingGeneralPlanResidentialMixed?: boolean | null;
   buildingGeneralPlanOffice?: boolean | null;
-  buildingGeneralPlanNeighborhood?: boolean | null;
+  buildingGeneralPlanHotel?: boolean | null;
+  buildingGeneralPlanComplex?: boolean | null;
+  buildingGeneralPlanRetail?: boolean | null;
   buildingGeneralPlanCultural?: boolean | null;
+  buildingGeneralPlanNeighborhood?: boolean | null;
   buildingMassPlanResidential?: boolean | null;
   buildingMassPlanOffice?: boolean | null;
   buildingMassPlanNeighborhood?: boolean | null;

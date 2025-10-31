@@ -115,6 +115,33 @@ export default function EvaluationResultPage() {
   const [projects, setProjects] = useState<any[]>([]);
   const { user, accessToken, refreshToken } = useUserStore();
 
+  const buildingGeneralUsageOptions: Array<{ key: keyof Project; label: string }> = [
+    { key: 'buildingGeneralPlanResidentialGeneral', label: '공동주택(일반)' },
+    { key: 'buildingGeneralPlanResidentialMixed', label: '공동주택(주상복합)' },
+    { key: 'buildingGeneralPlanOffice', label: '업무시설' },
+    { key: 'buildingGeneralPlanHotel', label: '호텔시설' },
+    { key: 'buildingGeneralPlanComplex', label: '복합시설(예: 주거+호텔)' },
+    { key: 'buildingGeneralPlanRetail', label: '판매시설' },
+    { key: 'buildingGeneralPlanCultural', label: '문화집회시설' },
+    { key: 'buildingGeneralPlanNeighborhood', label: '근린생활시설' },
+  ];
+  const buildingUsageDisplay =
+    selectedProject == null
+      ? ''
+      : (() => {
+          const selected = buildingGeneralUsageOptions
+            .filter(({ key }) => Boolean(selectedProject[key]))
+            .map(({ label }) => label);
+
+          if (selectedProject.buildingGeneralEtcChecked && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          } else if (!selected.length && selectedProject.buildingGeneralEtcInput) {
+            selected.push(selectedProject.buildingGeneralEtcInput);
+          }
+
+          return selected.join(', ');
+        })();
+
   const [summary, setSummary] = useState<any>(null);
   const [stackEffectForecast, setStackEffectForecast] = useState<any>(null);
   const [issueForecast, setIssueForecast] = useState<any>(null);
@@ -416,17 +443,7 @@ export default function EvaluationResultPage() {
                   </tr>
                   <tr>
                     <th>건물용도</th>
-                    <td>
-                      {selectedProject.buildingGeneralPlanResidential
-                        ? '공동주택'
-                        : selectedProject.buildingGeneralPlanOffice
-                          ? '업무시설'
-                          : selectedProject.buildingGeneralPlanNeighborhood
-                            ? '근린생활시설'
-                            : selectedProject.buildingGeneralPlanCultural
-                              ? '문화/집회시설'
-                              : selectedProject.buildingGeneralEtcInput}
-                    </td>
+                    <td>{buildingUsageDisplay || '-'}</td>
                   </tr>
                   <tr>
                     <th>위치</th>
@@ -573,8 +590,29 @@ export default function EvaluationResultPage() {
                       </div>
 
                       <div className="comm-border">
-                        <h3>{selectedProject.projectName}</h3>
-                        <div className="border-0">{summary?.project?.projResultDesc}</div>
+                        <div className="border-0">
+                          <p>
+                            ‘연돌효과 영향도’는 건물 내 연돌효과로 인한 압력분포가 미치는 다양한 문제점을
+                            수치화한 지표로, 연돌현상으로 알려진 제반 문제점의 수준을 나타냅니다.
+                          </p>
+                          <p className="mt-3">
+                            <strong>: 주요 평가요소</strong>
+                            <br />최대 압력차 (Ip): 로비층 및 최상층에서의 최대 압력차, [Ip] 환산 데이터
+                            <br />문제 발생층 비율 (Ir): 기준 압력차를 초과하는 층의 비율, [Ir] 환산 데이터
+                            <br />건축계획 요소 (Ia): 연돌현상에 영향을 미치는 계획적 요인, [Ia] 환산 데이터
+                          </p>
+                          <p className="mt-3">
+                            <strong>등급 정의</strong>
+                            <br />문제 없음: 주요 구간에서 유의할 만한 압력차 문제가 없음(단, 상세 건축계획에
+                            따라 달라질 수 있음)
+                            <br />문제 우려: 일부 구간에서 압력차 문제가 발생할 가능성이 있으며, 사전 검토 및
+                            건축적 개선이 필요함
+                            <br />문제 발생: 다수 구간에서 압력차 문제가 발생하며, 개선안 저감수준에 대한 검토가
+                            필요함
+                            <br />문제 심각: 대부분 구간에서 압력차 문제가 발생하며, 특정 구간은 문제가 매우
+                            심각함
+                          </p>
+                        </div>
                       </div>
 
                       <div className="comm-border">
@@ -724,8 +762,8 @@ export default function EvaluationResultPage() {
                                 <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘1" />
                               </div>
                               <div className="text-wrap">
-                                <div className="title">화재 및 피난 안전</div>
-                                <div className="desc">화재 및 피난 안전 화재 및 피난 안전 화재</div>
+                                <div className="title">화재 및 피난 안전 문제</div>
+                                <div className="desc">수직 샤프트를 통한 연기 전파로 피난 안전성 저하</div>
                                 <div className="sub">개선안 설계도서 반영 필요</div>
                               </div>
                             </div>
@@ -736,9 +774,9 @@ export default function EvaluationResultPage() {
                                 <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘2" />
                               </div>
                               <div className="text-wrap">
-                                <div className="title">건축 요소/자재 하자</div>
+                                <div className="title">건축 요소 과압 문제</div>
                                 <div className="desc">
-                                  건축 요소/자재 하자건축요소 자재하자 건축
+                                압력차로 인해 문이 열리거나 닫히기 어려움(보행 불편, 안전 문제)
                                 </div>
                                 <div className="sub">시뮬레이션 검토 필요</div>
                               </div>
@@ -750,10 +788,9 @@ export default function EvaluationResultPage() {
                                 <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘3" />
                               </div>
                               <div className="text-wrap">
-                                <div className="title">엘리베이터 도어 오작동 및 고장</div>
+                                <div className="title">엘리베이터문 오작동 및 고장</div>
                                 <div className="desc">
-                                  화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난 화재 및 피난
-                                  화재 및 피난
+                                엘리베이터 운행 장애 및 진동 문제 발생
                                 </div>
                               </div>
                             </div>
@@ -764,8 +801,8 @@ export default function EvaluationResultPage() {
                                 <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘4" />
                               </div>
                               <div className="text-wrap">
-                                <div className="title">도어 소음 (휘슬링)</div>
-                                <div className="desc">도어 소음 (휘슬링)</div>
+                                <div className="title">엘리베이터문/출입문 소음 발생</div>
+                                <div className="desc">틈새를 통한 고주파 소음 발생</div>
                               </div>
                             </div>
                           )}
@@ -775,8 +812,8 @@ export default function EvaluationResultPage() {
                                 <Image src={iconLightOn} alt="중요 문제 및 하자 아이콘5" />
                               </div>
                               <div className="text-wrap">
-                                <div className="title">에너지 및 HYAC 시스템 설계 오류</div>
-                                <div className="desc">에너지 및 HYAC 시스템 설계 오류 설명</div>
+                                <div className="title">에너지 손실 및 실내 공기유동 불안정</div>
+                                <div className="desc">침기/누기 증가, 환기성능 저하, 압력제어 오류</div>
                                 <div className="sub">시뮬레이션 검토 필요</div>
                               </div>
                             </div>
