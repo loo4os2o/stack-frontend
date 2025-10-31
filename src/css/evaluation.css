@@ -218,6 +218,31 @@ h1 {
   background-color: #eaeaea;
 }
 
+.evacuation-info-box {
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: flex-start;
+}
+.evacuation-info-box h4 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #12121b;
+}
+.evacuation-info-box p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #333333;
+  font-weight: 500;
+  line-height: 140%;
+}
+
 .image-section {
   border: 1px solid #eaeaea;
   border-radius: 0.75rem;
@@ -230,7 +255,7 @@ h1 {
   justify-content: flex-start;
   gap: 1rem;
 }
-.image-section > p{
+.image-section > p {
   font-size: 0.875rem;
   background: #f5f5f5;
   border-radius: 0.75rem;

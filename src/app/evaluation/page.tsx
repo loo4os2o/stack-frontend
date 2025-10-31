@@ -611,7 +611,7 @@ export default function EvaluationPage() {
         <div className="evaluation-page">
           <h2>1. 건물 일반 정보</h2>
           <section>
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
               <div className="w-full md:w-1/2 left">
                 {/* 프로젝트명 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
@@ -1357,7 +1357,7 @@ export default function EvaluationPage() {
           <h2 className="mt-8">4. 계단실 샤프트 계획</h2>
           <section>
             <div className="flex flex-col md:flex-row gap-8">
-              <div className="w-full md:w-2/2 left">
+              <div className="w-full md:w-3/5 left">
                 {/* 피난안전구역 개소 */}
                 <div className="grid grid-cols-1 md:grid-cols-1">
                   <div className="form-group">
@@ -1384,10 +1384,10 @@ export default function EvaluationPage() {
                     className="form-group flex-col sub top"
                     style={{ alignItems: 'flex-start', marginBottom: 0 }}
                   >
-                    <label>위치</label>
+                    <label>위치(층)(최상층부터 입력)                    </label>
 
-                    <div className="grid grid-cols-3 gap-2 lg:grid-cols-5">
-                      <div className="input-unit-wrap w-40">
+                    <div className="grid grid-cols-3 gap-2 lg:grid-cols-4">
+                      <div className="input-unit-wrap w-full">
                         <input
                           type="number"
                           name="firstStairShaftFloors"
@@ -1396,7 +1396,7 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-40">
+                      <div className="input-unit-wrap w-full">
                         <input
                           type="number"
                           name="secondStairShaftFloors"
@@ -1405,7 +1405,7 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-40">
+                      <div className="input-unit-wrap w-full">
                         <input
                           type="number"
                           name="thirdStairShaftFloors"
@@ -1414,7 +1414,7 @@ export default function EvaluationPage() {
                         />
                         <span className="text-gray-500 ml-2">F</span>
                       </div>
-                      <div className="input-unit-wrap w-40">
+                      <div className="input-unit-wrap w-full">
                         <input
                           type="number"
                           name="fourthStairShaftFloors"
@@ -1426,13 +1426,22 @@ export default function EvaluationPage() {
                     </div>
                   </div>
                 </div>
-              </div>{' '}
-              {/* 4. 계단실 샤프트 계획 : 왼쪽 영역 끝 - right 없음 */}
+              </div>
+              <div className="w-full md:w-2/5 right">
+                <div className="evacuation-info-box">
+                  <p>
+                    피난안전구역은 고층 및 초고층 건축물에서 화재나 지진 등 재난 발생 시 이용객이
+                    일시적으로 안전하게 대피할 수 있도록 건물 중간층에 설치하는 대피 공간입니다.
+                    이 구역은 피난층 또는 지상으로 통하는 직통계단과 직접 연결되며, 피난·안전을 위한
+                    다양한 설비를 갖추어야 합니다.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* 5. 기본 건축계획 */}
-          <h2 className="mt-8">5. 기본 건축계획</h2>
+          <h2 className="mt-8">5. 건축계획 체크사항</h2>
           <section style={{ borderBottom: 0 }}>
             <div className="flex flex-col md:flex-row gap-8">
               <div className="w-full md:w-2/2 left">
@@ -1476,8 +1485,8 @@ export default function EvaluationPage() {
                       <div>
                         <span>로비층 외 출입층</span>
                         <div className="checkbox-sub">
-                          로비층 외에도 주요 출입이 이루어지는 층이 있는 경우 해당 여부를 표시해
-                          주세요. (예: 지하철 연결층 등)
+                        로비층 외에도 주요 출입이 이루어지는 층이 있는지 여부를 체크해 주세요.
+                        (예: 지하철 연결층 등)
                         </div>
                       </div>
                     </label>
@@ -1500,10 +1509,9 @@ export default function EvaluationPage() {
                         }
                       />
                       <div>
-                        <span>엘리베이터 홀 구획</span>
+                        <span>승객용 엘리베이터 홀 구획</span>
                         <div className="checkbox-sub">
-                          기준층 내 엘리베이터 홀이 벽체 및 도어로 복도 또는 주요 공간과 분리되어
-                          있는지 여부를 체크해 주세요.
+                        기준층 내 엘리베이터 홀이 벽체 및 도어로 복도(또는 주요 공간)과 분리되어 있는지 여부를 체크해 주세요.
                         </div>
                       </div>
                     </label>
@@ -1522,16 +1530,16 @@ export default function EvaluationPage() {
                         }
                       />
                       <div>
-                        <span>발코니</span>
+                        <span>발코니 및 베란다</span>
                         <div className="checkbox-sub">
-                          외부로 연결되는 발코니가 있는 경우 해당 여부를 체크해 주세요.
+                        외기와 연결된 발코니(또는 베란다)가 있는지 여부를 체크해 주세요.
                         </div>
                       </div>
                     </label>
                   </div>
                 </div>
 
-                <div className="title-divider mt-8">특수목적</div>
+                <div className="title-divider mt-8">기타</div>
                 {/* 체크박스 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
                   <div className="checkbox-group">
@@ -1549,7 +1557,7 @@ export default function EvaluationPage() {
                       <div>
                         <span>전망층</span>
                         <div className="checkbox-sub">
-                          최상층 등에 전망 목적의 층이 계획되어 있는 경우 해당 여부를 체크해 주세요.
+                          최상층 등에 전망 목적의 층이 계획되어 있는 경우 체크해 주세요. 
                         </div>
                       </div>
                     </label>
@@ -1570,8 +1578,29 @@ export default function EvaluationPage() {
                       <div>
                         <span>옥상정원</span>
                         <div className="checkbox-sub">
-                          옥상에 사용자 접근 가능한 옥상정원이 계획되어 있고, 출입통로와 도어가 있는
-                          경우 체크해 주세요.
+                        포디움 상층부 또는 기준층에 정원이 있어 외부로 출입이 가능한 경우 체크해 주세요.
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* 스카이 로비  -- 추가 항목 -- 계산에는 반영되지 않는다고 함 */}
+                  <div className="checkbox-group mt-2">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={formData.skyLobby}
+                        onChange={(e) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            skyLobby: e.target.checked,
+                          }))
+                        }
+                      />
+                      <div>
+                        <span>스카이 로비</span>
+                        <div className="checkbox-sub">
+                        엘리베이터 조닝에서 스카이 로비방식이 적용된 경우 체크해 주세요.
                         </div>
                       </div>
                     </label>
