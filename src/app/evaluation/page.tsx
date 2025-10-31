@@ -659,7 +659,7 @@ export default function EvaluationPage() {
                       </select>
                       <TooltipButton
                         position="bottom"
-                        tooltipText="기후데이터를 적용하기 위한 프로젝트 위치(도시)를 선택해 주세요.<br/>지역별 외기조건 반영에 사용됩니다."
+                        tooltipText="지역별 외기조건에 반영"
                       />
                     </div>
                   </div>
@@ -747,7 +747,7 @@ export default function EvaluationPage() {
                       </div>
                       <TooltipButton
                         position="bottom"
-                        tooltipText="지표면으로부터 건축물 상단까지 수직 거리"
+                        tooltipText="지면으로부터 최상층까지의 높이"
                       />
                     </div>
                   </div>
