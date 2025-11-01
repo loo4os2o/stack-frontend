@@ -40,6 +40,23 @@
   justify-content: center;
   margin-bottom: 1.25rem;
 }
+.plan-level-stack {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 900;
+  font-size: 0.938rem;
+  color: #ffffff;
+}
+.plan-level-stack-letter {
+  display: inline-block;
+}
+.plan-level-stack-letter.dark {
+  color: #000000;
+}
+.plan-level-stack-letter.accent {
+  color: #FF4500;
+}
 .plan-subtitle{
   font-weight: 500;
   font-size: 0.875rem;
@@ -97,6 +114,47 @@
   left: 0;
   margin-top: 0.125rem;
 }
+.plan-feature-divider {
+  position: relative;
+  padding-left: 0;
+  margin: 1.25rem 0;
+  width: 100%;
+  height: 1.5rem;
+  list-style: none;
+}
+.plan-feature-divider::before,
+.plan-feature-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 1.25rem);
+  height: 1px;
+  background: rgba(255, 69, 0, 0.2);
+  transform: translateY(-50%);
+}
+.plan-feature-divider::before {
+  left: 0;
+}
+.plan-feature-divider::after {
+  right: 0;
+}
+.plan-feature-divider-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 69, 0, 0.25);
+  color: #FF4500;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1;
+}
 
 .plan-duration{
   font-weight: 700;
@@ -104,8 +162,8 @@
   line-height: 130%;
   text-align: center;
   color: #333333;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid rgba(255, 69, 0, 0.15);
+  padding: 1.25rem 0 0;
+  border-top: 1px solid rgba(255, 69, 0, 0.15);
 }
 
 .plan-sample{
