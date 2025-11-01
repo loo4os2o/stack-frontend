@@ -18,10 +18,10 @@ export default function ServiceComparisonTable() {
           </span>
         </div>
 
-        <button type="button" className="integration-media-cta">
+        <a href="https://btairtech.co.kr/" target="_blank" rel="noopener noreferrer" className="integration-media-cta">
           연돌효과 통합 엔지니어링 알아보기
           <span aria-hidden="true">&gt;</span>
-        </button>
+        </a>
       </div>
     </section>
   );
