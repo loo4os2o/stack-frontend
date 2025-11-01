@@ -304,7 +304,7 @@ export default function IntroPage() {
 
   return (
     <div className="container mx-auto pt-10 pb-20">
-      <h1 className="text-3xl font-bold mb-5">연돌현상 소개</h1>
+      <h1 className="text-3xl font-bold mb-5">연돌효과란?</h1>
 
       <div className="flex flex-col gap-2 mb-8">
         {accordionData.map((item, idx) => {
