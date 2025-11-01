@@ -162,6 +162,9 @@ export default function ServiceRequestPage() {
 
             <div className="form-group">
               <label>첨부파일</label>
+              <p className="text-sm text-gray-500 mt-1">
+                (건물의 개요, 도면, 단면도 등 관련 자료를 함께 제출하시면 보다 정확하고 신속한 검토 및 회신이 가능합니다.)
+              </p>
               <input type="file" name="file" onChange={handleChange} />
             </div>
 
@@ -174,7 +177,7 @@ export default function ServiceRequestPage() {
                   onChange={handleChange}
                   required
                 />
-                <span>개인정보 수집 및 이용에 동의합니다.</span>
+                <span>개인정보 수집 및 이용에 동의합니다.</span> <span className="text-red-500 ml-1">*</span>
               </label>
               <Link href="#" className="login-link-btn">
                 약관보기
