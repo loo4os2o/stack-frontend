@@ -5,7 +5,7 @@ import slideImg1 from '@/assets/images/03_input _001.png';
 import slideImg2 from '@/assets/images/03_input _002.png';
 import EvaluationDiagram1 from '@/assets/images/03_input _003.png';
 import EvaluationDiagram2 from '@/assets/images/03_input _004.png';
-import ExImgIntro4 from '@/assets/images/12_stackeffect _001.jpg';
+import ExImgIntro4 from '@/assets/images/12_stackeffect _003.jpg';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import Modal from '@/components/common/Modal';

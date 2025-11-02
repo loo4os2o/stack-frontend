@@ -4,7 +4,7 @@ import '@/css/projects.css';
 import Image from 'next/image';
 import pdfFileIcon from '@/assets/icons/icon-pdf.png';
 import ExImgIntro2 from '@/assets/images/12_stackeffect _002.png';
-import ExImgIntro4 from '@/assets/images/12_stackeffect _001.jpg';
+import ExImgIntro4 from '@/assets/images/12_stackeffect _003.jpg';
 import accMinus from '@/assets/icons/icon-minus.png';
 import accPlus from '@/assets/icons/icon-plus.png';
 

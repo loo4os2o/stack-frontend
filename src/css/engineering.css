@@ -272,14 +272,10 @@
 .integration-media-area{
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 320px;
+  min-height: 0;
   border-radius: 1.25rem;
   background: linear-gradient(135deg, rgba(237, 192, 108, 0.12), rgba(255, 69, 0, 0.08));
-  border: 1px dashed rgba(18, 18, 27, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid rgba(18, 18, 27, 0.08);
   overflow: hidden;
 }
 
@@ -290,6 +286,12 @@
   text-align: center;
   padding: 1.5rem;
   line-height: 150%;
+}
+
+.integration-media-img{
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .integration-media-cta{
@@ -321,9 +323,6 @@
   .integration-media{
     max-width: 100%;
   }
-  .integration-media-area{
-    min-height: 260px;
-  }
 }
 
 @media (max-width: 640px){
@@ -333,7 +332,6 @@
     font-size: 2.75rem;
   }
   .integration-media-area{
-    min-height: 220px;
     border-radius: 1rem;
   }
   .integration-media-cta{
