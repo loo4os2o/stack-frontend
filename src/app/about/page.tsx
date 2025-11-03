@@ -3,9 +3,9 @@ import React from 'react';
 
 import '@/css/about.css';
 import Image from 'next/image';
-import AboutStackDiagram1 from '@/assets/images/02_about STACK _001.png';
+import AboutStackDiagram1 from '@/assets/images/02_about STACK _004.png';
 import AboutStackDiagram2 from '@/assets/images/02_about STACK _002.png';
-import ExImgDiagram2 from '@/assets/images/02_about STACK _003.png';
+import ExImgDiagram2 from '@/assets/images/02_about_process.png';
 import TargetBlank from '@/assets/icons/icon-target-blank.png';
 import logoAbout from '@/assets/images/logo-STACK-about.png';
 

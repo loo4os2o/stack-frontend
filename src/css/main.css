@@ -193,7 +193,7 @@
 }
 .sys-features h2 {
   font-weight: 800;
-  font-size: 48px;
+  font-size: 2.5rem;
   line-height: 140%;
   text-align: center;
   color: #0b0b0b;
@@ -201,7 +201,7 @@
 }
 .sys-features h2 strong {
   font-weight: 900;
-  font-size: 3.25rem;
+  font-size: 2.75rem;
   line-height: 100%;
   letter-spacing: 1rem;
   color: #12121b;
@@ -290,7 +290,7 @@
   max-width: 1200px;
   margin: 0 auto 2.5rem auto !important;
   font-weight: 800;
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 140%;
   color: #0b0b0b;
 }

@@ -137,12 +137,12 @@ body {
     color: #ffffff;
     border: 1px solid #ff4500;
   }
-  .btn-primary:hover,
-  .btn-primary:focus,
-  .btn-primary:active {
-    background: #d33d06;
-    border: 1px solid #d33d06;
-  }
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background: #ac3100;
+  border: 1px solid #ac3100;
+}
   .btn-primary:disabled,
   .btn-primary.disabled {
     background: #cccccc;

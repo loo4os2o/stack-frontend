@@ -5,7 +5,7 @@ import ArrowRight from '@/assets/icons/icon-btn-more.png';
 import IconService from '@/assets/icons/icon-service.png';
 // import Background from '@/assets/images/architecture-1867194_1920.png';
 import Background from '@/assets/images/01_home _001.jpeg';
-import slideImg1 from '@/assets/images/01_home _002.png';
+import slideImg1 from '@/assets/images/01_home _005.png';
 import slideImg2 from '@/assets/images/01_home _003.png';
 import slideImg3 from '@/assets/images/01_home _004.png';
 // import slideImg3 from '@/assets/images/acro.jpg';
