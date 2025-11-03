@@ -5,6 +5,7 @@ import ArrowRight from '@/assets/icons/icon-btn-more.png';
 import IconService from '@/assets/icons/icon-service.png';
 // import Background from '@/assets/images/architecture-1867194_1920.png';
 import Background from '@/assets/images/01_home _001.jpeg';
+import LogoTagline from '@/assets/images/01_home _006.png';
 import slideImg1 from '@/assets/images/01_home _005.png';
 import slideImg2 from '@/assets/images/01_home _003.png';
 import slideImg3 from '@/assets/images/01_home _004.png';
@@ -91,7 +92,13 @@ export default function Home() {
       {/* Section - 타이틀 */}
       <section className="bg-wrap">
         <div className="text-logo">
-          <p>빠르고 정확한 연돌현상평가</p>
+          <Image
+            src={LogoTagline}
+            alt="빠르고 정확한 연돌현상평가 로고"
+            width={360}
+            height={113}
+            className="tagline-logo"
+          />
           <h1>
             S <span>T</span> A C K
           </h1>
