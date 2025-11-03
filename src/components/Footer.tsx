@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import logoBTairTech from '@/assets/images/logo-BTairTech.png';
 import logoINHA from '@/assets/images/logo-INHA_University.png';
+import logoMirae from '@/assets/images/logo-mirae.png';
+import logoBTairTech from '@/assets/images/logo-BTairTech.png';
 
 const Footer = () => {
   return (
@@ -11,6 +12,9 @@ const Footer = () => {
         {/* 링크바 있을때 */}
         <div className="footer-link-bar">
           <div className="inner">
+            <Link href="https://www.inha.ac.kr/kr/4174/subview.do" target="_blank">
+              <Image src={logoMirae} alt="미래 로고 바로가기" width={144} />
+            </Link>
             <Link href="https://www.inha.ac.kr/kr/index.do" target="_blank">
               <Image src={logoINHA} alt="인하대학교 바로가기" width={144} />
             </Link>
