@@ -285,22 +285,12 @@ export default function Home() {
         <div className="intro-buttons mt-10">
           <a
             href="#"
-            className="btn-secondary btn-50 rounded-xl
+            className="btn-primary btn-50 rounded-xl
               flex items-center justify-between gap-2"
-            style={{ width: '280px' }}
+            style={{ width: '300px' }}
             onClick={(e) => handleNavigation(e, '/engineering')}
           >
             엔지니어링 서비스 더 알아보기
-            <Image src={ArrowRightOpacity} alt="arrow-right" width={24} height={24} />
-          </a>
-          <a
-            href="#"
-            className="btn-primary btn-50 rounded-xl
-              flex items-center justify-between gap-2"
-            style={{ width: '280px' }}
-            onClick={(e) => handleNavigation(e, '/evaluation')}
-          >
-            연돌현상 평가하기
             <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
           </a>
         </div>
