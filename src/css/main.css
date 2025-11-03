@@ -305,7 +305,8 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
   padding: 2.188rem 1.25rem;
-  background: #ffffff;
+  background: linear-gradient(140deg, #4e71a6, #335b82);
+  color: #f9fbff;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -316,7 +317,7 @@
   font-weight: 700;
   font-size: 1rem;
   line-height: 130%;
-  color: #969696;
+  color: #e6eef9;
   margin-bottom: 0.25rem;
 }
 
@@ -324,7 +325,7 @@
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 130%;
-  color: #333333;
+  color: #ffffff;
 }
 
 .main-intro .intro-image {
