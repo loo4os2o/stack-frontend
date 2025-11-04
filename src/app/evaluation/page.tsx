@@ -2,10 +2,11 @@
 
 import ArrowRight from '@/assets/icons/icon-btn-more.png';
 import slideImg1 from '@/assets/images/03_input _001.png';
-import slideImg2 from '@/assets/images/03_input _002.png';
-import EvaluationDiagram1 from '@/assets/images/03_input _003.png';
+import slideImg2 from '@/assets/images/03_input _005.png';
+import EvaluationDiagram1 from '@/assets/images/03_input _006.png';
 import EvaluationDiagram2 from '@/assets/images/03_input _004.png';
-import ExImgIntro4 from '@/assets/images/12_stackeffect _003.jpg';
+import BuildingMassImage from '@/assets/images/03_input _007.png';
+import ElevatorShaftImage from '@/assets/images/03_input _008.png';
 import ElevatorStackedBarChart from '@/components/charts/ElevatorStackedBarChart';
 import SectionStackedBarChart from '@/components/charts/SectionStackedBarChart';
 import Modal from '@/components/common/Modal';
@@ -1193,44 +1194,55 @@ export default function EvaluationPage() {
               </div>
               {/* 2. 건물 매스 계획 : 왼쪽 영역 끝 */}
               <div className="w-full lg:w-3/5 right">
-                <div className="flex gap-4 md:flex-row flex-col w-full">
+                <div className="flex gap-4 md:flex-row flex-col w-full items-stretch">
                   {/* 차트 영역 */}
-                  <div className="chart-wrap md:w-2/5">
-                    <SectionStackedBarChart
-                      data={generateSectionDataArray({
-                        groundFloors: formData.aboveFloors,
-                        basementFloors: formData.belowFloors,
-                        hasPodium: formData.hasPodium,
-                        podiumFloors: formData.podiumHeight,
-                      })}
-                      // data={[
-                      //   { section: 1, basement: 0, soil: -17, envelope: 0 },
-                      //   { section: 2, basement: -7, soil: -10, envelope: 0 },
-                      //   { section: 3, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 4, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 5, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 6, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 7, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 8, basement: -7, soil: -10, envelope: 30 },
-                      //   { section: 9, basement: -7, soil: -10, envelope: 5 },
-                      //   { section: 10, basement: -7, soil: -10, envelope: 5 },
-                      //   { section: 11, basement: -7, soil: -10, envelope: 0 },
-                      //   { section: 12, basement: 0, soil: -17, envelope: 0 },
-                      // ]}
-                      width={240}
-                      height={300}
-                    />
+                  <div className="chart-wrap md:w-2/5 flex items-center justify-center">
+                    <div
+                      style={{
+                        width: '100%',
+                        maxWidth: '280px',
+                        height: '240px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SectionStackedBarChart
+                        data={generateSectionDataArray({
+                          groundFloors: formData.aboveFloors,
+                          basementFloors: formData.belowFloors,
+                          hasPodium: formData.hasPodium,
+                          podiumFloors: formData.podiumHeight,
+                        })}
+                        width={240}
+                        height={240}
+                      />
+                    </div>
                   </div>
 
                   {/* 이미지 영역 */}
-                  <div className="image-section md:w-3/5">
-                    <div className="image-wrap" style={{ minHeight: '240px', maxHeight: '240px' }}>
-                      <Image src={ExImgIntro4} alt={'이미지 영역'} />
+                  <div className="image-section md:w-3/5 flex flex-col items-center">
+                    <div
+                      className="image-wrap mx-auto"
+                      style={{
+                        maxWidth: '300px',
+                        width: '100%',
+                        height: '240px',
+                        margin: '0 auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Image
+                        src={BuildingMassImage}
+                        alt={'이미지 영역'}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                      />
                     </div>
-                    <p>
-                      포디움 상층부 타워와는 다른 기능(예: 상업, 켜뮤니티, 로비, 주차 등)을
-                      수용하며, 저층부의 매스를 통해 상부 타워와의 용도-동선-파사드 분리를
-                      계획적으로 구현하는 기반부 구성이다.
+                    <p className="mt-3 text-sm leading-6">
+                      포디움 상층부 타워와는 다른 기능(예: 상업, 커뮤니티, 로비, 주차 등)을 수용하며, 저층부의 매스를
+                      통해 상부 타워와의 용도·동선·파사드 분리를 계획적으로 구현하는 기반부 구성이다.
                     </p>
                   </div>
                 </div>
@@ -1408,34 +1420,60 @@ export default function EvaluationPage() {
               </div>
               {/* 3. 승객용 엘리베이터 샤프트 계획 : 왼쪽 영역 끝 */}
               <div className="w-full lg:w-3/5 right">
-                <div className="flex gap-4 md:flex-row flex-col w-full">
+                <div className="flex gap-4 md:flex-row flex-col w-full items-stretch">
                   {/* 차트 영역 */}
-                  <div className="chart-wrap md:w-2/5">
-                    <ElevatorStackedBarChart
-                      data={analyzeElevatorShaftSystem({
-                        numFloorGround: formData.aboveFloors,
-                        numFloorBasement: formData.belowFloors,
-                        EVZoningtypeSingle: formData.zoningType === 'single',
-                        EVZoningtypeTwo: formData.zoningType === 'two',
-                        EVZoningtypeMulti: formData.zoningType === 'multi',
-                        EVSkylobby: formData.skyLobby,
-                        EVTopfloorLow: formData.shaftBelowFloors,
-                        EVTopfloorMid: formData.shaftAboveFloors,
-                        EVTopfloorHigh: formData.shaftAdditionalAboveFloors,
-                        EVBasementshuttle: formData.shuttleElevator,
-                      })}
-                    />
+                  <div className="chart-wrap md:w-2/5 flex items-center justify-center">
+                    <div
+                      style={{
+                        width: '100%',
+                        maxWidth: '300px',
+                        height: '240px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <ElevatorStackedBarChart
+                        data={analyzeElevatorShaftSystem({
+                          numFloorGround: formData.aboveFloors,
+                          numFloorBasement: formData.belowFloors,
+                          EVZoningtypeSingle: formData.zoningType === 'single',
+                          EVZoningtypeTwo: formData.zoningType === 'two',
+                          EVZoningtypeMulti: formData.zoningType === 'multi',
+                          EVSkylobby: formData.skyLobby,
+                          EVTopfloorLow: formData.shaftBelowFloors,
+                          EVTopfloorMid: formData.shaftAboveFloors,
+                          EVTopfloorHigh: formData.shaftAdditionalAboveFloors,
+                          EVBasementshuttle: formData.shuttleElevator,
+                        })}
+                      />
+                    </div>
                   </div>
 
                   {/* 이미지 영역 */}
-                  <div className="image-section md:w-3/5">
-                    <div className="image-wrap" style={{ minHeight: '240px', maxHeight: '240px' }}>
-                      <Image src={ExImgIntro4} alt={'이미지 영역'} />
+                  <div className="image-section md:w-3/5 flex flex-col items-center">
+                    <div
+                      className="image-wrap mx-auto"
+                      style={{
+                        maxWidth: '300px',
+                        width: '100%',
+                        height: '240px',
+                        margin: '0 auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Image
+                        src={ElevatorShaftImage}
+                        alt={'이미지 영역'}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                      />
                     </div>
-                    <p>
-                      스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해 중간층에 배치되는
-                      환승용 공용로비로, 승객은 저층용 엘리베이터를 타고 스카이로비까지 이동한 뒤,
-                      고층부 전용 엘리베이터로 환승해 상층부로 이동한다.
+                    <p className="mt-3 text-sm leading-6">
+                      스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해 중간층에 배치되는 환승용 공용로비로,
+                      승객은 저층용 엘리베이터를 타고 스카이로비까지 이동한 뒤, 고층부 전용 엘리베이터로 환승해
+                      상층부로 이동한다.
                     </p>
                   </div>
                 </div>

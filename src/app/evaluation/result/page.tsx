@@ -38,7 +38,7 @@ import { generateSectionDataArray } from '@/lib/buildingSection';
 import { analyzeElevatorShaftSystem } from '@/lib/elevatorCalc';
 
 import ImageChart1 from '@/assets/images/03_input _000.png';
-import ImageChart2 from '@/assets/images/03_input _002.png';
+import ImageChart2 from '@/assets/images/03_input _005.png';
 import HorizontalFillWithMarkers from '@/components/charts/HorizontalFillWithMarker';
 import { useUserStore } from '@/utils/store';
 import { createClient } from '@supabase/supabase-js';
