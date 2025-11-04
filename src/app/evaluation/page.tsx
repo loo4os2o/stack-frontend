@@ -44,6 +44,7 @@ export default function EvaluationPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [promoModalOpen, setPromoModalOpen] = useState(false);
   const promoVideoRef = useRef<HTMLVideoElement>(null);
+  type ShaftFieldKey = 'shaftBelowFloors' | 'shaftAboveFloors' | 'shaftAdditionalAboveFloors';
 
   // 슬라이드 이미지 배열
   const slides = [
@@ -151,6 +152,58 @@ export default function EvaluationPage() {
       ...prevData,
       buildingMassEtcInput: value,
     }));
+  };
+
+  useEffect(() => {
+    if (formData.zoningType === 'single') {
+      setFormData((prevData) => {
+        if (prevData.shaftBelowFloors === 0 && prevData.shaftAdditionalAboveFloors === 0) {
+          return prevData;
+        }
+        return {
+          ...prevData,
+          shaftBelowFloors: 0,
+          shaftAdditionalAboveFloors: 0,
+        };
+      });
+    } else if (formData.zoningType === 'two') {
+      setFormData((prevData) => {
+        if (prevData.shaftAdditionalAboveFloors === 0) {
+          return prevData;
+        }
+        return {
+          ...prevData,
+          shaftAdditionalAboveFloors: 0,
+        };
+      });
+    }
+  }, [formData.zoningType]);
+
+  const shaftFieldConfigs: Array<{ key: ShaftFieldKey; label: string }> =
+    formData.zoningType === 'single'
+      ? [{ key: 'shaftAboveFloors', label: '최상층' }]
+      : formData.zoningType === 'two'
+        ? [
+            { key: 'shaftBelowFloors', label: '저층부' },
+            { key: 'shaftAboveFloors', label: '고층부' },
+          ]
+        : [
+            { key: 'shaftBelowFloors', label: '저층부' },
+            { key: 'shaftAboveFloors', label: '중층부' },
+            { key: 'shaftAdditionalAboveFloors', label: '고층부' },
+          ];
+
+  const getShaftFieldValue = (key: ShaftFieldKey) => {
+    switch (key) {
+      case 'shaftBelowFloors':
+        return formData.shaftBelowFloors;
+      case 'shaftAboveFloors':
+        return formData.shaftAboveFloors;
+      case 'shaftAdditionalAboveFloors':
+        return formData.shaftAdditionalAboveFloors;
+      default:
+        return 0;
+    }
   };
 
   useEffect(() => console.log('formData: ', formData), [formData]);
@@ -1194,19 +1247,10 @@ export default function EvaluationPage() {
               </div>
               {/* 2. 건물 매스 계획 : 왼쪽 영역 끝 */}
               <div className="w-full lg:w-3/5 right">
-                <div className="flex gap-4 md:flex-row flex-col w-full items-stretch">
+                <div className="visual-block flex gap-4 md:flex-row flex-col w-full items-stretch">
                   {/* 차트 영역 */}
-                  <div className="chart-wrap md:w-2/5 flex items-center justify-center">
-                    <div
-                      style={{
-                        width: '100%',
-                        maxWidth: '280px',
-                        height: '240px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <div className="visual-panel md:w-2/5">
+                    <div className="visual-panel__media visual-panel__media--chart">
                       <SectionStackedBarChart
                         data={generateSectionDataArray({
                           groundFloors: formData.aboveFloors,
@@ -1221,26 +1265,15 @@ export default function EvaluationPage() {
                   </div>
 
                   {/* 이미지 영역 */}
-                  <div className="image-section md:w-3/5 flex flex-col items-center">
-                    <div
-                      className="image-wrap mx-auto"
-                      style={{
-                        maxWidth: '300px',
-                        width: '100%',
-                        height: '240px',
-                        margin: '0 auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <div className="visual-panel md:w-3/5">
+                    <div className="visual-panel__media visual-panel__media--image">
                       <Image
                         src={BuildingMassImage}
                         alt={'이미지 영역'}
                         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                       />
                     </div>
-                    <p className="mt-3 text-sm leading-6">
+                    <p className="visual-panel__caption">
                       포디움 상층부 타워와는 다른 기능(예: 상업, 커뮤니티, 로비, 주차 등)을 수용하며, 저층부의 매스를
                       통해 상부 타워와의 용도·동선·파사드 분리를 계획적으로 구현하는 기반부 구성이다.
                     </p>
@@ -1316,60 +1349,25 @@ export default function EvaluationPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-                    {/* 지하 */}
-                    <div>
-                      <label htmlFor="shaftBelowFloors" className="small">
-                        지하
-                      </label>
-                      <div className="input-unit-wrap">
-                        <input
-                          type="number"
-                          id="shaftBelowFloors"
-                          name="shaftBelowFloors"
-                          placeholder="1"
-                          value={formData.shaftBelowFloors}
-                          onChange={handleChange}
-                        />
-                        <span className="text-gray-500 ml-2">F</span>
+                  <div className="shaft-fields grid grid-cols-1 md:grid-cols-3 gap-2">
+                    {shaftFieldConfigs.map(({ key, label }) => (
+                      <div key={key} className="shaft-field">
+                        <label htmlFor={key} className="small">
+                          {label}
+                        </label>
+                        <div className="input-unit-wrap">
+                          <input
+                            type="number"
+                            id={key}
+                            name={key}
+                            placeholder="1"
+                            value={getShaftFieldValue(key)}
+                            onChange={handleChange}
+                          />
+                          <span className="text-gray-500 ml-2">F</span>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* 지상 */}
-                    <div>
-                      <label htmlFor="shaftAboveFloors" className="small">
-                        지상
-                      </label>
-                      <div className="input-unit-wrap">
-                        <input
-                          type="number"
-                          id="shaftAboveFloors"
-                          name="shaftAboveFloors"
-                          placeholder="1"
-                          value={formData.shaftAboveFloors}
-                          onChange={handleChange}
-                        />
-                        <span className="text-gray-500 ml-2">F</span>
-                      </div>
-                    </div>
-
-                    {/* 추가 */}
-                    <div>
-                      <label htmlFor="shaftAdditionalAboveFloors" className="small">
-                        추가
-                      </label>
-                      <div className="input-unit-wrap">
-                        <input
-                          type="number"
-                          id="shaftAdditionalAboveFloors"
-                          name="shaftAdditionalAboveFloors"
-                          placeholder="1"
-                          value={formData.shaftAdditionalAboveFloors}
-                          onChange={handleChange}
-                        />
-                        <span className="text-gray-500 ml-2">F</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
@@ -1420,19 +1418,10 @@ export default function EvaluationPage() {
               </div>
               {/* 3. 승객용 엘리베이터 샤프트 계획 : 왼쪽 영역 끝 */}
               <div className="w-full lg:w-3/5 right">
-                <div className="flex gap-4 md:flex-row flex-col w-full items-stretch">
+                <div className="visual-block flex gap-4 md:flex-row flex-col w-full items-stretch">
                   {/* 차트 영역 */}
-                  <div className="chart-wrap md:w-2/5 flex items-center justify-center">
-                    <div
-                      style={{
-                        width: '100%',
-                        maxWidth: '300px',
-                        height: '240px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <div className="visual-panel md:w-2/5">
+                    <div className="visual-panel__media visual-panel__media--chart">
                       <ElevatorStackedBarChart
                         data={analyzeElevatorShaftSystem({
                           numFloorGround: formData.aboveFloors,
@@ -1451,26 +1440,15 @@ export default function EvaluationPage() {
                   </div>
 
                   {/* 이미지 영역 */}
-                  <div className="image-section md:w-3/5 flex flex-col items-center">
-                    <div
-                      className="image-wrap mx-auto"
-                      style={{
-                        maxWidth: '300px',
-                        width: '100%',
-                        height: '240px',
-                        margin: '0 auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <div className="visual-panel md:w-3/5">
+                    <div className="visual-panel__media visual-panel__media--image">
                       <Image
                         src={ElevatorShaftImage}
                         alt={'이미지 영역'}
                         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                       />
                     </div>
-                    <p className="mt-3 text-sm leading-6">
+                    <p className="visual-panel__caption">
                       스카이로비는 고층 건물에서 엘리베이터 효율을 높이기 위해 중간층에 배치되는 환승용 공용로비로,
                       승객은 저층용 엘리베이터를 타고 스카이로비까지 이동한 뒤, 고층부 전용 엘리베이터로 환승해
                       상층부로 이동한다.
