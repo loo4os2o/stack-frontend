@@ -73,6 +73,8 @@ export default function EvaluationPage() {
     hasPodium: false,
     podiumHeight: 0,
     perimeterRatio: 0,
+    typicalFloorPerimeterLength: 0,
+    podiumPerimeterLength: 0,
     buildingMassPlanResidential: false,
     buildingMassPlanOffice: false,
     buildingMassPlanNeighborhood: false,
@@ -384,6 +386,22 @@ export default function EvaluationPage() {
         document.querySelector(`[name="perimeterRatio"]`)?.scrollIntoView({ behavior: 'smooth' });
         return false;
       }
+
+      if (!upsertFormData['typicalFloorPerimeterLength']) {
+        alert('기준층 외피 둘레길이(대표값)을 입력해주세요.');
+        document
+          .querySelector(`[name="typicalFloorPerimeterLength"]`)
+          ?.scrollIntoView({ behavior: 'smooth' });
+        return false;
+      }
+
+      if (!upsertFormData['podiumPerimeterLength']) {
+        alert('포디움 외피 둘레길이(대표값)을 입력해주세요.');
+        document
+          .querySelector(`[name="podiumPerimeterLength"]`)
+          ?.scrollIntoView({ behavior: 'smooth' });
+        return false;
+      }
     }
 
     return true;
@@ -410,6 +428,8 @@ export default function EvaluationPage() {
       hasPodium: false,
       podiumHeight: 0,
       perimeterRatio: 0,
+      typicalFloorPerimeterLength: 0,
+      podiumPerimeterLength: 0,
       buildingMassPlanResidential: false,
       buildingMassPlanOffice: false,
       buildingMassPlanNeighborhood: false,
@@ -528,6 +548,8 @@ export default function EvaluationPage() {
           hasPodium: false,
           podiumHeight: 0,
           perimeterRatio: 0,
+          typicalFloorPerimeterLength: 0,
+          podiumPerimeterLength: 0,
           buildingMassPlanResidential: false,
           buildingMassPlanOffice: false,
           buildingMassPlanNeighborhood: false,
@@ -1041,7 +1063,7 @@ export default function EvaluationPage() {
 
                 {/* 스위치 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 mt-6">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 mb-3">
                     <h3 className="mb-0 whitespace-nowrap flex items-center switch-label-inline">
                       저층부 포디움
                     </h3>
@@ -1056,6 +1078,12 @@ export default function EvaluationPage() {
                             hasPodium: e.target.checked,
                             podiumHeight: e.target.checked ? formData.podiumHeight : 0,
                             perimeterRatio: e.target.checked ? formData.perimeterRatio : 0,
+                            typicalFloorPerimeterLength: e.target.checked
+                              ? formData.typicalFloorPerimeterLength
+                              : 0,
+                            podiumPerimeterLength: e.target.checked
+                              ? formData.podiumPerimeterLength
+                              : 0,
                             buildingMassPlanResidential: e.target.checked
                               ? formData.buildingMassPlanResidential
                               : false,
@@ -1084,7 +1112,7 @@ export default function EvaluationPage() {
                 </div>
 
                 {/* 포디움 높이 */}
-                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
                   <div className={`form-group sub ${!formData.hasPodium ? 'disabled' : ''}`}>
                     <label htmlFor="podiumHeight">
                       포디움 높이 (m)<span className="text-red-500 ml-1">*</span>
@@ -1117,7 +1145,7 @@ export default function EvaluationPage() {
                 </div>
 
                 {/* 외피 둘레비율 */}
-                <div className="grid grid-cols-1 md:grid-cols-1 pl-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
                   <div className={`form-group sub ${!formData.hasPodium ? 'disabled' : ''}`}>
                     <label htmlFor="">
                       외피 둘레비율<span className="text-red-500 ml-1">*</span>
@@ -1134,6 +1162,62 @@ export default function EvaluationPage() {
                           name="perimeterRatio"
                           placeholder="0"
                           value={formData.perimeterRatio}
+                          onChange={handleChange}
+                          disabled={!formData.hasPodium}
+                          className={`bg-transparent transition ${
+                            !formData.hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-black'
+                          }`}
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 외피 둘레길이 - 기준층 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
+                  <div className={`form-group sub sub-child ${!formData.hasPodium ? 'disabled' : ''}`}>
+                    <label htmlFor="typicalFloorPerimeterLength">기준층 외피 둘레길이(대표값)</label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div
+                        className={`input-unit-wrap transition ${
+                          !formData.hasPodium ? 'bg-gray-100' : 'bg-white'
+                        }`}
+                      >
+                        <input
+                          type="number"
+                          id="typicalFloorPerimeterLength"
+                          name="typicalFloorPerimeterLength"
+                          placeholder="0"
+                          value={formData.typicalFloorPerimeterLength}
+                          onChange={handleChange}
+                          disabled={!formData.hasPodium}
+                          className={`bg-transparent transition ${
+                            !formData.hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-black'
+                          }`}
+                        />
+                        <span className="text-gray-500 ml-2">m</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 외피 둘레길이 - 포디움 */}
+                <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
+                  <div className={`form-group sub sub-child ${!formData.hasPodium ? 'disabled' : ''}`}>
+                    <label htmlFor="podiumPerimeterLength">포디움 외피 둘레길이(대표값)</label>
+                    <div className="flex items-center gap-2 w-full">
+                      <div
+                        className={`input-unit-wrap transition ${
+                          !formData.hasPodium ? 'bg-gray-100' : 'bg-white'
+                        }`}
+                      >
+                        <input
+                          type="number"
+                          id="podiumPerimeterLength"
+                          name="podiumPerimeterLength"
+                          placeholder="0"
+                          value={formData.podiumPerimeterLength}
                           onChange={handleChange}
                           disabled={!formData.hasPodium}
                           className={`bg-transparent transition ${

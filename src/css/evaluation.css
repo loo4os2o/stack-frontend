@@ -129,6 +129,7 @@ h1 {
 .evaluation-page .form-group label {
   min-width: 8.75rem;
   margin-bottom: 0;
+  box-sizing: border-box;
 }
 .evaluation-page .form-group.disabled label {
   color: #9ca3af;
@@ -162,7 +163,7 @@ h1 {
 }
 .evaluation-page .form-group.sub::before,
 .evaluation-page .sub::before {
-  content: '└';
+  content: 'ㄴ';
   position: absolute;
   left: -28px;
   top: 10px;
@@ -176,6 +177,14 @@ h1 {
 .evaluation-page .form-group.sub.top::before,
 .evaluation-page .sub::before {
   top: 2px;
+}
+
+.evaluation-page .form-group.sub label {
+  min-width: 13.5rem;
+  white-space: nowrap;
+}
+.evaluation-page .form-group.sub.sub-child label {
+  padding-left: 1.5rem;
 }
 
 .evaluation-page h3.switch-label-inline {
