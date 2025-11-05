@@ -572,6 +572,11 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.switch-inline {
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
 .switch-input {
   display: none;
 }

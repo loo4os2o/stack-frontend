@@ -178,6 +178,13 @@ h1 {
   top: 2px;
 }
 
+.evaluation-page h3.switch-label-inline {
+  margin-bottom: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
 .switch-row-label {
   display: inline-flex;
   align-items: center;

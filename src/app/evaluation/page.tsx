@@ -780,13 +780,13 @@ export default function EvaluationPage() {
                     <label>
                       건물규모(층수) <span className="text-red-500 ml-1">*</span>
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 flex-1">
                       {/* 지하 */}
                       <div>
                         <label htmlFor="belowFloors" className="small">
                           지하
                         </label>
-                        <div className="input-unit-wrap">
+                        <div className="input-unit-wrap w-full">
                           <input
                             type="number"
                             id="belowFloors"
@@ -804,7 +804,7 @@ export default function EvaluationPage() {
                         <label htmlFor="aboveFloors" className="small">
                           지상
                         </label>
-                        <div className="input-unit-wrap">
+                        <div className="input-unit-wrap w-full">
                           <input
                             type="number"
                             id="aboveFloors"
@@ -1042,7 +1042,9 @@ export default function EvaluationPage() {
                 {/* 스위치 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 mt-6">
                   <div className="flex items-center gap-3">
-                    <h3 className="mb-0 whitespace-nowrap">저층부 포디움</h3>
+                    <h3 className="mb-0 whitespace-nowrap flex items-center switch-label-inline">
+                      저층부 포디움
+                    </h3>
                     <label className="switch-container switch-inline">
                       <input
                         type="checkbox"
