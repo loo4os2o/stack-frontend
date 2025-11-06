@@ -168,6 +168,10 @@ h1 {
   left: -28px;
   top: 10px;
 }
+.evaluation-page .form-group.sub.sub-child::before,
+.evaluation-page .sub.sub-child::before {
+  left: -12px;
+}
 @media (max-width: 1240px) {
   .evaluation-page .form-group.sub::before,
   .evaluation-page .sub::before {
