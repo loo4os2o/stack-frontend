@@ -349,6 +349,15 @@ body {
     color: #999999;
     cursor: not-allowed;
   }
+  .input-unit-wrap.readonly,
+  .input-unit-wrap.readonly > span {
+    background-color: #f3f4f6;
+    color: #6b7280;
+  }
+  .input-unit-wrap.readonly input {
+    color: #6b7280;
+    cursor: default;
+  }
 }
 
 /* checkbox */

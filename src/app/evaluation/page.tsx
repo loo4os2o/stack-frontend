@@ -119,13 +119,40 @@ export default function EvaluationPage() {
     }));
   };
 
+  const computePerimeterRatio = (podiumLength: number, typicalLength: number) => {
+    if (!typicalLength) return 0;
+    const ratio = podiumLength / typicalLength;
+    if (!Number.isFinite(ratio)) {
+      return 0;
+    }
+    return parseFloat(ratio.toFixed(3));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    const isChecked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? isChecked : type === 'number' ? parseFloat(value) : value,
-    }));
+    const isCheckbox = type === 'checkbox';
+    const isNumber = type === 'number';
+    const checkboxValue = isCheckbox ? (e.target as HTMLInputElement).checked : undefined;
+    const numericValue = isNumber ? (value === '' ? 0 : parseFloat(value)) : undefined;
+
+    setFormData((prevData) => {
+      const nextState: typeof prevData = {
+        ...prevData,
+        [name]: isCheckbox ? checkboxValue : isNumber ? numericValue ?? 0 : value,
+      };
+
+      if (name === 'typicalFloorPerimeterLength' || name === 'podiumPerimeterLength') {
+        const podiumLength =
+          name === 'podiumPerimeterLength' ? numericValue ?? 0 : prevData.podiumPerimeterLength;
+        const typicalLength =
+          name === 'typicalFloorPerimeterLength'
+            ? numericValue ?? 0
+            : prevData.typicalFloorPerimeterLength;
+        nextState.perimeterRatio = computePerimeterRatio(podiumLength, typicalLength);
+      }
+
+      return nextState;
+    });
   };
 
   const handleGeneralEtcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1207,12 +1234,12 @@ export default function EvaluationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
                   <div className={`form-group sub ${!formData.hasPodium ? 'disabled' : ''}`}>
                     <label htmlFor="">
-                      외피 둘레비율<span className="text-red-500 ml-1">*</span>
+                      외피 둘레비율
                     </label>
                     <div className="flex items-center gap-2 w-full">
                       <div
                         className={`input-unit-wrap transition ${
-                          !formData.hasPodium ? 'bg-gray-100' : 'bg-white'
+                          !formData.hasPodium ? 'disabled' : 'readonly'
                         }`}
                       >
                         <input
@@ -1221,13 +1248,13 @@ export default function EvaluationPage() {
                           name="perimeterRatio"
                           placeholder="0"
                           value={formData.perimeterRatio}
-                          onChange={handleChange}
+                          readOnly
                           disabled={!formData.hasPodium}
                           className={`bg-transparent transition ${
-                            !formData.hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-black'
+                            !formData.hasPodium ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600'
                           }`}
                         />
-                        <span className="text-gray-500 ml-2">m</span>
+                        <span className="text-gray-500 ml-2">-</span>
                       </div>
                     </div>
                   </div>
@@ -1236,7 +1263,7 @@ export default function EvaluationPage() {
                 {/* 외피 둘레길이 - 기준층 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
                   <div className={`form-group sub sub-child ${!formData.hasPodium ? 'disabled' : ''}`}>
-                    <label htmlFor="typicalFloorPerimeterLength">기준층 외피 둘레길이(대표값)</label>
+                    <label htmlFor="typicalFloorPerimeterLength">기준층 외피 둘레길이(대표값)<span className="text-red-500 ml-1">*</span></label>
                     <div className="flex items-center gap-2 w-full">
                       <div
                         className={`input-unit-wrap transition ${
@@ -1264,7 +1291,7 @@ export default function EvaluationPage() {
                 {/* 외피 둘레길이 - 포디움 */}
                 <div className="grid grid-cols-1 md:grid-cols-1 pl-10">
                   <div className={`form-group sub sub-child ${!formData.hasPodium ? 'disabled' : ''}`}>
-                    <label htmlFor="podiumPerimeterLength">포디움 외피 둘레길이(대표값)</label>
+                    <label htmlFor="podiumPerimeterLength">포디움 외피 둘레길이(대표값)<span className="text-red-500 ml-1">*</span></label>
                     <div className="flex items-center gap-2 w-full">
                       <div
                         className={`input-unit-wrap transition ${
