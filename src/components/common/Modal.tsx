@@ -12,6 +12,8 @@ interface ModalProps {
   headerPadding?: string;
   titlePadding?: string;
   bodyPadding?: string;
+  hideHeader?: boolean;
+  closeOnOverlayClick?: boolean;
 }
 
 export default function Modal({
@@ -25,6 +27,8 @@ export default function Modal({
   headerPadding = '2.5rem 2.5rem 0 2.5rem',
   titlePadding = '0 0 2rem 0',
   bodyPadding = '2rem 1.8rem 2rem 2.5rem',
+  hideHeader = false,
+  closeOnOverlayClick = false,
 }: ModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -42,22 +46,29 @@ export default function Modal({
     // <div className="modal-overlay" onClick={onClose}>
 
     // 2. 오버레이 클릭해도 모달 닫히지 않음 (닫기 버튼을 누를때만 닫히도록 구현현)
-    <div className="modal-overlay">
+    <div
+      className="modal-overlay"
+      onClick={() => {
+        if (closeOnOverlayClick) onClose();
+      }}
+    >
       <div
         className="modal-content"
         style={{ width, minWidth: 280 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header" style={{ padding: headerPadding }}>
-          <div className="line" style={{ padding: titlePadding }}>
-            {title && <h2 className="modal-title">{title}</h2>}
-            {!hideCloseButton && (
-              <button className="modal-close" onClick={onClose} aria-label="닫기">
-                ×
-              </button>
-            )}
+        {!hideHeader && (
+          <div className="modal-header" style={{ padding: headerPadding }}>
+            <div className="line" style={{ padding: titlePadding }}>
+              {title && <h2 className="modal-title">{title}</h2>}
+              {!hideCloseButton && (
+                <button className="modal-close" onClick={onClose} aria-label="닫기">
+                  ×
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="modal-body" style={{ padding: bodyPadding }}>
           {children}
         </div>

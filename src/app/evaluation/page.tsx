@@ -41,6 +41,8 @@ type GeneralUsageKey =
 export default function EvaluationPage() {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
+  const [consentModalOpen, setConsentModalOpen] = useState(false);
+  const [consentAgreed, setConsentAgreed] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [promoModalOpen, setPromoModalOpen] = useState(false);
   const promoVideoRef = useRef<HTMLVideoElement>(null);
@@ -154,6 +156,29 @@ export default function EvaluationPage() {
       ...prevData,
       buildingMassEtcInput: value,
     }));
+  };
+
+  const handleLandingStartClick = () => {
+    if (!user || !user?.email) {
+      alert('로그인 후 이용해주세요.');
+      router.push('/login');
+      return;
+    }
+    setConsentAgreed(false);
+    setConsentModalOpen(true);
+  };
+
+  const closeConsentModal = () => {
+    setConsentModalOpen(false);
+    setConsentAgreed(false);
+  };
+
+  const handleConsentStart = () => {
+    if (!consentAgreed) {
+      return;
+    }
+    setConsentModalOpen(false);
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -637,14 +662,7 @@ export default function EvaluationPage() {
             <div className="flex justify-end">
               <button
                 className="btn-primary btn-50 rounded-xl flex items-center justify-between gap-2 w-1/2"
-                onClick={() => {
-                  if (!user || !user?.email) {
-                    alert('로그인 후 이용해주세요.');
-                    router.push('/login');
-                    return;
-                  }
-                  setModalOpen(true);
-                }}
+                onClick={handleLandingStartClick}
               >
                 시작하기
                 <Image src={ArrowRight} alt="arrow-right" width={24} height={24} />
@@ -713,6 +731,47 @@ export default function EvaluationPage() {
           </div>
         </div>
       </section>
+
+      {/* 시작하기 동의 모달 */}
+      <Modal
+        open={consentModalOpen}
+        onClose={closeConsentModal}
+        title={''}
+        footer={' '}
+        width={'640px'}
+        hideHeader={true}
+        hideCloseButton={true}
+        closeOnOverlayClick={true}
+        bodyPadding={'3rem 2.5rem 3rem 2.5rem'}
+      >
+        <div className="flex flex-col gap-6 text-base leading-relaxed text-gray-700 min-h-[260px]">
+          <p className="text-lg">
+            본 프로그램의 결과는 비영리적 용도 및 내부 검토 목적으로만 사용 가능합니다. 상업적 활용 및
+            재배포를 금하며 위반 시 법적 책임이 발생할 수 있습니다.
+          </p>
+          <p className="font-semibold pb-4 text-lg">
+            # 내부 검토: 프로젝트 주체 또는 설계 및 시공사의 연돌현상 사전 검토
+          </p>
+          <div className="flex items-center justify-between gap-4 text-lg font-medium">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={consentAgreed}
+                onChange={(e) => setConsentAgreed(e.target.checked)}
+              />
+              동의합니다
+            </label>
+            <button
+              className={`btn-primary btn-50 rounded-xl h-14 text-lg px-6 ${!consentAgreed ? 'opacity-50 cursor-not-allowed' : ''}`}
+              style={{ width: '40%' }}
+              onClick={handleConsentStart}
+              disabled={!consentAgreed}
+            >
+              시작하기
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* 시작하기 모달 */}
       <Modal
