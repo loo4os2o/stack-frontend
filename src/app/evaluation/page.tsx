@@ -1240,7 +1240,7 @@ export default function EvaluationPage() {
                       <div
                         className={`input-unit-wrap transition ${
                           !formData.hasPodium ? 'disabled' : 'readonly'
-                        }`}
+                        } w-full md:w-[12.5rem] md:max-w-[12.5rem] md:flex-none`}
                       >
                         <input
                           type="number"
@@ -1268,7 +1268,7 @@ export default function EvaluationPage() {
                       <div
                         className={`input-unit-wrap transition ${
                           !formData.hasPodium ? 'bg-gray-100' : 'bg-white'
-                        }`}
+                        } w-full md:w-[12.5rem] md:max-w-[12.5rem] md:flex-none`}
                       >
                         <input
                           type="number"
@@ -1296,7 +1296,7 @@ export default function EvaluationPage() {
                       <div
                         className={`input-unit-wrap transition ${
                           !formData.hasPodium ? 'bg-gray-100' : 'bg-white'
-                        }`}
+                        } w-full md:w-[12.5rem] md:max-w-[12.5rem] md:flex-none`}
                       >
                         <input
                           type="number"
