@@ -249,24 +249,37 @@ export default function EvaluationResultPage() {
   };
 
   useEffect(() => {
-    if (selectedProject && accessToken) {
-      console.log('Calling fetchSummary for project', selectedProject.id);
-      fetchSummary();
-      console.log('Calling fetchStackEffectForecast for project', selectedProject.id);
-      fetchStackEffectForecast();
-      console.log('Calling fetchIssueForecast for project', selectedProject.id);
-      fetchIssueForecast();
-      console.log('Calling fetchPressureDiffrentials for project', selectedProject.id);
-      fetchPressureDiffrentials();
-      console.log('Calling fetchSolutionOverview for project', selectedProject.id);
-      fetchSolutionOverview();
-      console.log('Calling fetchSolutionRecommendations for project', selectedProject.id);
-      fetchSolutionRecommendations();
-      console.log('Calling fetchSolutionSimulation for project', selectedProject.id);
-      fetchSolutionSimulation();
-    } else if (selectedProject && !accessToken) {
+    if (!selectedProject) return;
+    if (!accessToken) {
       console.warn('selectedProject is set but accessToken is missing; skipping API calls');
+      return;
     }
+
+    const runCall = (label: string, fn: () => Promise<void>) => {
+      console.log(`Calling ${label} for project`, selectedProject.id);
+      return fn();
+    };
+
+    const fetchAll = async () => {
+      const tasks: Array<[string, Promise<void>]> = [
+        ['fetchSummary', runCall('fetchSummary', fetchSummary)],
+        ['fetchStackEffectForecast', runCall('fetchStackEffectForecast', fetchStackEffectForecast)],
+        ['fetchIssueForecast', runCall('fetchIssueForecast', fetchIssueForecast)],
+        ['fetchPressureDiffrentials', runCall('fetchPressureDiffrentials', fetchPressureDiffrentials)],
+        ['fetchSolutionOverview', runCall('fetchSolutionOverview', fetchSolutionOverview)],
+        ['fetchSolutionRecommendations', runCall('fetchSolutionRecommendations', fetchSolutionRecommendations)],
+        ['fetchSolutionSimulation', runCall('fetchSolutionSimulation', fetchSolutionSimulation)],
+      ];
+
+      const results = await Promise.allSettled(tasks.map(([, promise]) => promise));
+      results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.error(`${tasks[index][0]} failed`, result.reason);
+        }
+      });
+    };
+
+    fetchAll();
   }, [selectedProject, accessToken]);
 
   async function get_my_projects() {
