@@ -7,7 +7,7 @@ import RangeBarWithBullet from '@/components/charts/RangeBarWithBullet';
 import humps from 'humps';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   getIssueForecast,
@@ -111,9 +111,12 @@ export default function EvaluationResultPage() {
   const [isLoading, setIsLoading] = useState(true);
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY || '';
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const supabase = useMemo(() => createClient(supabaseUrl, supabaseAnonKey), [
+    supabaseUrl,
+    supabaseAnonKey,
+  ]);
   const [projects, setProjects] = useState<any[]>([]);
-  const { user, accessToken, refreshToken } = useUserStore();
+  const { user, accessToken, refreshToken, setAccessToken, setRefreshToken } = useUserStore();
 
   const buildingGeneralUsageOptions: Array<{ key: keyof Project; label: string }> = [
     { key: 'buildingGeneralPlanResidentialGeneral', label: '공동주택(일반)' },
@@ -149,6 +152,36 @@ export default function EvaluationResultPage() {
   const [solutionOverview, setSolutionOverview] = useState<any>(null);
   const [solutionRecommendations, setSolutionRecommendations] = useState<any>(null);
   const [solutionSimulation, setSolutionSimulation] = useState<any>(null);
+
+  useEffect(() => {
+    // Sync Supabase session tokens into the Zustand store on mount/refresh and keep them updated.
+    const syncSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
+      if (session?.access_token && session.access_token !== accessToken) {
+        setAccessToken(session.access_token);
+      }
+      if (session?.refresh_token && session.refresh_token !== refreshToken) {
+        setRefreshToken(session.refresh_token);
+      }
+    };
+
+    syncSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.access_token) {
+        setAccessToken(session.access_token);
+        setRefreshToken(session.refresh_token ?? null);
+      } else {
+        setAccessToken(null);
+        setRefreshToken(null);
+      }
+    });
+
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, [supabase, accessToken, refreshToken, setAccessToken, setRefreshToken]);
 
   const fetchSummary = async () => {
     if (!accessToken) {
@@ -216,7 +249,7 @@ export default function EvaluationResultPage() {
   };
 
   useEffect(() => {
-    if (selectedProject) {
+    if (selectedProject && accessToken) {
       console.log('Calling fetchSummary for project', selectedProject.id);
       fetchSummary();
       console.log('Calling fetchStackEffectForecast for project', selectedProject.id);
@@ -231,8 +264,10 @@ export default function EvaluationResultPage() {
       fetchSolutionRecommendations();
       console.log('Calling fetchSolutionSimulation for project', selectedProject.id);
       fetchSolutionSimulation();
+    } else if (selectedProject && !accessToken) {
+      console.warn('selectedProject is set but accessToken is missing; skipping API calls');
     }
-  }, [selectedProject]);
+  }, [selectedProject, accessToken]);
 
   async function get_my_projects() {
     const { data: userData, error: userError } = await supabase.auth.getUser();
