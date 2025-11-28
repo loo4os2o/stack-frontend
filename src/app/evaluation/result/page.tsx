@@ -217,12 +217,19 @@ export default function EvaluationResultPage() {
 
   useEffect(() => {
     if (selectedProject) {
+      console.log('Calling fetchSummary for project', selectedProject.id);
       fetchSummary();
+      console.log('Calling fetchStackEffectForecast for project', selectedProject.id);
       fetchStackEffectForecast();
+      console.log('Calling fetchIssueForecast for project', selectedProject.id);
       fetchIssueForecast();
+      console.log('Calling fetchPressureDiffrentials for project', selectedProject.id);
       fetchPressureDiffrentials();
+      console.log('Calling fetchSolutionOverview for project', selectedProject.id);
       fetchSolutionOverview();
+      console.log('Calling fetchSolutionRecommendations for project', selectedProject.id);
       fetchSolutionRecommendations();
+      console.log('Calling fetchSolutionSimulation for project', selectedProject.id);
       fetchSolutionSimulation();
     }
   }, [selectedProject]);
