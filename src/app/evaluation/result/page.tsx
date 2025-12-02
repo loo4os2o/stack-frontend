@@ -42,6 +42,10 @@ import ImageChart2 from '@/assets/images/03_input _005.png';
 import HorizontalFillWithMarkers from '@/components/charts/HorizontalFillWithMarker';
 import { useUserStore } from '@/utils/store';
 import { createClient } from '@supabase/supabase-js';
+import IconThumnail from '@/assets/icons/icon-thum.png';
+import IconLightRed from '@/assets/icons/icon-light-red.png';
+import IconLightBlue from '@/assets/icons/icon-light-blue.png';
+import IconLightGreen from '@/assets/icons/icon-light-green.png';
 
 // 차트 데이터
 const chartData: {
@@ -1228,7 +1232,7 @@ export default function EvaluationResultPage() {
                   <div className="w-full md:w-2/2 left">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="comm-border">
-                        <h3>연돌현상 영향도</h3>
+                        <h3>연돌효과 영향도 평가</h3>
                         <div className="chart-wrap" style={{ height: '160px' }}>
                           {/* 차트 - 연돌현상 영향도 */}
                           <HorizontalFillWithMarkers
@@ -1260,16 +1264,16 @@ export default function EvaluationResultPage() {
                         </div> */}
                       </div>
 
-                      <div className="comm-border">
+                      {/* <div className="comm-border">
                         <h3>{selectedProject?.projectName}</h3>
                         <div className="border-0">{solutionOverview?.project?.projResultDesc}</div>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-5">
                       <div className="comm-border">
-                        <h3>연돌현상 해결방안</h3>
-                        <div className="flex flex-row gap-4 mb-4">
+                        <h3>개선안 리스트</h3>
+                        <div className="flex flex-row gap-4">
                           {solutionOverview?.solutions.map((item: any, index: number) => {
                             console.log(`solution${index + 1}`, item[`solution${index + 1}`]);
                             if (item[`solution${index + 1}`]) {
@@ -1290,15 +1294,155 @@ export default function EvaluationResultPage() {
                           })}
                         </div>
 
-                        <ul className="mt-3">
+                        {/* <ul className="mt-3">
                           <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
                           <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
                           <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
                           <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
                           <li>엔지니어링 관련 설명 엔지니어링 관련 설명 엔지니어링 관련 설명</li>
-                        </ul>
+                        </ul> */}
+
+                        <div className='impro-plan flex flex-wrap gap-y-8 gap-x-7'>
+                          {/* 구획 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT1</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>구획<span>Compartmentalization</span></div>
+                              <div className='text'>큰 공간을 작고 독립된 구획으로 분할(기밀 경계)</div>
+                              <div className='thum-icon flex flex-row gap-3'>
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                              </div>
+                            </div>
+                          </div>
+                          {/* 조닝 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT2</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>조닝<span>Zoning</span></div>
+                              <div className='text'>기능·운영 목적에 따라 공간을 여러 구역으로 구분</div>
+                              <div className='thum-icon flex flex-row gap-3'>
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                              </div>
+                            </div>
+                          </div>
+                          {/* 분리 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT3</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>분리<span>Separation</span></div>
+                              <div className='text'>이질적 공간 간 물리적 차단하여 공기·오염 확산 방지</div>
+                              <div className='thum-icon flex flex-row gap-3'>
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                              </div>
+                            </div>
+                          </div>
+                          {/* 셸터링 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT4</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>셸터링<span>Sheltering</span></div>
+                              <div className='text'>출입구 및 개구부 버퍼존 형성</div>
+                              <div className='thum-icon flex flex-row gap-3'>
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                              </div>
+                            </div>
+                          </div>
+                          {/* 스크리닝 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT5</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>스크리닝<span>Screening</span></div>
+                              <div className='text'>기능적 개구부 이중 차단</div>
+                              <div className='thum-icon flex flex-row gap-3'>
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                                <Image src={IconThumnail} alt='썸네일 아이콘' />
+                              </div>
+                            </div>
+                          </div>
+                          {/* 특화 개선안 */}
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightRed} alt='개선안 리스트 빨강불 아이콘' width={36} height={36} />
+                              <div className='icon-text pt-2'>CT6</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title'>특화 개선안</div>
+                              <div className='text'>건축계획에 따른 특수 개선안 전략</div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-5">
+                      <div className="comm-border">
+                        <h3>엔지니어링 검토</h3>
+                        <div className='eng-rev flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E1</div>
+                            </div>
+                          </div>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E2</div>
+                            </div>
+                          </div>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E3</div>
+                            </div>
+                          </div>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E4</div>
+                            </div>
+                          </div>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E5</div>
+                            </div>
+                          </div>
+                          <div className='flex gap-5'>
+                            <div className='comm-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>E6</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </section>
@@ -1326,7 +1470,7 @@ export default function EvaluationResultPage() {
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="w-full md:w-2/2 left">
                     {/* 리스트 */}
-                    <div className="flex flex-col gap-4 col-span-2">
+                    {/* <div className="flex flex-col gap-4 col-span-2">
                       {solutionRecommendations?.fireEvacuationSafety && (
                         <div className="icon-list">
                           <div className="icon-box">
@@ -1395,7 +1539,192 @@ export default function EvaluationResultPage() {
                           </div>
                         </div>
                       )}
+                    </div> */}
+
+                    {/* 리스트 - 디자인(2025-12-03) */}
+                    <div className="impro-detail grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* <div className="impro-detail flex flex-wrap gap-5"> */}
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT1</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>외부 출입문 방풍구조화 : 방풍실 설치 (지하층, 로비층, 옥상층)</li>
+                                <li>엘리베이터 샤프트 개구부 기밀화</li>
+                                <li>엘리베이터 기계실 기밀화</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT2</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>기능적/화재안전 구획 (기계실, 방화·연기제어존 구획)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT3</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>열 환경 조닝 (고온·저온 공간 분리)</li>
+                                <li>공조(HVAC) 조닝 (사용패턴별 공조 구역화)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT4</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>기능 분리 (오염원 구역 분리 (예, 거주자 영역 VS 식당·조리실, 쓰레기실 등))</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border disabled">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT5</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>외부출입문 Air-Lock 구조화 : 출입문 종류/개폐방향/기밀성능 지정(지하층, 로비층, 옥상층)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border disabled">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT6</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>외부출입문 Air-Lock 구조화 : 출입문 종류/개폐방향/기밀성능 지정(지하층, 로비층, 옥상층)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT7</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>수직 샤프트 영역 구획 (엘리베이터 홀, 계단실 차단)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border disabled">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT8</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>기밀화 구획 지정 (기밀화 구획도 작성, 기밀 도어 지정)</li>
+                                <li>로비층/기준층 내부 구획 추가</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT9</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>가감압 압력 조닝 (양압·중성·음압 구역 구분)</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT10</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>수직적 분리 (지하 vs 지상, 저층 vs 고층)</li>
+                                <li>엘리베이터 수직 샤프트 분리</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
+                    <div className="impro-detail grid grid-cols-1 md:grid-cols-1 gap-5 mt-5">
+                      <div className="comm-border gradient">
+                        <h3>특화개선안</h3>
+                        <div className='flex flex-wrap gap-y-8 gap-x-5'>
+                          <div className='flex gap-5 items-center'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT1</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <ul>
+                                <li>리베이터문 스크린도어 설치-시뮬레이션 검토 필요</li>
+                                <li>카이로비 샤프트 간 경로 구획 설치</li>
+                                <li>망용 엘리베이터 경로 구획 설치</li>
+                                <li>계실 출입문 2중 도어 설치</li>
+                                <li>위세대 및 특수용도실 전실 확보 (완충 공간)</li>
+                                <li>리베이터 홀에 실내 회전문 설치-시뮬레이션 검토 필요</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </section>
