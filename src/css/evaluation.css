@@ -671,7 +671,10 @@ p {
   padding: 0 0 0.75rem 0;
 }
 
+/* ********************************************** */
 /* 2025-12-03 result 페이지 추가 수정사항 */
+/* ********************************************** */
+/* 1. 해결방안 개요 - 개선안 리스트 */
 .impro-plan{}
 .impro-plan .comm-border{
   padding: 0 1.75rem;
@@ -687,13 +690,16 @@ p {
 }
 .impro-plan .icon-text,
 .eng-rev .icon-text,
-.impro-detail .icon-border .icon-text{
+.impro-detail .icon-border .icon-text,
+.eng-rev-detail .icon-border .icon-text,
+.eng-rev-detail .icon-border-skyblue .icon-text{
   font-weight: 600;
   font-size: 0.938rem;
   line-height: 160%;
   color: #333333;
 }
-.impro-plan .title{
+.impro-plan .title,
+.eng-rev-detail .title{
   font-weight: 700;
   font-size: 1rem;
   line-height: 130%;
@@ -712,15 +718,14 @@ p {
   letter-spacing: -0.05rem;
   margin: 0.125rem 0 0.625rem 0;
 }
-.thum-icon{
-
-}
+.thum-icon{}
 @media (max-width: 500px) {
   .impro-plan > div{
     flex-direction: column;
   }
 }
 
+/* 1. 해결방안 개요 - 엔지니어링 검토 */
 .eng-rev{}
 .eng-rev .comm-border{
   position: relative;
@@ -748,6 +753,7 @@ p {
   pointer-events: none;
 }
 
+/* 2. 개선안 리스트 */
 .impro-detail{}
 .impro-detail .comm-border{
   border: 1px solid rgba(0, 178, 68, 0.1);
@@ -756,7 +762,8 @@ p {
 .impro-detail .comm-border.gradient{
   background: linear-gradient(93.11deg, rgba(0, 178, 68, 0.1) 1.36%, rgba(158, 207, 13, 0.1) 99.71%);
 }
-.impro-detail .icon-border{
+.impro-detail .icon-border,
+.eng-rev-detail .icon-border{
   position: relative;
   border: none;
   border-radius: 0.625rem;
@@ -768,7 +775,8 @@ p {
   flex-wrap: wrap;
   box-sizing: border-box;
 }
-.impro-detail .icon-border::before{
+.impro-detail .icon-border::before,
+.eng-rev-detail .icon-border::before{
   content: '';
   position: absolute;
   inset: 0;
@@ -785,7 +793,8 @@ p {
   mask-composite: exclude;
   pointer-events: none;
 }
-.impro-detail ul>li{
+.impro-detail ul > li,
+.ent-rev-detail ul > li{
   letter-spacing: -0.03rem;
   color: #333333;
 }
@@ -793,27 +802,112 @@ p {
   top: 10px !important;
   transform: translateY(0) !important;
 }
+
+/* 3. 엔지니어링 검토 */
+.eng-rev-detail{}
+.eng-rev-detail .comm-border{
+  border: 1px solid rgba(0, 154, 209, 0.1);
+  background: rgba(0, 154, 209, 0.06);
+}
+.eng-rev-detail .icon-border::before{
+  background: linear-gradient(180deg, rgba(0, 154, 209, 0.9) 0%, rgba(0, 45, 209, 0.9) 100%);
+}
+.eng-rev-detail .icon-border-skyblue{
+  border: 3px solid rgba(0, 154, 209, 0.55);
+  border-radius: 0.625rem;
+  background: #fff;
+  padding: 0.938rem 1.875rem;
+  width: 6.25rem;
+  height: 6.25rem;
+  box-sizing: border-box;
+}
+.eng-rev-detail .btn{
+  border-radius: 0.5rem;
+  margin-left: auto;
+  width: 6.25rem;
+  height: 2.375rem;
+  padding: 0.375rem 2.188rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 160%;
+  letter-spacing: -0.05rem;
+}
+.eng-rev-detail .btn.primary{
+  background: #002DD1;
+  color: #fff;
+}
+.eng-rev-detail .btn.basic{
+  border: 1px solid #002DD1;
+  background: #fff;
+  color: #002DD1;
+}
+
 /* 비활성성 */
-.impro-detail .disabled{
+.impro-detail .disabled,
+.eng-rev-detail .disabled{
   background: #F7F6F6;
   border: 1px solid #EAEAEA;
 }
-.impro-detail .disabled .icon-border{
+.impro-detail .disabled .icon-border,
+.eng-rev-detail .disabled .icon-border,
+.eng-rev-detail .disabled .icon-border-skyblue{
   background: #EFEFEF;
   border: 1px solid #DDDDDD;
 }
-.impro-detail .disabled .icon-border::before{
+.impro-detail .disabled .icon-border::before,
+.eng-rev-detail .disabled .icon-border::before{
   display: none;
 }
-.impro-detail .disabled .icon-border > img{
+.impro-detail .disabled .icon-border > img,
+.eng-rev-detail .disabled .icon-border > img,
+.eng-rev-detail .disabled .icon-border-skyblue > img{
   filter: brightness(0) saturate(100%) invert(65%) sepia(1%) saturate(803%) hue-rotate(326deg) brightness(105%) contrast(94%);
 }
-.impro-detail .disabled .icon-border .icon-text{
+.impro-detail .disabled .icon-border .icon-text,
+.eng-rev-detail .disabled .icon-border .icon-text,
+.eng-rev-detail .disabled .icon-border-skyblue .icon-text{
   color: #B0ABAB;
 }
-.impro-detail .disabled ul>li{
+.impro-detail .disabled ul > li,
+.eng-rev-detail .disabled ul > li{
   color: #B0ABAB;
 }
-.impro-detail .disabled ul>li::before{
+.impro-detail .disabled ul > li::before,
+.eng-rev-detail .disabled ul > li::before{
   background: #B0ABAB;
+}
+.eng-rev-detail .disabled .title{
+  color: #969696;
+}
+.eng-rev-detail .disabled .btn{
+  display: none;
+}
+
+/* 포인트 */
+.point{
+  background: #C31A00;
+  border-radius: 1rem;
+  width: 100%;
+  padding: 1.25rem 2.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 160%;
+  color: #fff;
+  letter-spacing: -0.01rem;
+  position: relative;
+}
+.point::before{
+  content: '';
+  background-image: url('../assets/icons/icon-exclamation-mark.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 2.5rem;
+  top: 1.375rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.point span{
+  display: block;
+  margin-left: 1.875rem;
 }

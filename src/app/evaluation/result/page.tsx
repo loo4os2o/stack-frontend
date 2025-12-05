@@ -1230,7 +1230,7 @@ export default function EvaluationResultPage() {
               <section>
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="w-full md:w-2/2 left">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-5">
                       <div className="comm-border">
                         <h3>연돌효과 영향도 평가</h3>
                         <div className="chart-wrap" style={{ height: '160px' }}>
@@ -1451,7 +1451,7 @@ export default function EvaluationResultPage() {
                 <h2>
                   <span className="num">2</span> 개선안 리스트
                 </h2>
-                <div className="title-sub mb-3">
+                {/* <div className="title-sub mb-3">
                   {solutionRecommendations?.savingRate < 0 ? (
                     <>
                       <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
@@ -1463,7 +1463,7 @@ export default function EvaluationResultPage() {
                       <strong>{Math.abs(solutionRecommendations?.savingRate)}%</strong> 증가
                     </>
                   )}
-                </div>
+                </div> */}
               </div>
               {/* 2. 개선안 리스트 */}
               <section>
@@ -1543,12 +1543,11 @@ export default function EvaluationResultPage() {
 
                     {/* 리스트 - 디자인(2025-12-03) */}
                     <div className="impro-detail grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* <div className="impro-detail flex flex-wrap gap-5"> */}
                       <div className="comm-border">
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT1</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1565,7 +1564,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT2</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1580,7 +1579,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT3</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1596,7 +1595,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT4</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1611,7 +1610,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT5</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1626,7 +1625,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT6</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1641,7 +1640,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT7</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1656,7 +1655,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT8</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1672,7 +1671,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT9</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1687,7 +1686,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT10</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1707,7 +1706,7 @@ export default function EvaluationResultPage() {
                         <div className='flex flex-wrap gap-y-8 gap-x-5'>
                           <div className='flex gap-5 items-center'>
                             <div className='icon-border flex flex-col items-center justify-center'>
-                              <Image src={IconLightGreen} alt='개선안 리스트 초록록 아이콘' width={34} height={34} />
+                              <Image src={IconLightGreen} alt='개선안 리스트 초록 아이콘' width={34} height={34} />
                               <div className='icon-text pt-2'>CT1</div>
                             </div>
                             <div className='flex flex-col justify-center'>
@@ -1731,9 +1730,9 @@ export default function EvaluationResultPage() {
 
               <div className="flex items-center gap-5 mt-8">
                 <h2>
-                  <span className="num">3</span> 연돌현상 설계검토 및 시뮬레이션
+                  <span className="num">3</span> 엔지니어링 검토
                 </h2>
-                <div className="title-sub mb-3">
+                {/* <div className="title-sub mb-3">
                   {solutionSimulation?.savingRate < 0 ? (
                     <>
                       <Image src={iconDecrease} alt="절감 아이콘" width={14} height={14} />
@@ -1745,68 +1744,130 @@ export default function EvaluationResultPage() {
                       <strong>{Math.abs(solutionSimulation?.savingRate)}%</strong> 증가
                     </>
                   )}
-                </div>
+                </div> */}
               </div>
-              {/* 3. 연돌현상 설계검토 및 시뮬레이션 */}
+              {/* 3. 엔지니어링 검토 */}
               <section>
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="w-full md:w-2/2 left">
-                    {/* 연돌현상 설계검토 */}
-                    <div className="mb-8">
-                      <h3 className="icon">연돌현상 설계검토</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="comm-border border-0">
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          <div className="text-box">
-                            <ul>
-                              <li>건축/설비 도면 검토를 통한 맞춤형 개선전략</li>
-                              <li>개선전략 별 상세 데이터 제시</li>
-                              <li>층별 수정사항이 반영된 설계도면</li>
-                              <li>기밀화라인이 표현된 기밀화구획도</li>
-                            </ul>
+                    {/* 리스트 - 디자인(2025-12-05) */}
+                    <div className="eng-rev-detail grid grid-cols-1 md:grid-cols-1 gap-5">
+                      <div className="comm-border">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT1</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>도면 검토-건축설계 개선사항 반영</div>
+                              <ul>
+                                <li>에너지 및 HYAC 시스템 설계 오류 설명</li>
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-
-                        <div className="comm-border-none">
-                          <div className="image-wrap">
-                            <Image src={resultChartEx2} alt="연돌현상 설계검토" />
-                          </div>
+                          <button className='btn primary'>필요</button>
                         </div>
                       </div>
-                    </div>
-
-                    {/* 연돌현상 시뮬레이션 */}
-                    <div className="">
-                      <h3 className="icon">연돌현상 시뮬레이션</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="comm-border border-0">
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          건물 내부 기류 분석 결과, 연돌현상에 따른 공기 흐름 왜곡이 확인되었으며,
-                          에너지 손실 및 화재 안전 측면에서 개선이 필요한 구조로 평가되었습니다.
-                          <div className="text-box">
-                            <ul>
-                              <li>층별/존별 공기유동 및 압력차 분석</li>
-                              <li>세부 건축요소의 문제발생 여부 검토</li>
-                              <li>개선전략 케이스 별 저감효과 비교 분석</li>
-                              <li>개선전략 우선순위 분석을 통한 최적화</li>
-                            </ul>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT2</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>도면 검토-기밀화 구획 지정</div>
+                              <ul>
+                                <li>구획 전략에 따른 1-2-3차 구획 설정(기밀화 구획도 작성)</li>
+                                <li>기밀성능 지정(구획 경계층, 출입문)</li>
+                              </ul>
+                            </div>
                           </div>
+                          <button className='btn primary'>필요</button>
                         </div>
-
-                        <div className="comm-border-none">
-                          <div className="image-wrap">
-                            <Image src={resultChartEx3} alt="연돌현상 시뮬레이션" />
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT3</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>Simplified 시뮬레이션-엘리베이터 샤프트 조닝 평가</div>
+                              <ul>
+                                <li>수직 샤프트에 따른 압력분포 평가</li>
+                                <li>연간 침기부하 평가</li>
+                              </ul>
+                            </div>
                           </div>
+                          <button className='btn primary'>필요</button>
+                        </div>
+                      </div>
+                      <div className="comm-border">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border-skyblue flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT4</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>Detailed 시뮬레이션-전체 건물 연돌효과 평가</div>
+                              <ul>
+                                <li>[기존안 VS 개선안] 문제 저감수준 평가</li>
+                                <li>보완 개선안 마련</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <button className='btn basic'>권장</button>
+                        </div>
+                      </div>
+                      <div className="comm-border disabled">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT5</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>기밀시공 관리 지침 수립</div>
+                              <ul>
+                                <li>층 단위 기밀시공 체크리스트 작성</li>
+                                <li>주요부위 기밀시공 상세도 마련</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <button className='btn primary'>필요</button>
+                        </div>
+                      </div>
+                      <div className="comm-border disabled">
+                        <div className='flex flex-wrap items-center gap-y-8 gap-x-5'>
+                          <div className='flex gap-5'>
+                            <div className='icon-border-skyblue flex flex-col items-center justify-center'>
+                              <Image src={IconLightBlue} alt='엔지니어링 검토 파랑 아이콘' width={34} height={34} />
+                              <div className='icon-text pt-2'>CT6</div>
+                            </div>
+                            <div className='flex flex-col justify-center'>
+                              <div className='title mb-1'>Detailed 시뮬레이션-전체 건물 연돌효과 평가</div>
+                              <ul>
+                                <li>[기존안 VS 개선안] 문제 저감수준 평가</li>
+                                <li>보완 개선안 마련</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <button className='btn basic'>권장</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </section>
+
+              <div className="point mt-5 flex flex-col">
+                <span>전문가 검토 내용 및 추가 코멘트는 보고서에 포함되어 있습니다.</span>
+                {/* <span>전문가 검토 내용 및 추가 코멘트는 보고서에 포함되어 있습니다.</span> */}
+              </div>
 
               <div className="flex justify-between space-x-4 mt-8">
                 <button
