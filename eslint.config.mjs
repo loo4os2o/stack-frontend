@@ -10,14 +10,13 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
   {
     rules: {
       'no-unused-vars': ['warn', { varsIgnorePattern: '^users$' }],
       '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^users$' }],
       '@typescript-eslint/no-explicit-any': 'off', // Disable the rule for using 'any' type,
     },
-    extends: ['prettier'],
   },
 ];
 
