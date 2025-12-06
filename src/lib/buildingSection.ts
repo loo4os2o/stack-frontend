@@ -25,7 +25,7 @@ export function generateSectionDataArray(props: SectionProps): SectionData[] {
 
   for (let i = 1; i <= 12; i++) {
     let basement = 0;
-    let soil = -(basementFloors + 10);
+    const soil = -(basementFloors + 10);
     let envelope = 0;
 
     if (i >= 2 && i <= 11) {

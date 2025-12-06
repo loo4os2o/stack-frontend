@@ -1278,7 +1278,7 @@ export default function EvaluationResultPage() {
                             console.log(`solution${index + 1}`, item[`solution${index + 1}`]);
                             if (item[`solution${index + 1}`]) {
                               return (
-                                <div className="icon-box-col">
+                                <div key={index} className="icon-box-col">
                                   <div className="icon-box">
                                     <Image
                                       src={iconLightOn}
@@ -1289,7 +1289,7 @@ export default function EvaluationResultPage() {
                                 </div>
                               );
                             } else {
-                              return;
+                              return null;
                             }
                           })}
                         </div>
